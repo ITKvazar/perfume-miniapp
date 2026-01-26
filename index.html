@@ -21,6 +21,7 @@
     .cart-item { display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid #f0f0f0; }
     .muted { color:#666; font-size: 12px; }
     .error { color: #d32f2f; background: #ffebee; padding: 12px; border-radius: 8px; margin-top: 10px; display: none; }
+    .success { color: #2e7d32; background: #e8f5e9; padding: 12px; border-radius: 8px; margin-top: 10px; display: none; }
   </style>
 </head>
 <body>
@@ -60,9 +61,14 @@
     </div>
 
     <div id="error" class="error"></div>
+    <div id="success" class="success"></div>
   </div>
 
 <script>
+  // ⚠️ ВАЖНО: замените на ваш IP/домен где запущен бот
+  // Для теста на локалке используйте ngrok (см. ниже)
+  const API_URL = "https://a1b2c3d4.ngrok.io/order";
+  
   const tg = window.Telegram?.WebApp;
   
   if (!tg) {
@@ -144,6 +150,7 @@
     document.getElementById("catalog").style.display = "none";
     document.getElementById("q").style.display = "none";
     document.getElementById("error").style.display = "none";
+    document.getElementById("success").style.display = "none";
     renderCart();
     updateMainButton();
   }
@@ -184,7 +191,7 @@
     document.getElementById("total").textContent = total;
   }
 
-  function submitOrder() {
+  async function submitOrder() {
     const name = document.getElementById("name").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const address = document.getElementById("address").value.trim();
@@ -201,29 +208,56 @@
       if (p) items.push({ sku: p.sku, title: p.title, qty, price_rub: p.price_rub });
     });
 
-    const order = { name, phone, address, comment, items };
-    
-    // ВАЖНО: используем JSON.stringify и отправляем
-    const jsonData = JSON.stringify(order);
-    console.log("Sending:", jsonData);
-    
+    const order = {
+      name, phone, address, comment, items,
+      _userId: tg.initDataUnsafe?.user?.id || 0,
+      _username: tg.initDataUnsafe?.user?.username || "",
+      _initData: tg.initData
+    };
+
+    tg.MainButton.setText("Отправляем...");
+    tg.MainButton.disable();
+    document.getElementById("error").style.display = "none";
+    document.getElementById("success").style.display = "none";
+
     try {
-      tg.sendData(jsonData);
-      tg.MainButton.setText("Отправляем...");
-      tg.MainButton.disable();
+      // Пробуем сначала sendData (быстрый способ)
+      tg.sendData(JSON.stringify(order));
       
-      // Если через 3 секунды не закрылось — показываем ошибку
-      setTimeout(() => {
-        document.getElementById("error").textContent = "Не удалось отправить. Попробуйте ещё раз или напишите боту напрямую.";
+      // Ждём 1 секунду и проверяем, закрылся ли мини-апп
+      await new Promise(r => setTimeout(r, 1000));
+      
+      // Если не закрылся — используем POST
+      throw new Error("sendData failed, trying POST");
+      
+    } catch (e) {
+      // Запасной вариант: POST-запрос
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(order)
+        });
+        
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        
+        const result = await response.json();
+        if (!result.ok) throw new Error(result.error);
+        
+        document.getElementById("success").textContent = "✅ Заказ отправлен! Проверьте чат с ботом.";
+        document.getElementById("success").style.display = "block";
+        tg.MainButton.setText("Отправлено!");
+        
+        // Закрываем через 2 секунды
+        setTimeout(() => tg.close(), 2000);
+        
+      } catch (postError) {
+        console.error("POST error:", postError);
+        document.getElementById("error").textContent = "❌ Не удалось отправить. Напишите боту @OriginalPerfumeBot напрямую.";
         document.getElementById("error").style.display = "block";
         tg.MainButton.enable();
         tg.MainButton.setText("✅ Оформить заказ");
-      }, 3000);
-      
-    } catch (err) {
-      console.error("Error:", err);
-      document.getElementById("error").textContent = "Ошибка: " + err.message;
-      document.getElementById("error").style.display = "block";
+      }
     }
   }
 
