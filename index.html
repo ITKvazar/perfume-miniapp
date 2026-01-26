@@ -6,7 +6,7 @@
   <title>Original Perfume</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 12px; background: #f5f5f5; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 12px; background: #f5f5f5; }
     .row { display:flex; gap:12px; flex-wrap:wrap; }
     .card { border:1px solid #ddd; border-radius:12px; padding:12px; width: 220px; background: white; }
     .title { font-weight:700; margin-bottom:6px; }
@@ -16,12 +16,11 @@
     .btn2 { background:#eee; }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .top { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom: 12px; background: white; padding: 12px; border-radius: 12px; }
-    input { padding:8px; border-radius:10px; border:1px solid #ddd; width: 100%; max-width: 360px; box-sizing: border-box; }
+    input, textarea { padding:8px; border-radius:10px; border:1px solid #ddd; width: 100%; max-width: 360px; box-sizing: border-box; font-family: inherit; }
     .section { margin-top:16px; }
     .cart-item { display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid #f0f0f0; }
     .muted { color:#666; font-size: 12px; }
-    textarea { width:100%; max-width:600px; min-height:60px; padding:8px; border-radius:10px; border:1px solid #ddd; box-sizing: border-box; }
-    .success { display: none; background: #d4edda; color: #155724; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; border: 1px solid #c3e6cb; }
+    .error { color: #d32f2f; background: #ffebee; padding: 12px; border-radius: 8px; margin-top: 10px; display: none; }
   </style>
 </head>
 <body>
@@ -60,10 +59,7 @@
       <button class="btn2" onclick="closeCart()">← Назад к товарам</button>
     </div>
 
-    <div id="success" class="success">
-      ✅ Заказ оформлен!<br>
-      <small>Нажмите кнопку "Оформить заказ" внизу экрана для подтверждения</small>
-    </div>
+    <div id="error" class="error"></div>
   </div>
 
 <script>
@@ -84,7 +80,6 @@
   ];
 
   const cart = new Map();
-  let orderData = null;
 
   function add(sku) {
     cart.set(sku, (cart.get(sku) || 0) + 1);
@@ -117,9 +112,11 @@
   function updateMainButton() {
     if (cart.size === 0 || document.getElementById("cart").style.display === "none") {
       tg.MainButton.hide();
+      tg.MainButton.offClick(submitOrder);
     } else {
       tg.MainButton.setText("✅ Оформить заказ");
       tg.MainButton.show();
+      tg.MainButton.onClick(submitOrder);
     }
   }
 
@@ -146,6 +143,7 @@
     document.getElementById("cart").style.display = "";
     document.getElementById("catalog").style.display = "none";
     document.getElementById("q").style.display = "none";
+    document.getElementById("error").style.display = "none";
     renderCart();
     updateMainButton();
   }
@@ -186,39 +184,48 @@
     document.getElementById("total").textContent = total;
   }
 
-  // ОБРАБОТЧИК MainButton - самый надёжный способ
-  tg.MainButton.onClick(() => {
-    if (!orderData) {
-      // Собираем данные заказа
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const address = document.getElementById("address").value.trim();
-      const comment = document.getElementById("comment").value.trim();
+  function submitOrder() {
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const comment = document.getElementById("comment").value.trim();
 
-      if (!name || !phone || !address) {
-        tg.showAlert("Заполните имя, телефон и адрес");
-        return;
-      }
-
-      const items = [];
-      cart.forEach((qty, sku) => {
-        const p = products.find(x => x.sku === sku);
-        if (p) items.push({ sku: p.sku, title: p.title, qty, price_rub: p.price_rub });
-      });
-
-      orderData = { name, phone, address, comment, items };
+    if (!name || !phone || !address) {
+      tg.showAlert("Заполните имя, телефон и адрес");
+      return;
     }
 
-    // Отправляем данные через MainButton (надёжнее sendData!)
-    tg.sendData(JSON.stringify(orderData));
+    const items = [];
+    cart.forEach((qty, sku) => {
+      const p = products.find(x => x.sku === sku);
+      if (p) items.push({ sku: p.sku, title: p.title, qty, price_rub: p.price_rub });
+    });
+
+    const order = { name, phone, address, comment, items };
     
-    // Показываем успех
-    document.getElementById("success").style.display = "block";
+    // ВАЖНО: используем JSON.stringify и отправляем
+    const jsonData = JSON.stringify(order);
+    console.log("Sending:", jsonData);
     
-    // Меняем текст кнопки
-    tg.MainButton.setText("Отправлено!");
-    tg.MainButton.disable();
-  });
+    try {
+      tg.sendData(jsonData);
+      tg.MainButton.setText("Отправляем...");
+      tg.MainButton.disable();
+      
+      // Если через 3 секунды не закрылось — показываем ошибку
+      setTimeout(() => {
+        document.getElementById("error").textContent = "Не удалось отправить. Попробуйте ещё раз или напишите боту напрямую.";
+        document.getElementById("error").style.display = "block";
+        tg.MainButton.enable();
+        tg.MainButton.setText("✅ Оформить заказ");
+      }, 3000);
+      
+    } catch (err) {
+      console.error("Error:", err);
+      document.getElementById("error").textContent = "Ошибка: " + err.message;
+      document.getElementById("error").style.display = "block";
+    }
+  }
 
   render();
   updateCartBadge();
