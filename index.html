@@ -21,11 +21,7 @@
     .cart-item { display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid #f0f0f0; }
     .muted { color:#666; font-size: 12px; }
     textarea { width:100%; max-width:600px; min-height:60px; padding:8px; border-radius:10px; border:1px solid #ddd; box-sizing: border-box; }
-    .loading { display: none; text-align: center; padding: 20px; background: white; border-radius: 12px; margin-top: 20px; }
-    .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .success { display: none; background: #d4edda; color: #155724; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; border: 1px solid #c3e6cb; }
-    .error { display: none; background: #f8d7da; color: #721c24; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; border: 1px solid #f5c6cb; }
   </style>
 </head>
 <body>
@@ -62,34 +58,24 @@
 
     <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
       <button class="btn2" onclick="closeCart()">← Назад к товарам</button>
-      <button class="btn" id="checkoutBtn" onclick="checkout()">✅ Оформить и перейти к оплате</button>
-    </div>
-
-    <div id="loading" class="loading">
-      <span class="spinner"></span>
-      Отправляем заказ в Telegram...
     </div>
 
     <div id="success" class="success">
-      ✅ Заказ отправлен!<br>
-      <small>Проверьте чат с ботом для получения реквизитов оплаты.<br>Это окно закроется автоматически...</small>
-    </div>
-
-    <div id="error" class="error">
-      ❌ Ошибка отправки<br>
-      <small id="errorText">Попробуйте ещё раз</small>
+      ✅ Заказ оформлен!<br>
+      <small>Нажмите кнопку "Оформить заказ" внизу экрана для подтверждения</small>
     </div>
   </div>
 
 <script>
   const tg = window.Telegram?.WebApp;
   
-  if (tg) {
-    tg.ready();
-    tg.expand();
-    tg.MainButton.setText("Оформить заказ");
-    tg.MainButton.onClick(checkout);
+  if (!tg) {
+    alert("Откройте в Telegram");
+    throw new Error("Not in Telegram");
   }
+
+  tg.ready();
+  tg.expand();
 
   const products = [
     { sku: "p001", title: "Парфюм A", price_rub: 3500 },
@@ -98,11 +84,12 @@
   ];
 
   const cart = new Map();
+  let orderData = null;
 
   function add(sku) {
     cart.set(sku, (cart.get(sku) || 0) + 1);
     updateCartBadge();
-    if (tg && cart.size > 0) tg.MainButton.show();
+    updateMainButton();
   }
   
   function dec(sku) {
@@ -111,19 +98,29 @@
     else cart.set(sku, q - 1);
     updateCartBadge();
     renderCart();
-    if (tg && cart.size === 0) tg.MainButton.hide();
+    updateMainButton();
   }
   
   function inc(sku) {
     cart.set(sku, (cart.get(sku) || 0) + 1);
     updateCartBadge();
     renderCart();
+    updateMainButton();
   }
 
   function updateCartBadge() {
     let count = 0;
     cart.forEach(v => count += v);
     document.getElementById("cartCount").textContent = count;
+  }
+
+  function updateMainButton() {
+    if (cart.size === 0 || document.getElementById("cart").style.display === "none") {
+      tg.MainButton.hide();
+    } else {
+      tg.MainButton.setText("✅ Оформить заказ");
+      tg.MainButton.show();
+    }
   }
 
   function render() {
@@ -150,14 +147,14 @@
     document.getElementById("catalog").style.display = "none";
     document.getElementById("q").style.display = "none";
     renderCart();
-    if (tg) tg.MainButton.show();
+    updateMainButton();
   }
   
   function closeCart() {
     document.getElementById("cart").style.display = "none";
     document.getElementById("catalog").style.display = "";
     document.getElementById("q").style.display = "";
-    if (tg && cart.size === 0) tg.MainButton.hide();
+    tg.MainButton.hide();
   }
 
   function renderCart() {
@@ -189,67 +186,39 @@
     document.getElementById("total").textContent = total;
   }
 
-  function checkout() {
-    if (cart.size === 0) {
-      alert("Корзина пустая");
-      return;
-    }
+  // ОБРАБОТЧИК MainButton - самый надёжный способ
+  tg.MainButton.onClick(() => {
+    if (!orderData) {
+      // Собираем данные заказа
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const comment = document.getElementById("comment").value.trim();
 
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const address = document.getElementById("address").value.trim();
-    const comment = document.getElementById("comment").value.trim();
-
-    if (!name || !phone || !address) {
-      alert("Заполните имя, телефон и адрес");
-      return;
-    }
-
-    const items = [];
-    cart.forEach((qty, sku) => {
-      const p = products.find(x => x.sku === sku);
-      if (p) items.push({ sku: p.sku, title: p.title, qty, price_rub: p.price_rub });
-    });
-
-    const order = { name, phone, address, comment, items };
-    const text = JSON.stringify(order);
-
-    // UI: показываем загрузку
-    document.getElementById("checkoutBtn").disabled = true;
-    document.getElementById("loading").style.display = "block";
-    document.getElementById("error").style.display = "none";
-
-    if (tg) {
-      try {
-        // ВАЖНО: sendData отправляет данные боту
-        tg.sendData(text);
-        console.log("Data sent:", text);
-        
-        // Даём больше времени на отправку (2 секунды)
-        setTimeout(() => {
-          document.getElementById("loading").style.display = "none";
-          document.getElementById("success").style.display = "block";
-          
-          // Закрываем через 3 секунды, чтобы пользователь увидел сообщение
-          setTimeout(() => {
-            tg.close();
-          }, 3000);
-        }, 2000);
-        
-      } catch (err) {
-        console.error("Error sending data:", err);
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("error").style.display = "block";
-        document.getElementById("errorText").textContent = "Ошибка: " + err.message;
-        document.getElementById("checkoutBtn").disabled = false;
+      if (!name || !phone || !address) {
+        tg.showAlert("Заполните имя, телефон и адрес");
+        return;
       }
-    } else {
-      console.log("ORDER:", text);
-      alert("Откройте в Telegram, чтобы отправить заказ боту.");
-      document.getElementById("loading").style.display = "none";
-      document.getElementById("checkoutBtn").disabled = false;
+
+      const items = [];
+      cart.forEach((qty, sku) => {
+        const p = products.find(x => x.sku === sku);
+        if (p) items.push({ sku: p.sku, title: p.title, qty, price_rub: p.price_rub });
+      });
+
+      orderData = { name, phone, address, comment, items };
     }
-  }
+
+    // Отправляем данные через MainButton (надёжнее sendData!)
+    tg.sendData(JSON.stringify(orderData));
+    
+    // Показываем успех
+    document.getElementById("success").style.display = "block";
+    
+    // Меняем текст кнопки
+    tg.MainButton.setText("Отправлено!");
+    tg.MainButton.disable();
+  });
 
   render();
   updateCartBadge();
