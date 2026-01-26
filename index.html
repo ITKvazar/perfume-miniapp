@@ -22,6 +22,7 @@
     .muted { color:#666; font-size: 12px; }
     .error { color: #d32f2f; background: #ffebee; padding: 12px; border-radius: 8px; margin-top: 10px; display: none; }
     .success { color: #2e7d32; background: #e8f5e9; padding: 12px; border-radius: 8px; margin-top: 10px; display: none; }
+    .manual { background: #fff3e0; padding: 12px; border-radius: 8px; margin-top: 10px; display: none; }
   </style>
 </head>
 <body>
@@ -62,13 +63,16 @@
 
     <div id="error" class="error"></div>
     <div id="success" class="success"></div>
+    
+    <!-- Запасной вариант: отправка вручную -->
+    <div id="manual" class="manual">
+      <b>⚠️ Автоотправка не сработала</b><br>
+      Нажмите кнопку ниже, скопируйте текст и отправьте боту:<br>
+      <button class="btn" onclick="copyOrderText()" style="margin-top:8px;">📋 Скопировать заказ</button>
+    </div>
   </div>
 
 <script>
-  // ⚠️ ВАЖНО: замените на ваш IP/домен где запущен бот
-  // Для теста на локалке используйте ngrok (см. ниже)
-  const API_URL = "https://slick-points-drive.loca.lt";
-  
   const tg = window.Telegram?.WebApp;
   
   if (!tg) {
@@ -79,6 +83,8 @@
   tg.ready();
   tg.expand();
 
+  const BOT_USERNAME = "OriginalPerfumeBot"; // ← ЗАМЕНИТЕ на username вашего бота
+
   const products = [
     { sku: "p001", title: "Парфюм A", price_rub: 3500 },
     { sku: "p002", title: "Парфюм B", price_rub: 2900 },
@@ -86,6 +92,7 @@
   ];
 
   const cart = new Map();
+  let currentOrderText = "";
 
   function add(sku) {
     cart.set(sku, (cart.get(sku) || 0) + 1);
@@ -149,8 +156,7 @@
     document.getElementById("cart").style.display = "";
     document.getElementById("catalog").style.display = "none";
     document.getElementById("q").style.display = "none";
-    document.getElementById("error").style.display = "none";
-    document.getElementById("success").style.display = "none";
+    hideMessages();
     renderCart();
     updateMainButton();
   }
@@ -160,6 +166,12 @@
     document.getElementById("catalog").style.display = "";
     document.getElementById("q").style.display = "";
     tg.MainButton.hide();
+  }
+
+  function hideMessages() {
+    document.getElementById("error").style.display = "none";
+    document.getElementById("success").style.display = "none";
+    document.getElementById("manual").style.display = "none";
   }
 
   function renderCart() {
@@ -191,74 +203,75 @@
     document.getElementById("total").textContent = total;
   }
 
-  async function submitOrder() {
+  function generateOrderText() {
     const name = document.getElementById("name").value.trim();
     const phone = document.getElementById("phone").value.trim();
     const address = document.getElementById("address").value.trim();
     const comment = document.getElementById("comment").value.trim();
+
+    let itemsText = "";
+    let total = 0;
+    cart.forEach((qty, sku) => {
+      const p = products.find(x => x.sku === sku);
+      const line = p.price_rub * qty;
+      total += line;
+      itemsText += `• ${p.title} x${qty} = ${line}₽\n`;
+    });
+
+    return `🛍 НОВЫЙ ЗАКАЗ\n\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📍 Адрес: ${address}\n💬 Комментарий: ${comment || '-'}\n\n📦 Товары:\n${itemsText}\n💰 Итого: ${total}₽`;
+  }
+
+  function copyOrderText() {
+    navigator.clipboard.writeText(currentOrderText).then(() => {
+      // Открываем чат с ботом
+      tg.openTelegramLink(`https://t.me/${BOT_USERNAME}`);
+      tg.close();
+    });
+  }
+
+  async function submitOrder() {
+    const name = document.getElementById("name").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const address = document.getElementById("address").value.trim();
 
     if (!name || !phone || !address) {
       tg.showAlert("Заполните имя, телефон и адрес");
       return;
     }
 
-    const items = [];
-    cart.forEach((qty, sku) => {
-      const p = products.find(x => x.sku === sku);
-      if (p) items.push({ sku: p.sku, title: p.title, qty, price_rub: p.price_rub });
-    });
-
-    const order = {
-      name, phone, address, comment, items,
-      _userId: tg.initDataUnsafe?.user?.id || 0,
-      _username: tg.initDataUnsafe?.user?.username || "",
-      _initData: tg.initData
-    };
-
+    currentOrderText = generateOrderText();
+    hideMessages();
+    
     tg.MainButton.setText("Отправляем...");
     tg.MainButton.disable();
-    document.getElementById("error").style.display = "none";
-    document.getElementById("success").style.display = "none";
 
+    // Пробуем sendData (работает не всегда)
     try {
-      // Пробуем сначала sendData (быстрый способ)
-      tg.sendData(JSON.stringify(order));
+      tg.sendData(JSON.stringify({
+        name, phone, address, 
+        comment: document.getElementById("comment").value.trim(),
+        items: Array.from(cart.entries()).map(([sku, qty]) => {
+          const p = products.find(x => x.sku === sku);
+          return { sku, title: p.title, qty, price_rub: p.price_rub };
+        })
+      }));
       
-      // Ждём 1 секунду и проверяем, закрылся ли мини-апп
-      await new Promise(r => setTimeout(r, 1000));
-      
-      // Если не закрылся — используем POST
-      throw new Error("sendData failed, trying POST");
+      // Если сработало — Telegram закроет мини-апп автоматически
+      // Если нет — покажем запасной вариант через 1.5 секунды
+      setTimeout(() => {
+        showManualFallback();
+      }, 1500);
       
     } catch (e) {
-      // Запасной вариант: POST-запрос
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(order)
-        });
-        
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        
-        const result = await response.json();
-        if (!result.ok) throw new Error(result.error);
-        
-        document.getElementById("success").textContent = "✅ Заказ отправлен! Проверьте чат с ботом.";
-        document.getElementById("success").style.display = "block";
-        tg.MainButton.setText("Отправлено!");
-        
-        // Закрываем через 2 секунды
-        setTimeout(() => tg.close(), 2000);
-        
-      } catch (postError) {
-        console.error("POST error:", postError);
-        document.getElementById("error").textContent = "❌ Не удалось отправить. Напишите боту @OriginalPerfumeBot напрямую.";
-        document.getElementById("error").style.display = "block";
-        tg.MainButton.enable();
-        tg.MainButton.setText("✅ Оформить заказ");
-      }
+      showManualFallback();
     }
+  }
+
+  function showManualFallback() {
+    tg.MainButton.hide();
+    document.getElementById("manual").style.display = "block";
+    document.getElementById("success").textContent = "⚠️ Нажмите кнопку ниже, чтобы скопировать заказ и отправить боту";
+    document.getElementById("success").style.display = "block";
   }
 
   render();
