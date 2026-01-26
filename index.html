@@ -21,10 +21,11 @@
     .cart-item { display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid #f0f0f0; }
     .muted { color:#666; font-size: 12px; }
     textarea { width:100%; max-width:600px; min-height:60px; padding:8px; border-radius:10px; border:1px solid #ddd; box-sizing: border-box; }
-    .loading { display: none; text-align: center; padding: 20px; }
+    .loading { display: none; text-align: center; padding: 20px; background: white; border-radius: 12px; margin-top: 20px; }
     .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .success { display: none; background: #d4edda; color: #155724; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; }
+    .success { display: none; background: #d4edda; color: #155724; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; border: 1px solid #c3e6cb; }
+    .error { display: none; background: #f8d7da; color: #721c24; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; border: 1px solid #f5c6cb; }
   </style>
 </head>
 <body>
@@ -66,11 +67,17 @@
 
     <div id="loading" class="loading">
       <span class="spinner"></span>
-      Отправляем заказ...
+      Отправляем заказ в Telegram...
     </div>
 
     <div id="success" class="success">
-      ✅ Заказ отправлен! Можете закрыть окно.
+      ✅ Заказ отправлен!<br>
+      <small>Проверьте чат с ботом для получения реквизитов оплаты.<br>Это окно закроется автоматически...</small>
+    </div>
+
+    <div id="error" class="error">
+      ❌ Ошибка отправки<br>
+      <small id="errorText">Попробуйте ещё раз</small>
     </div>
   </div>
 
@@ -80,7 +87,6 @@
   if (tg) {
     tg.ready();
     tg.expand();
-    // Включаем кнопку подтверждения (опционально)
     tg.MainButton.setText("Оформить заказ");
     tg.MainButton.onClick(checkout);
   }
@@ -96,7 +102,6 @@
   function add(sku) {
     cart.set(sku, (cart.get(sku) || 0) + 1);
     updateCartBadge();
-    // Показываем MainButton если есть товары
     if (tg && cart.size > 0) tg.MainButton.show();
   }
   
@@ -209,25 +214,35 @@
     const order = { name, phone, address, comment, items };
     const text = JSON.stringify(order);
 
-    // Показываем загрузку
+    // UI: показываем загрузку
     document.getElementById("checkoutBtn").disabled = true;
     document.getElementById("loading").style.display = "block";
+    document.getElementById("error").style.display = "none";
 
     if (tg) {
-      // Отправляем данные
-      tg.sendData(text);
-      
-      // ВАЖНО: не закрываем сразу! Даем время на отправку
-      // Telegram гарантирует доставку, но нужно немного подождать
-      setTimeout(() => {
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("success").style.display = "block";
+      try {
+        // ВАЖНО: sendData отправляет данные боту
+        tg.sendData(text);
+        console.log("Data sent:", text);
         
-        // Закрываем через 500мс после показа успеха
+        // Даём больше времени на отправку (2 секунды)
         setTimeout(() => {
-          tg.close();
-        }, 500);
-      }, 1000);
+          document.getElementById("loading").style.display = "none";
+          document.getElementById("success").style.display = "block";
+          
+          // Закрываем через 3 секунды, чтобы пользователь увидел сообщение
+          setTimeout(() => {
+            tg.close();
+          }, 3000);
+        }, 2000);
+        
+      } catch (err) {
+        console.error("Error sending data:", err);
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("error").style.display = "block";
+        document.getElementById("errorText").textContent = "Ошибка: " + err.message;
+        document.getElementById("checkoutBtn").disabled = false;
+      }
     } else {
       console.log("ORDER:", text);
       alert("Откройте в Telegram, чтобы отправить заказ боту.");
