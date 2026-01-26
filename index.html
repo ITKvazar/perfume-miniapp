@@ -1,204 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Original Perfume</title>
+  <meta charset="UTF-8" />
+  <title>Mini App Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- 🔴 ОБЯЗАТЕЛЬНО: Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
   <style>
-    body { font-family: Arial, sans-serif; margin: 12px; }
-    .row { display:flex; gap:12px; flex-wrap:wrap; }
-    .card { border:1px solid #ddd; border-radius:12px; padding:12px; width: 220px; }
-    .title { font-weight:700; margin-bottom:6px; }
-    .price { margin: 6px 0; }
-    button { padding:8px 10px; border-radius:10px; border:0; cursor:pointer; }
-    .btn { background:#222; color:#fff; }
-    .btn2 { background:#eee; }
-    .top { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom: 12px; }
-    input { padding:8px; border-radius:10px; border:1px solid #ddd; width: 100%; max-width: 360px; }
-    .section { margin-top:16px; }
-    .cart-item { display:flex; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid #f0f0f0; }
-    .muted { color:#666; font-size: 12px; }
-    textarea { width:100%; max-width:600px; min-height:60px; padding:8px; border-radius:10px; border:1px solid #ddd; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    button {
+      padding: 14px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: none;
+      background: #2aabee;
+      color: white;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
-  <div class="top">
-    <div>
-      <div style="font-size:18px;font-weight:800;">🛍 Original Perfume</div>
-      <div class="muted">Оплата переводом. Доставка уточняется отдельно.</div>
-    </div>
-    <button class="btn2" onclick="openCart()">🧺 Корзина (<span id="cartCount">0</span>)</button>
-  </div>
 
-  <input id="q" placeholder="Поиск по товарам..." oninput="render()" />
+  <h2>🧪 Telegram Mini App</h2>
+  <p>Нажми кнопку — данные уйдут боту</p>
 
-  <div class="section">
-    <div class="row" id="list"></div>
-  </div>
+  <button onclick="send()">Отправить тестовые данные</button>
 
-  <div class="section" id="cart" style="display:none;">
-    <h3>Корзина</h3>
-    <div id="cartItems"></div>
-    <div style="margin-top:10px;font-weight:700;">Итого: <span id="total">0</span> ₽</div>
+  <script>
+    // 🔴 Инициализация Telegram WebApp
+    const tg = window.Telegram.WebApp;
 
-    <h3 style="margin-top:16px;">Оформление</h3>
-    <div class="muted">Заполните данные — мы согласуем доставку после оплаты.</div>
-    <div style="margin-top:10px; max-width: 600px;">
-      <input id="name" placeholder="Имя" />
-      <div style="height:8px;"></div>
-      <input id="phone" placeholder="Телефон" />
-      <div style="height:8px;"></div>
-      <input id="address" placeholder="Адрес (город, улица, дом)" />
-      <div style="height:8px;"></div>
-      <textarea id="comment" placeholder="Комментарий к заказу (необязательно)"></textarea>
-    </div>
-
-    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-      <button class="btn2" onclick="closeCart()">← Назад к товарам</button>
-      <button class="btn" onclick="checkout()">✅ Оформить и перейти к оплате</button>
-    </div>
-  </div>
-
-<script>
-  const tg = window.Telegram?.WebApp;
-  if (tg) {
+    // Говорим Telegram, что приложение готово
     tg.ready();
-    // Можно расширить окно
+
+    // Расширяем окно (по желанию)
     tg.expand();
-  }
 
-  // Пример товаров. Потом заменишь на свои 50.
-  const products = [
-    { sku: "p001", title: "Парфюм A", price_rub: 3500 },
-    { sku: "p002", title: "Парфюм B", price_rub: 2900 },
-    { sku: "p003", title: "Парфюм C", price_rub: 4100 },
-  ];
+    // 🔍 ЖЁСТКАЯ ПРОВЕРКА: это именно Telegram WebApp?
+    alert("Telegram.WebApp = " + !!window.Telegram?.WebApp);
 
-  const cart = new Map(); // sku -> qty
+    function send() {
+      const data = {
+        test: "PING_FROM_MINIAPP",
+        time: new Date().toISOString()
+      };
 
-  function add(sku) {
-    cart.set(sku, (cart.get(sku) || 0) + 1);
-    updateCartBadge();
-  }
-  function dec(sku) {
-    const q = cart.get(sku) || 0;
-    if (q <= 1) cart.delete(sku);
-    else cart.set(sku, q - 1);
-    updateCartBadge();
-    renderCart();
-  }
-  function inc(sku) {
-    cart.set(sku, (cart.get(sku) || 0) + 1);
-    updateCartBadge();
-    renderCart();
-  }
+      // 🔴 САМОЕ ВАЖНОЕ: отправка данных в бота
+      tg.sendData(JSON.stringify(data));
 
-  function updateCartBadge() {
-    let count = 0;
-    cart.forEach(v => count += v);
-    document.getElementById("cartCount").textContent = count;
-  }
-
-  function render() {
-    const q = document.getElementById("q").value.toLowerCase().trim();
-    const list = document.getElementById("list");
-    list.innerHTML = "";
-    products
-      .filter(p => !q || p.title.toLowerCase().includes(q))
-      .forEach(p => {
-        const el = document.createElement("div");
-        el.className = "card";
-        el.innerHTML = `
-          <div class="title">${p.title}</div>
-          <div class="price">${p.price_rub} ₽</div>
-          <button class="btn" onclick="add('${p.sku}')">В корзину</button>
-          <div class="muted" style="margin-top:8px;">SKU: ${p.sku}</div>
-        `;
-        list.appendChild(el);
-      });
-  }
-
-  function openCart() {
-    document.getElementById("cart").style.display = "";
-    document.getElementById("list").style.display = "none";
-    document.getElementById("q").style.display = "none";
-    renderCart();
-  }
-  function closeCart() {
-    document.getElementById("cart").style.display = "none";
-    document.getElementById("list").style.display = "";
-    document.getElementById("q").style.display = "";
-  }
-
-  function renderCart() {
-    const box = document.getElementById("cartItems");
-    box.innerHTML = "";
-    let total = 0;
-
-    cart.forEach((qty, sku) => {
-      const p = products.find(x => x.sku === sku);
-      const line = p.price_rub * qty;
-      total += line;
-
-      const row = document.createElement("div");
-      row.className = "cart-item";
-      row.innerHTML = `
-        <div>
-          <div><b>${p.title}</b></div>
-          <div class="muted">${p.price_rub} ₽ × ${qty} = ${line} ₽</div>
-        </div>
-        <div style="display:flex; gap:6px; align-items:center;">
-          <button class="btn2" onclick="dec('${sku}')">−</button>
-          <button class="btn2" onclick="inc('${sku}')">+</button>
-        </div>
-      `;
-      box.appendChild(row);
-    });
-
-    document.getElementById("total").textContent = total;
-  }
-
-  function checkout() {
-    if (cart.size === 0) {
-      alert("Корзина пустая");
-      return;
+      // Закрываем mini app
+      tg.close();
     }
+  </script>
 
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const address = document.getElementById("address").value.trim();
-    const comment = document.getElementById("comment").value.trim();
-
-    if (!name || !phone || !address) {
-      alert("Заполните имя, телефон и адрес");
-      return;
-    }
-
-    const items = [];
-    cart.forEach((qty, sku) => {
-      const p = products.find(x => x.sku === sku);
-      items.push({ sku: p.sku, title: p.title, qty, price_rub: p.price_rub });
-    });
-
-    const order = { name, phone, address, comment, items };
-
-    // ВАЖНО: это отправит JSON в чат боту.
-    // Именно это умеет принимать твой текущий Python-бот (handle_order_json).
-    const text = JSON.stringify(order);
-
-    if (tg) {
-      tg.sendData(text); // отправляет данные боту
-      tg.close();        // закрыть мини-апп
-    } else {
-      // для теста в браузере
-      console.log("ORDER:", text);
-      alert("Откройте в Telegram, чтобы отправить заказ боту.");
-    }
-  }
-
-  render();
-  updateCartBadge();
-</script>
 </body>
 </html>
