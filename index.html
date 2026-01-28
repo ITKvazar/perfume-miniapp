@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Original Perfume</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { text-align: center; color: #333; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 14px; }
+        .product {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+        .product:hover { transform: translateX(5px); }
+        .product-info h3 { color: #333; font-size: 16px; }
+        .product-info p { color: #667eea; font-weight: bold; font-size: 18px; margin-top: 5px; }
+        .btn-add {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: #667eea;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-add:hover { background: #764ba2; transform: scale(1.1); }
+        .btn-add.active { background: #28a745; }
+        
+        .cart {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+        }
+        .cart h2 { color: #333; margin-bottom: 15px; font-size: 20px; }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .total {
+            text-align: right;
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .form {
+            display: none;
+            margin-top: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .success {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="shop">
+            <h1>🛍 Original Perfume</h1>
+            <p class="subtitle">Оригинальная парфюмерия с доставкой</p>
+            
+            <div id="products"></div>
+            
+            <div class="cart" id="cart">
+                <h2>🧺 Ваша корзина</h2>
+                <div id="cart-items"></div>
+                <div class="total">Итого: <span id="total">0</span> ₽</div>
+                <button class="btn-submit" onclick="showForm()">Оформить заказ</button>
+            </div>
+        </div>
+        
+        <div class="form" id="form">
+            <h2>📋 Оформление</h2>
+            <input type="text" id="name" placeholder="Ваше имя" required>
+            <input type="tel" id="phone" placeholder="Телефон" required>
+            <input type="text" id="address" placeholder="Адрес доставки" required>
+            <textarea id="comment" placeholder="Комментарий (необязательно)" rows="3"></textarea>
+            <button class="btn-submit" id="submitBtn" onclick="submitOrder()">Подтвердить заказ</button>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Отправляем заказ...</p>
+        </div>
+        
+        <div class="success" id="success">
+            <div class="success-icon">✅</div>
+            <h2>Заказ принят!</h2>
+            <p>Номер заказа: <b id="order-id"></b></p>
+            <p style="margin-top: 15px; color: #666;">Мы свяжемся с вами для подтверждения</p>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ ЗАМЕНИТЕ на ваш URL из Apps Script
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyExwxxwL5YpoYhCUMg5bHvvqpEavXMhGGzWFVj6EQl_GyDwoM-W3cBO07Kfqqyv2qEcg/exec';
+        
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+        
+        const products = [
+            {sku: 'p001', title: 'Chanel No. 5 (50ml)', price: 8500},
+            {sku: 'p002', title: 'Dior Sauvage (100ml)', price: 7200},
+            {sku: 'p003', title: 'Tom Ford Black Orchid', price: 12000},
+            {sku: 'p004', title: 'YSL Libre (50ml)', price: 6800},
+        ];
+        
+        const cart = {};
+        
+        function renderProducts() {
+            const div = document.getElementById('products');
+            div.innerHTML = products.map(p => `
+                <div class="product">
+                    <div class="product-info">
+                        <h3>${p.title}</h3>
+                        <p>${p.price.toLocaleString()} ₽</p>
+                    </div>
+                    <button class="btn-add ${cart[p.sku] ? 'active' : ''}" 
+                            onclick="addToCart('${p.sku}')">
+                        ${cart[p.sku] || '+'}
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        function addToCart(sku) {
+            cart[sku] = (cart[sku] || 0) + 1;
+            renderProducts();
+            updateCart();
+            
+            // Анимация кнопки
+            tg.HapticFeedback.impactOccurred('light');
+        }
+        
+        function updateCart() {
+            const items = Object.entries(cart).map(([sku, qty]) => {
+                const p = products.find(x => x.sku === sku);
+                return {...p, qty};
+            });
+            
+            if (items.length === 0) {
+                document.getElementById('cart').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('cart').style.display = 'block';
+            document.getElementById('cart-items').innerHTML = items.map(i => `
+                <div class="cart-item">
+                    <span>${i.title}</span>
+                    <b>${i.qty} × ${i.price.toLocaleString()} ₽</b>
+                </div>
+            `).join('');
+            
+            const total = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+            document.getElementById('total').textContent = total.toLocaleString();
+            
+            // Обновляем MainButton
+            tg.MainButton.setText(`Оформить на ${total.toLocaleString()} ₽`);
+            tg.MainButton.show();
+            tg.MainButton.onClick(showForm);
+        }
+        
+        function showForm() {
+            document.getElementById('shop').style.display = 'none';
+            document.getElementById('form').style.display = 'block';
+            tg.MainButton.hide();
+        }
+        
+        async function submitOrder() {
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const comment = document.getElementById('comment').value.trim();
+            
+            if (!name || !phone || !address) {
+                tg.showAlert('Заполните все обязательные поля');
+                return;
+            }
+            
+            const items = Object.entries(cart).map(([sku, qty]) => {
+                const p = products.find(x => x.sku === sku);
+                return {sku, title: p.title, qty, price_rub: p.price};
+            });
+            
+            const total = items.reduce((sum, i) => sum + i.price_rub * i.qty, 0);
+            
+            const order = {
+                name, phone, address, comment, items, total,
+                userId: tg.initDataUnsafe?.user?.id,
+                username: tg.initDataUnsafe?.user?.username
+            };
+            
+            // UI загрузка
+            document.getElementById('form').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(order),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('success').style.display = 'block';
+                    document.getElementById('order-id').textContent = result.orderId;
+                    tg.HapticFeedback.notificationOccurred('success');
+                    
+                    // Закрываем через 3 секунды
+                    setTimeout(() => tg.close(), 3000);
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('form').style.display = 'block';
+                document.getElementById('submitBtn').disabled = false;
+                tg.showAlert('Ошибка отправки. Попробуйте ещё раз.');
+            }
+        }
+        
+        renderProducts();
+    </script>
+</body>
+</html>
