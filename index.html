@@ -784,16 +784,26 @@
 
         /* blur halo below bottom area */
         .bottom-nav::after{
-            content:"";
-            position:absolute;
-            left:0; right:0;
-            bottom: 0;
-            height: calc(22px + env(safe-area-inset-bottom));
-            background: var(--glass);
-            -webkit-backdrop-filter: blur(var(--blur));
-            backdrop-filter: blur(var(--blur));
-            opacity: .85;
-            pointer-events:none;
+              content:"";
+              position:absolute;
+              left: 0;
+              right: 0;
+            
+              /* стартуем НЕ от низа экрана, а от низа плашки */
+              top: 10px;                 /* совпадает с padding-top у .bottom-nav */
+              bottom: 0;
+            
+              /* смещаемся вниз на высоту самой плашки */
+              transform: translateY(74px); /* ≈ высота .bottom-nav-inner (подгони при желании) */
+            
+              height: calc(14px + env(safe-area-inset-bottom)); /* меньше и аккуратнее */
+            
+              background: rgba(255,255,255,.55); /* менее белый */
+              -webkit-backdrop-filter: blur(14px);
+              backdrop-filter: blur(14px);
+              opacity: .55;               /* менее выраженный */
+              pointer-events:none;
+              z-index: 0;                 /* важно: ниже плашки */
         }
 
         .bottom-nav-inner{
@@ -811,6 +821,9 @@
 
             border-radius: 22px;
             padding: 8px;
+
+            position: relative; 
+            z-index: 2;
         }
 
         .nav-item {
