@@ -125,41 +125,133 @@
             flex-shrink: 0;
         }
 
-        /* Sort Dropdown */
-        .sort-dropdown {
-            position: relative;
-        }
-
-        .sort-menu {
+        /* Sort Bottom Sheet */
+        .sort-overlay {
             display: none;
             position: fixed;
-            top: 120px;
-            left: 16px;
-            right: 16px;
-            background: #fff;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            z-index: 3000;
-            overflow: hidden;
-            border: 1px solid #E5E7EB;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 2999;
         }
 
-        .sort-menu.show { display: block; }
+        .sort-overlay.show { display: block; }
 
-        .sort-option {
-            padding: 16px 20px;
+        .sort-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            z-index: 3000;
+            padding: 12px 16px max(16px, env(safe-area-inset-bottom, 16px));
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .sort-sheet.show {
+            transform: translateY(0);
+        }
+
+        .sort-sheet-handle {
+            width: 36px;
+            height: 4px;
+            background: #D1D5DB;
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
+
+        .sort-sheet-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .sort-sheet-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid #E5E7EB;
             cursor: pointer;
             font-size: 16px;
-            transition: background 0.2s;
-            border-bottom: 1px solid #E5E7EB;
+            color: #000;
         }
 
-        .sort-option:last-child {
+        .sort-sheet-option:last-child {
             border-bottom: none;
         }
 
-        .sort-option:hover { background: #F9FAFB; }
-        .sort-option.active { color: var(--primary); font-weight: 600; }
+        .sort-sheet-option input {
+            display: none;
+        }
+
+        .sort-radio {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid #D1D5DB;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .sort-sheet-option input:checked + .sort-radio {
+            border-color: #007AFF;
+            background: #007AFF;
+        }
+
+        .sort-sheet-option input:checked + .sort-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff;
+        }
+
+        .sort-sheet-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .sort-btn-cancel {
+            flex: 1;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            background: #E5E7EB;
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .sort-btn-apply {
+            flex: 1.5;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            background: #007AFF;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* Sort button active state (circle border) */
+        .filter-btn.icon-only.sort-active {
+            border: 1.5px solid #000;
+        }
 
         /* ===== Main scrollable content ===== */
         .content {
@@ -1072,7 +1164,7 @@
     </div>
     <div class="filters-wrap">
         <div class="filters">
-            <button class="filter-btn icon-only" onclick="showSortMenu()">
+            <button class="filter-btn icon-only" id="sortBtn" onclick="showSortSheet()">
                 <svg width="15" height="12" viewBox="0 0 15 12" fill="none">
                     <path d="M0.5 1.5H14.5" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>
                     <path d="M3 6H12" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>
@@ -1087,12 +1179,32 @@
     </div>
 </div>
 
-<!-- Sort Menu -->
-<div class="sort-menu" id="sortMenu">
-    <div class="sort-option active" data-sort="default">По умолчанию</div>
-    <div class="sort-option" data-sort="new">Сначала новинки</div>
-    <div class="sort-option" data-sort="price-desc">Цена: высокая → низкая</div>
-    <div class="sort-option" data-sort="price-asc">Цена: низкая → высокая</div>
+<!-- Sort Bottom Sheet -->
+<div class="sort-overlay" id="sortOverlay" onclick="closeSortSheet()"></div>
+<div class="sort-sheet" id="sortSheet">
+    <div class="sort-sheet-handle"></div>
+    <div class="sort-sheet-title">Показать сначала</div>
+    <div class="sort-sheet-options" id="sortOptions">
+        <label class="sort-sheet-option">
+            <span>Популярные</span>
+            <input type="radio" name="sort" value="popular" checked>
+            <span class="sort-radio"></span>
+        </label>
+        <label class="sort-sheet-option">
+            <span>Подешевле</span>
+            <input type="radio" name="sort" value="price-asc">
+            <span class="sort-radio"></span>
+        </label>
+        <label class="sort-sheet-option">
+            <span>Подороже</span>
+            <input type="radio" name="sort" value="price-desc">
+            <span class="sort-radio"></span>
+        </label>
+    </div>
+    <div class="sort-sheet-buttons">
+        <button class="sort-btn-cancel" onclick="cancelSort()">Отменить</button>
+        <button class="sort-btn-apply" onclick="applySort()">Применить</button>
+    </div>
 </div>
 
 <!-- ===== Main Content ===== -->
@@ -1314,6 +1426,7 @@
                 description: 'Роскошный восточный аромат с нотами розы, ладана и ванили. Идеален для особых случаев.',
                 characteristics: {Объем: '50ml', Тип: 'Eau de Parfum', Производитель: 'Oman', Год: '2025'},
                 isNew: true,
+                popularity: 3,
                 tags: ['new', 'spring']
             },
             {
@@ -1326,6 +1439,7 @@
                 description: 'Мужественный древесно-восточный аромат с ромом, древесиной кедра и мускусом.',
                 characteristics: {Объем: '50ml', Тип: 'Extrait de Parfum', Производитель: 'France', Год: '2024'},
                 isNew: false,
+                popularity: 1,
                 tags: ['summer']
             },
             {
@@ -1337,6 +1451,7 @@
                 description: 'Современный унисекс аромат с цитрусовыми нотами и древесной базой.',
                 characteristics: {Объем: '50ml', Тип: 'Eau de Parfum', Производитель: 'Russia', Год: '2026'},
                 isNew: true,
+                popularity: 4,
                 tags: ['new', 'gift']
             },
             {
@@ -1349,6 +1464,7 @@
                 description: 'Яркий цветочно-фруктовый аромат для уверенных в себе женщин.',
                 characteristics: {Объем: '50ml', Тип: 'Extrait de Parfum', Производитель: 'Turkey', Год: '2025'},
                 isNew: true,
+                popularity: 5,
                 tags: ['spring', 'gift']
             },
             {
@@ -1360,6 +1476,7 @@
                 description: 'Легендарная классика. Цветочно-альдегидный шедевр.',
                 characteristics: {Объем: '50ml', Тип: 'Eau de Parfum', Производитель: 'France', Год: '1921'},
                 isNew: false,
+                popularity: 2,
                 tags: ['gift']
             },
             {
@@ -1371,6 +1488,7 @@
                 description: 'Свежий, пряный и древесный. Магнетический аромат.',
                 characteristics: {Объем: '100ml', Тип: 'Eau de Toilette', Производитель: 'France', Год: '2015'},
                 isNew: false,
+                popularity: 6,
                 tags: ['summer']
             }
         ],
@@ -1378,7 +1496,7 @@
         favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
         orders: JSON.parse(localStorage.getItem('orders') || '[]'),
         currentCategory: 'all',
-        currentSort: 'default',
+        currentSort: 'popular',
         searchQuery: '',
         currentProduct: null,
         bannerIndex: 0
@@ -1402,23 +1520,8 @@
             });
         });
 
-        // Sort options
-        document.querySelectorAll('.sort-option').forEach(opt => {
-            opt.addEventListener('click', () => {
-                document.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
-                opt.classList.add('active');
-                state.currentSort = opt.dataset.sort;
-                document.getElementById('sortMenu').classList.remove('show');
-                renderProducts();
-            });
-        });
-
-        // Close sort menu on outside click
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.sort-dropdown') && !e.target.closest('.sort-menu')) {
-                document.getElementById('sortMenu').classList.remove('show');
-            }
-        });
+        // Set default sort radio to match state
+        updateSortRadio();
     });
 
     // Banner Carousel
@@ -1445,9 +1548,49 @@
         });
     }
 
-    // Sort Menu
-    function showSortMenu() {
-        document.getElementById('sortMenu').classList.add('show');
+    // Sort Bottom Sheet
+    function showSortSheet() {
+        updateSortRadio();
+        document.getElementById('sortOverlay').classList.add('show');
+        document.getElementById('sortSheet').classList.add('show');
+    }
+
+    function closeSortSheet() {
+        document.getElementById('sortOverlay').classList.remove('show');
+        document.getElementById('sortSheet').classList.remove('show');
+    }
+
+    function updateSortRadio() {
+        const radios = document.querySelectorAll('#sortOptions input[name="sort"]');
+        radios.forEach(r => {
+            r.checked = r.value === state.currentSort;
+        });
+    }
+
+    function applySort() {
+        const selected = document.querySelector('#sortOptions input[name="sort"]:checked');
+        if (selected) {
+            state.currentSort = selected.value;
+        }
+        updateSortBtnState();
+        closeSortSheet();
+        renderProducts();
+    }
+
+    function cancelSort() {
+        state.currentSort = 'popular';
+        updateSortBtnState();
+        closeSortSheet();
+        renderProducts();
+    }
+
+    function updateSortBtnState() {
+        const btn = document.getElementById('sortBtn');
+        if (state.currentSort !== 'popular') {
+            btn.classList.add('sort-active');
+        } else {
+            btn.classList.remove('sort-active');
+        }
     }
 
     // Filter by Tag
@@ -1470,12 +1613,12 @@
         }
 
         filtered = [...filtered];
-        if (state.currentSort === 'price-asc') {
+        if (state.currentSort === 'popular') {
+            filtered.sort((a, b) => a.popularity - b.popularity);
+        } else if (state.currentSort === 'price-asc') {
             filtered.sort((a, b) => a.price - b.price);
         } else if (state.currentSort === 'price-desc') {
             filtered.sort((a, b) => b.price - a.price);
-        } else if (state.currentSort === 'new') {
-            filtered.sort((a, b) => (b.isNew === a.isNew) ? 0 : b.isNew ? 1 : -1);
         }
 
         renderFilteredProducts(filtered);
