@@ -82,6 +82,12 @@
             color: #000;
         }
 
+        .nav-logo-img {
+            height: 36px;
+            width: auto;
+            object-fit: contain;
+        }
+
         /* ===== Filters - DESIGNER STYLE ===== */
         .filters-wrap {
             padding: 8px 16px 12px;
@@ -185,7 +191,7 @@
 
         /* ===== Main scrollable content ===== */
         .content {
-            padding-top: 72px;
+            padding-top: 120px;
             padding-bottom: 108px;
         }
 
@@ -1082,6 +1088,30 @@
 
 <!-- ===== Navigation Bar ===== -->
 <div class="nav-bar">
+    <div class="nav-header">
+        <button class="nav-btn" onclick="closeApp()">
+            <div class="nav-icon">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M1 1L13 13M13 1L1 13" stroke="#000" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+        </button>
+        <img src="logo.png" alt="Ароматная Публика" class="nav-logo-img">
+        <button class="nav-btn" onclick="toggleMenu()">
+            <div class="nav-icon">
+                <svg width="14" height="8" viewBox="0 0 14 8" fill="none">
+                    <path d="M1 1L7 7L13 1" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="nav-icon">
+                <svg width="20" height="4" viewBox="0 0 20 4" fill="none">
+                    <circle cx="4" cy="2" r="1.5" fill="#000"/>
+                    <circle cx="10" cy="2" r="1.5" fill="#000"/>
+                    <circle cx="16" cy="2" r="1.5" fill="#000"/>
+                </svg>
+            </div>
+        </button>
+    </div>
     <div class="filters-wrap">
         <div class="filters">
             <button class="filter-btn icon-only" onclick="showSortMenu()">
@@ -1308,6 +1338,13 @@
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
+    // Hide Telegram system header by requesting fullscreen
+    if (tg.requestFullscreen) {
+        tg.requestFullscreen();
+    }
+    if (tg.setHeaderColor) {
+        tg.setHeaderColor('#ffffff');
+    }
 
     // State
     let state = {
