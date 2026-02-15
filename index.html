@@ -813,6 +813,19 @@
 
         .page.active { display: block; }
 
+        .page-no-filters {
+            padding-top: 60px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 600;
+            font-style: italic;
+            color: #000;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
         .page-header {
             position: sticky;
             top: 0;
@@ -1382,10 +1395,8 @@
     </div>
 
     <!-- Favorites Page -->
-    <div id="favoritesPage" class="page">
-        <div class="page-header">
-            <h2>Избранное</h2>
-        </div>
+    <div id="favoritesPage" class="page page-no-filters">
+        <div class="page-title">Избранное</div>
         <div class="products" id="favoritesGrid"></div>
         <div id="emptyFavorites" class="empty-state hidden">
             <div class="empty-icon">🤍</div>
@@ -2136,20 +2147,26 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
 
+        const filtersWrap = document.querySelector('.filters-wrap');
+
         if (page === 'main') {
             document.getElementById('mainPage').classList.add('active');
             document.querySelectorAll('.tab')[0].classList.add('active');
+            filtersWrap.classList.remove('hidden');
         } else if (page === 'favorites') {
             document.getElementById('favoritesPage').classList.add('active');
             document.querySelectorAll('.tab')[1].classList.add('active');
+            filtersWrap.classList.add('hidden');
             renderFavorites();
         } else if (page === 'cart') {
             document.getElementById('cartPage').classList.add('active');
             document.querySelectorAll('.tab')[2].classList.add('active');
+            filtersWrap.classList.add('hidden');
             renderCart();
         } else if (page === 'profile') {
             document.getElementById('profilePage').classList.add('active');
             document.querySelectorAll('.tab')[3].classList.add('active');
+            filtersWrap.classList.add('hidden');
         }
 
         window.scrollTo(0, 0);
