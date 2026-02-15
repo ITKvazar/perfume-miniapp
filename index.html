@@ -291,16 +291,6 @@
             top: -6px;
         }
 
-        /* Brand label under filters */
-        .brand-label {
-            padding: 0 16px;
-            font-size: 20px;
-            font-weight: 600;
-            font-style: italic;
-            color: #000;
-            letter-spacing: -0.5px;
-        }
-
         /* Brand sheet options */
         .brand-sheet {
             max-height: 85vh;
@@ -1372,9 +1362,6 @@
             </div>
         </div>
 
-        <!-- Brand Name Label -->
-        <div class="brand-label hidden" id="brandLabel"></div>
-
         <!-- Products -->
         <div class="products-section">
             <div class="products" id="productsGrid"></div>
@@ -1725,23 +1712,21 @@
     // Category Filters
     function toggleCategory(cat, btn) {
         if (state.currentCategory === cat) {
-            // Deselect
             state.currentCategory = 'all';
             btn.classList.remove('cat-active');
             btn.innerHTML = btn.dataset.category === 'women' ? 'Женские' : btn.dataset.category === 'men' ? 'Мужские' : 'Унисекс';
         } else {
-            // Deselect all category buttons first
             document.querySelectorAll('[data-category]').forEach(b => {
                 b.classList.remove('cat-active');
                 const c = b.dataset.category;
                 b.innerHTML = c === 'women' ? 'Женские' : c === 'men' ? 'Мужские' : 'Унисекс';
             });
-            // Select this one
             state.currentCategory = cat;
             const label = cat === 'women' ? 'Женские' : cat === 'men' ? 'Мужские' : 'Унисекс';
             btn.classList.add('cat-active');
             btn.innerHTML = label + '<span class="filter-x" onclick="event.stopPropagation(); resetCategory()"><svg viewBox="0 0 8 8" fill="none"><path d="M1 1L7 7M7 1L1 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></span>';
         }
+        updateFilteredView();
         renderProducts();
     }
 
@@ -1752,6 +1737,7 @@
             const c = b.dataset.category;
             b.innerHTML = c === 'women' ? 'Женские' : c === 'men' ? 'Мужские' : 'Унисекс';
         });
+        updateFilteredView();
         renderProducts();
     }
 
@@ -1798,27 +1784,38 @@
     }
 
     function updateBrandBtn() {
-        const badge = document.getElementById('brandBadge');
-        const textEl = document.getElementById('brandBtnText');
+        const btn = document.getElementById('brandBtn');
         const count = state.selectedBrands.length;
-        const label = document.getElementById('brandLabel');
 
         if (count === 0) {
-            badge.classList.add('hidden');
-            textEl.textContent = 'Бренд';
-            label.classList.add('hidden');
-            label.textContent = '';
+            btn.classList.remove('cat-active');
+            btn.innerHTML = '<span id="brandBtnText">Бренд</span><svg width="10" height="6" viewBox="0 0 10 6" fill="none" style="margin-left:2px"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="brand-badge hidden" id="brandBadge">0</span>';
         } else if (count === 1) {
-            badge.classList.add('hidden');
-            textEl.textContent = 'Бренд';
-            label.classList.remove('hidden');
-            label.textContent = state.selectedBrands[0];
+            btn.classList.add('cat-active');
+            btn.innerHTML = state.selectedBrands[0] + '<span class="filter-x" onclick="event.stopPropagation(); resetBrands()"><svg viewBox="0 0 8 8" fill="none"><path d="M1 1L7 7M7 1L1 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></span>';
         } else {
-            badge.classList.remove('hidden');
-            badge.textContent = count;
-            textEl.textContent = 'Бренд';
-            label.classList.add('hidden');
-            label.textContent = '';
+            btn.classList.remove('cat-active');
+            btn.innerHTML = '<span id="brandBtnText">Бренд</span><svg width="10" height="6" viewBox="0 0 10 6" fill="none" style="margin-left:2px"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="brand-badge" id="brandBadge">' + count + '</span>';
+        }
+        updateFilteredView();
+    }
+
+    function resetBrands() {
+        state.selectedBrands = [];
+        updateBrandBtn();
+        renderProducts();
+    }
+
+    function updateFilteredView() {
+        const hasFilter = state.currentCategory !== 'all' || state.selectedBrands.length > 0;
+        const banner = document.querySelector('.banner-section');
+        const collections = document.getElementById('collections');
+        if (hasFilter) {
+            banner.classList.add('hidden');
+            collections.classList.add('hidden');
+        } else {
+            banner.classList.remove('hidden');
+            collections.classList.remove('hidden');
         }
     }
 
