@@ -291,6 +291,16 @@
             top: -6px;
         }
 
+        /* Brand label under filters */
+        .brand-label {
+            padding: 0 16px;
+            font-size: 20px;
+            font-weight: 600;
+            font-style: italic;
+            color: #000;
+            letter-spacing: -0.5px;
+        }
+
         /* Brand sheet options */
         .brand-sheet {
             max-height: 85vh;
@@ -1362,6 +1372,9 @@
             </div>
         </div>
 
+        <!-- Brand Name Label -->
+        <div class="brand-label hidden" id="brandLabel"></div>
+
         <!-- Products -->
         <div class="products-section">
             <div class="products" id="productsGrid"></div>
@@ -1785,23 +1798,29 @@
 
     function updateBrandBtn() {
         const btn = document.getElementById('brandBtn');
+        const label = document.getElementById('brandLabel');
         const count = state.selectedBrands.length;
 
         if (count === 0) {
             btn.classList.remove('cat-active');
             btn.innerHTML = '<span id="brandBtnText">Бренд</span><svg width="10" height="6" viewBox="0 0 10 6" fill="none" style="margin-left:2px"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="brand-badge hidden" id="brandBadge">0</span>';
+            label.classList.add('hidden');
         } else if (count === 1) {
             btn.classList.add('cat-active');
             btn.innerHTML = state.selectedBrands[0] + '<span class="filter-x" onclick="event.stopPropagation(); resetBrands()"><svg viewBox="0 0 8 8" fill="none"><path d="M1 1L7 7M7 1L1 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></span>';
+            label.textContent = state.selectedBrands[0];
+            label.classList.remove('hidden');
         } else {
             btn.classList.remove('cat-active');
             btn.innerHTML = '<span id="brandBtnText">Бренд</span><svg width="10" height="6" viewBox="0 0 10 6" fill="none" style="margin-left:2px"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="brand-badge" id="brandBadge">' + count + '</span>';
+            label.classList.add('hidden');
         }
         updateFilteredView();
     }
 
     function resetBrands() {
         state.selectedBrands = [];
+        document.getElementById('brandLabel').classList.add('hidden');
         updateBrandBtn();
         renderProducts();
     }
