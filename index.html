@@ -42,7 +42,7 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
+            z-index: 3001;
             background: linear-gradient(180deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.77) 80%, rgba(255,255,255,0) 100%);
             padding-top: env(safe-area-inset-top, 0px);
         }
@@ -52,6 +52,7 @@
             align-items: center;
             justify-content: center;
             padding: 44px 16px 8px;
+            position: relative;
         }
 
         .nav-logo-img {
@@ -134,7 +135,7 @@
             right: 0;
             bottom: 0;
             background: rgba(0,0,0,0.4);
-            z-index: 2999;
+            z-index: 3010;
         }
 
         .sort-overlay.show { display: block; }
@@ -146,7 +147,7 @@
             right: 0;
             background: #fff;
             border-radius: 20px 20px 0 0;
-            z-index: 3000;
+            z-index: 3011;
             padding: 12px 16px max(16px, env(safe-area-inset-bottom, 16px));
             transform: translateY(100%);
             transition: transform 0.3s ease;
@@ -863,40 +864,89 @@
             to { transform: translateY(0); }
         }
 
-        .modal-header {
-            position: sticky;
-            top: 0;
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            z-index: 10;
-            border-bottom: 1px solid #E5E7EB;
-        }
+        .modal-content { padding-bottom: 80px; padding-top: 80px; }
 
-        .back-btn {
-            width: 40px;
-            height: 40px;
+        /* Nav-bar detail mode elements */
+        .nav-back-btn {
+            display: none;
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            border: none;
-            background: #F9FAFB;
-            display: flex;
+            border: 1px solid #E5E7EB;
+            background: #fff;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 20px;
+            z-index: 10;
         }
 
-        .modal-content { padding-bottom: 100px; }
+        .nav-back-btn svg {
+            width: 18px;
+            height: 18px;
+        }
 
+        .nav-actions-right {
+            display: none;
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            align-items: center;
+            gap: 0;
+            background: #fff;
+            border: 1px solid #E5E7EB;
+            border-radius: 20px;
+            padding: 6px 4px;
+            z-index: 10;
+        }
+
+        .nav-action-btn {
+            width: 28px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .nav-actions-divider {
+            width: 1px;
+            height: 16px;
+            background: #E5E7EB;
+        }
+
+        body.detail-mode .nav-back-btn { display: flex; }
+        body.detail-mode .nav-actions-right { display: flex; }
+        body.detail-mode .filters-wrap { display: none !important; }
+        body.detail-mode .tab-bar-wrap { display: none !important; }
+        body.detail-mode .nav-bar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        body.viewer-mode .tab-bar-wrap { display: none !important; }
+        body.viewer-mode .detail-bottom-bar { display: none !important; }
+        body.viewer-mode .nav-actions-right { display: flex; }
+        body.viewer-mode .nav-bar {
+            background: rgba(245,245,245,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* Detail gallery */
         .detail-gallery {
-            height: 350px;
-            background: #F9FAFB;
+            background: #F5F5F5;
             position: relative;
             overflow: hidden;
+            aspect-ratio: 1 / 1;
         }
 
         .detail-images {
@@ -908,120 +958,360 @@
         .detail-image {
             min-width: 100%;
             height: 100%;
-            object-fit: cover;
-        }
-
-        .gallery-nav {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-        }
-
-        .gallery-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.5);
+            object-fit: contain;
             cursor: pointer;
         }
 
-        .gallery-dot.active { background: white; width: 24px; border-radius: 4px; }
-
-        .detail-info {
-            padding: 20px;
-        }
-
-        .detail-header {
+        .detail-image-actions {
+            position: absolute;
+            top: 16px;
+            right: 16px;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
+            gap: 8px;
+            z-index: 5;
         }
 
-        .detail-title {
-            font-size: 24px;
-            font-weight: 700;
-            flex: 1;
-            margin-right: 12px;
-        }
-
-        .detail-fav {
-            width: 44px;
-            height: 44px;
+        .detail-img-btn {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            border: 2px solid #E5E7EB;
-            background: white;
+            background: rgba(255,255,255,0.85);
+            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
             cursor: pointer;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
-        .detail-fav.active { color: #eb4444; border-color: #eb4444; }
+        .detail-img-btn.fav-active svg path {
+            fill: #eb4444;
+            stroke: #eb4444;
+        }
 
-        .detail-price-block {
-            margin-bottom: 24px;
+        /* Volume selector */
+        .volume-selector {
+            display: flex;
+            gap: 8px;
+            padding: 16px 16px 0;
+        }
+
+        .volume-btn {
+            height: 36px;
+            padding: 0 20px;
+            border-radius: 20px;
+            border: none;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 510;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #F3F4F6;
+            color: #000;
+        }
+
+        .volume-btn.active {
+            background: #000;
+            color: #fff;
+        }
+
+        /* Detail brand + title */
+        .detail-brand-line {
+            padding: 16px 16px 0;
+            font-size: 15px;
+            font-weight: 400;
+            color: #000;
+            letter-spacing: -0.3px;
+        }
+
+        .detail-brand-line .brand-name {
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .detail-brand-line .brand-sep {
+            color: #909096;
+            margin: 0 4px;
+        }
+
+        /* Detail price */
+        .detail-price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 8px 16px 0;
         }
 
         .detail-price {
-            font-size: 32px;
+            font-size: 22px;
             font-weight: 700;
-            color: var(--primary);
+            color: #000;
+            letter-spacing: -0.5px;
         }
 
         .detail-old-price {
-            font-size: 20px;
+            font-size: 16px;
             color: #909096;
             text-decoration: line-through;
-            margin-left: 12px;
         }
 
-        .detail-section {
-            margin-bottom: 24px;
+        /* Description card */
+        .detail-desc-card {
+            margin: 16px 16px 0;
+            background: #F9FAFB;
+            border-radius: 16px;
+            padding: 20px;
         }
 
-        .detail-section h3 {
+        .detail-desc-card h3 {
             font-size: 18px;
+            font-weight: 700;
             margin-bottom: 12px;
             color: #000;
         }
 
-        .detail-section p {
-            line-height: 1.6;
-            color: #6B7280;
+        .detail-desc-text {
+            font-size: 15px;
+            line-height: 1.55;
+            color: #3C3C43;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
         }
 
-        .characteristics {
-            display: grid;
-            gap: 12px;
+        .detail-desc-text.collapsed {
+            max-height: 5.5em;
         }
 
-        .char-item {
+        .detail-desc-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #909096;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: inherit;
+        }
+
+        .detail-desc-toggle svg {
+            transition: transform 0.2s;
+        }
+
+        .detail-desc-toggle.expanded svg {
+            transform: rotate(180deg);
+        }
+
+        /* Specs card */
+        .detail-specs-card {
+            margin: 12px 16px 0;
+            background: #F9FAFB;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .detail-specs-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #000;
+        }
+
+        .spec-row {
             display: flex;
             justify-content: space-between;
-            padding: 12px;
-            background: #F9FAFB;
-            border-radius: 12px;
+            align-items: flex-start;
+            padding: 14px 0;
+            border-bottom: 1px solid #E8E8ED;
         }
 
-        .char-label { color: #6B7280; }
-        .char-value { font-weight: 600; }
+        .spec-row:first-of-type {
+            padding-top: 0;
+        }
 
-        .detail-actions {
+        .spec-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .spec-label {
+            font-size: 15px;
+            color: #909096;
+            flex-shrink: 0;
+        }
+
+        .spec-value {
+            font-size: 15px;
+            color: #000;
+            text-align: right;
+        }
+
+        /* Detail bottom bar */
+        .detail-bottom-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background: #fff;
-            padding: 16px;
-            border-top: 1px solid #E5E7EB;
+            padding: 12px 16px;
+            padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
+            z-index: 3002;
             display: flex;
+            align-items: center;
             gap: 12px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+        }
+
+        .detail-add-btn {
+            flex: 1;
+            height: 52px;
+            border-radius: 14px;
+            border: none;
+            background: #000;
+            color: #fff;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: -0.3px;
+        }
+
+        .detail-qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #F3F4F6;
+            border-radius: 14px;
+            padding: 0 16px;
+            height: 52px;
+        }
+
+        .detail-qty-btn {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 500;
+            color: #000;
+            padding: 0;
+        }
+
+        .detail-qty-value {
+            font-size: 16px;
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .detail-goto-cart-btn {
+            flex: 1;
+            height: 52px;
+            border-radius: 14px;
+            border: none;
+            background: #007AFF;
+            color: #fff;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: -0.3px;
+        }
+
+        /* Image viewer fullscreen */
+        .image-viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #F5F5F5;
+            z-index: 2500;
+            flex-direction: column;
+        }
+
+        .image-viewer.show {
+            display: flex;
+        }
+
+        .image-viewer-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .image-viewer-main img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .image-viewer-thumbs {
+            display: flex;
+            gap: 8px;
+            padding: 16px;
+            padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+            overflow-x: auto;
+            scrollbar-width: none;
+            background: #fff;
+        }
+
+        .image-viewer-thumbs::-webkit-scrollbar { display: none; }
+
+        .viewer-thumb {
+            width: 72px;
+            height: 72px;
+            border-radius: 12px;
+            overflow: hidden;
+            flex-shrink: 0;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background: #F5F5F5;
+        }
+
+        .viewer-thumb.active {
+            border-color: #000;
+        }
+
+        .viewer-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        body.viewer-mode .nav-back-btn { display: none !important; }
+        body.viewer-mode .nav-close-btn { display: flex; }
+
+        .nav-close-btn {
+            display: none;
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #E5E7EB;
+            background: #fff;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .nav-close-btn svg {
+            width: 16px;
+            height: 16px;
         }
 
         .btn-primary {
@@ -1216,7 +1506,7 @@
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(255,255,255,0.95);
-            z-index: 3000;
+            z-index: 5000;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -1238,7 +1528,7 @@
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: #fff;
-            z-index: 3000;
+            z-index: 5000;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -1285,7 +1575,21 @@
 <!-- ===== Navigation Bar ===== -->
 <div class="nav-bar">
     <div class="nav-header">
+        <!-- Back button (detail mode) -->
+        <button class="nav-back-btn" onclick="closeModal()">
+            <svg viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <!-- Close button (viewer mode) -->
+        <button class="nav-close-btn" onclick="closeImageViewer()">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14" stroke="#000" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
         <img src="logo.png" alt="Ароматная Публика" class="nav-logo-img">
+        <!-- Right action buttons (detail mode) -->
+        <div class="nav-actions-right">
+            <button class="nav-action-btn" onclick="closeModal()"><svg width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1 1L7 7L13 1" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="nav-actions-divider"></div>
+            <button class="nav-action-btn" onclick="showDetailMenu()"><svg width="16" height="4" viewBox="0 0 16 4" fill="none"><circle cx="2" cy="2" r="1.5" fill="#000"/><circle cx="8" cy="2" r="1.5" fill="#000"/><circle cx="14" cy="2" r="1.5" fill="#000"/></svg></button>
+        </div>
     </div>
     <div class="filters-wrap">
         <div class="filters">
@@ -1463,15 +1767,14 @@
 
 <!-- ===== Product Detail Modal ===== -->
 <div id="productModal" class="modal">
-    <div class="modal-header">
-        <button class="back-btn" onclick="closeModal()">←</button>
-        <span style="font-weight: 600;">О товаре</span>
-        <div style="width: 40px;"></div>
-    </div>
     <div class="modal-content" id="modalContent"></div>
-    <div class="detail-actions">
-        <button class="btn-primary" id="modalAddToCart" onclick="addToCartFromModal()">Добавить в корзину</button>
-    </div>
+    <div class="detail-bottom-bar" id="detailBottomBar"></div>
+</div>
+
+<!-- ===== Image Viewer ===== -->
+<div id="imageViewer" class="image-viewer">
+    <div class="image-viewer-main" id="viewerMain"></div>
+    <div class="image-viewer-thumbs" id="viewerThumbs"></div>
 </div>
 
 <!-- ===== Tab Bar ===== -->
@@ -1566,22 +1869,24 @@
                 oldPrice: 8900,
                 category: 'women',
                 images: ['Photo.png', 'Photo.png'],
-                description: 'Роскошный восточный аромат с нотами розы, ладана и ванили. Идеален для особых случаев.',
-                characteristics: {Объем: '50ml', Тип: 'Eau de Parfum', Производитель: 'Oman', Год: '2025'},
+                volumes: ['50 мл', '100 мл'],
+                description: 'Роскошный восточный аромат с нотами розы, ладана и ванили. Идеален для особых случаев. В нём ощущаются глубокие нотки ладана и амбры, которые раскрываются постепенно, создавая многогранную композицию.',
+                characteristics: {Объем: '50', 'Тип продукта': 'Парфюмерная вода', 'Для кого': 'Для женщин', 'Группа ароматов': 'Восточные, Цветочные', Страна: 'Оман', Парфюмер: 'Renaud Busson', Сегмент: 'Нишевая', Стойкость: 'Стойкий 8-12 ч.'},
                 isNew: true,
                 popularity: 3,
                 tags: ['new', 'spring']
             },
             {
                 sku: 'p002',
-                title: 'KILIAN PARIS straight to heaven',
-                brand: 'Kilian',
-                price: 3750,
-                oldPrice: 4620,
+                title: 'Kilian Paris straight to heaven',
+                brand: 'KILIAN',
+                price: 10000,
+                oldPrice: 10500,
                 category: 'men',
                 images: ['Photo.png', 'Photo.png', 'Photo.png'],
-                description: 'Мужественный древесно-восточный аромат с ромом, древесиной кедра и мускусом.',
-                characteristics: {Объем: '50ml', Тип: 'Extrait de Parfum', Производитель: 'France', Год: '2024'},
+                volumes: ['50 мл', '100 мл'],
+                description: 'Парфюмерная вода By Kilian Straight To Heaven — это красивый благородный запоминающийся аромат. В нем, непременно, присутствуют алкогольные нотки рома, которые открываются для обоняния самыми первыми. В продолжении наслаждения процессом раскрытия Straight To Heaven, ярко ощущаются древесные оттенки, дополненные необычайным сочетанием ванили и пряного пачули. Шлейф парфюмерной воды, который будет повсюду оставаться и напоминать о вашем присутствии, имеет в себе ярко выраженные томные ноты мускуса и серой амбры. By Kilian является мужским ароматом и относится к категории древесных. Несмотря на это, его предпочитает и прекрасная половина.',
+                characteristics: {Объем: '50', 'Тип продукта': 'Парфюмерная вода', 'Для кого': 'Для женщин', 'Группа ароматов': 'Древесные, Пряные', Страна: 'Франция', Парфюмер: 'Calice Becker', Сегмент: 'Селективная / Нишевая', Стойкость: 'Стойкий 7-12 ч.'},
                 isNew: false,
                 popularity: 1,
                 tags: ['summer']
@@ -1593,8 +1898,9 @@
                 price: 4200,
                 category: 'unisex',
                 images: ['Photo.png', 'Photo.png'],
-                description: 'Современный унисекс аромат с цитрусовыми нотами и древесной базой.',
-                characteristics: {Объем: '50ml', Тип: 'Eau de Parfum', Производитель: 'Russia', Год: '2026'},
+                volumes: ['50 мл'],
+                description: 'Современный унисекс аромат с цитрусовыми нотами и древесной базой. Свежее открытие переходит в тёплую сердечную ноту с оттенками кедра и ветивера.',
+                characteristics: {Объем: '50', 'Тип продукта': 'Парфюмерная вода', 'Для кого': 'Унисекс', 'Группа ароматов': 'Цитрусовые, Древесные', Страна: 'Россия', Парфюмер: 'Алексей Маркин', Сегмент: 'Нишевая', Стойкость: 'Стойкий 6-8 ч.'},
                 isNew: true,
                 popularity: 4,
                 tags: ['new', 'gift']
@@ -1607,8 +1913,9 @@
                 oldPrice: 6500,
                 category: 'women',
                 images: ['Photo.png', 'Photo.png'],
-                description: 'Яркий цветочно-фруктовый аромат для уверенных в себе женщин.',
-                characteristics: {Объем: '50ml', Тип: 'Extrait de Parfum', Производитель: 'Turkey', Год: '2025'},
+                volumes: ['50 мл', '100 мл'],
+                description: 'Яркий цветочно-фруктовый аромат для уверенных в себе женщин. Сочные ноты персика и малины окружены нежной розой и жасмином.',
+                characteristics: {Объем: '50', 'Тип продукта': 'Экстракт духов', 'Для кого': 'Для женщин', 'Группа ароматов': 'Цветочные, Фруктовые', Страна: 'Турция', Парфюмер: 'Jorge Lee', Сегмент: 'Нишевая', Стойкость: 'Стойкий 10-14 ч.'},
                 isNew: true,
                 popularity: 5,
                 tags: ['spring', 'gift']
@@ -1620,8 +1927,9 @@
                 price: 8500,
                 category: 'women',
                 images: ['Photo.png'],
-                description: 'Легендарная классика. Цветочно-альдегидный шедевр.',
-                characteristics: {Объем: '50ml', Тип: 'Eau de Parfum', Производитель: 'France', Год: '1921'},
+                volumes: ['50 мл', '100 мл', '200 мл'],
+                description: 'Легендарная классика. Цветочно-альдегидный шедевр, который остаётся иконой парфюмерного искусства уже более столетия.',
+                characteristics: {Объем: '50', 'Тип продукта': 'Парфюмерная вода', 'Для кого': 'Для женщин', 'Группа ароматов': 'Цветочные, Альдегидные', Страна: 'Франция', Парфюмер: 'Ernest Beaux', Сегмент: 'Селективная', Стойкость: 'Стойкий 6-10 ч.'},
                 isNew: false,
                 popularity: 2,
                 tags: ['gift']
@@ -1633,8 +1941,9 @@
                 price: 7200,
                 category: 'men',
                 images: ['Photo.png', 'Photo.png'],
-                description: 'Свежий, пряный и древесный. Магнетический аромат.',
-                characteristics: {Объем: '100ml', Тип: 'Eau de Toilette', Производитель: 'France', Год: '2015'},
+                volumes: ['60 мл', '100 мл'],
+                description: 'Свежий, пряный и древесный. Магнетический аромат, в котором раскрываются ноты бергамота, перца и амброксана.',
+                characteristics: {Объем: '100', 'Тип продукта': 'Туалетная вода', 'Для кого': 'Для мужчин', 'Группа ароматов': 'Древесные, Пряные', Страна: 'Франция', Парфюмер: 'François Demachy', Сегмент: 'Селективная', Стойкость: 'Стойкий 8-10 ч.'},
                 isNew: false,
                 popularity: 6,
                 tags: ['summer']
@@ -1950,76 +2259,190 @@
     }
 
     // Product Detail
+    let detailImageIndex = 0;
+
     function openProduct(sku) {
         const p = state.products.find(x => x.sku === sku);
         if (!p) return;
 
         state.currentProduct = p;
+        detailImageIndex = 0;
         const modal = document.getElementById('productModal');
         const content = document.getElementById('modalContent');
+
+        const isFav = state.favorites.includes(sku);
+        const inCart = state.cart[sku] || 0;
 
         content.innerHTML = `
             <div class="detail-gallery">
                 <div class="detail-images" id="detailImages">
-                    ${p.images.map(img => `<img src="${img}" class="detail-image">`).join('')}
+                    ${p.images.map((img, i) => `<img src="${img}" class="detail-image" onclick="openImageViewer(${i})">`).join('')}
                 </div>
-                <div class="gallery-nav">
-                    ${p.images.map((_, i) => `<div class="gallery-dot ${i===0?'active':''}" onclick="setDetailImage(${i})"></div>`).join('')}
-                </div>
-            </div>
-            <div class="detail-info">
-                <div class="detail-header">
-                    <h1 class="detail-title">${p.title}</h1>
-                    <button class="detail-fav ${state.favorites.includes(sku)?'active':''}" onclick="toggleFavorite('${sku}', true)">
-                        ${state.favorites.includes(sku) ? '♥' : '♡'}
+                <div class="detail-image-actions">
+                    <button class="detail-img-btn ${isFav ? 'fav-active' : ''}" id="detailFavBtn" onclick="toggleFavoriteDetail('${sku}')">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 17.5S2.5 13 2.5 7.5C2.5 4.46 5.01 2.5 7.5 2.5C8.96 2.5 10 3.24 10 3.24S11.04 2.5 12.5 2.5C14.99 2.5 17.5 4.46 17.5 7.5C17.5 13 10 17.5 10 17.5Z" stroke="${isFav?'#eb4444':'#000'}" stroke-width="1.3" stroke-linejoin="round" fill="${isFav?'#eb4444':'none'}"/></svg>
+                    </button>
+                    <button class="detail-img-btn" onclick="shareProduct()">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 11L13 5M13 5H8M13 5V10" stroke="#000" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 10V14C13 14.55 12.55 15 12 15H4C3.45 15 3 14.55 3 14V6C3 5.45 3.45 5 4 5H8" stroke="#000" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                 </div>
-                <div class="detail-price-block">
-                    <span class="detail-price">${p.price.toLocaleString()} ₽</span>
-                    ${p.oldPrice ? `<span class="detail-old-price">${p.oldPrice.toLocaleString()} ₽</span>` : ''}
-                </div>
-                <div class="detail-section">
-                    <h3>Описание</h3>
-                    <p>${p.description}</p>
-                </div>
-                <div class="detail-section">
-                    <h3>Характеристики</h3>
-                    <div class="characteristics">
-                        ${Object.entries(p.characteristics).map(([k,v]) => `
-                            <div class="char-item">
-                                <span class="char-label">${k}</span>
-                                <span class="char-value">${v}</span>
-                            </div>
-                        `).join('')}
+            </div>
+            ${p.volumes && p.volumes.length > 0 ? `
+            <div class="volume-selector">
+                ${p.volumes.map((v, i) => `<button class="volume-btn ${i===0?'active':''}" onclick="selectVolume(this)">${v}</button>`).join('')}
+            </div>` : ''}
+            <div class="detail-brand-line">
+                <span class="brand-name">${p.brand}</span><span class="brand-sep">›</span> ${p.title}
+            </div>
+            <div class="detail-price-row">
+                <span class="detail-price">${p.price.toLocaleString()} ₽</span>
+                ${p.oldPrice ? `<span class="detail-old-price">${p.oldPrice.toLocaleString()} ₽</span>` : ''}
+            </div>
+            <div class="detail-desc-card">
+                <h3>Описание</h3>
+                <div class="detail-desc-text collapsed" id="descText">${p.description}</div>
+                <button class="detail-desc-toggle" id="descToggle" onclick="toggleDescription()">
+                    Читать дальше <svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path d="M1 1L6 6L11 1" stroke="#909096" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+            <div class="detail-specs-card">
+                <h3>Техническая спецификация</h3>
+                ${Object.entries(p.characteristics).map(([k,v]) => `
+                    <div class="spec-row">
+                        <span class="spec-label">${k}</span>
+                        <span class="spec-value">${v}</span>
                     </div>
-                </div>
+                `).join('')}
             </div>
         `;
 
+        renderDetailBottomBar(sku);
+
         modal.style.display = 'block';
+        modal.scrollTop = 0;
+        document.body.classList.add('detail-mode');
         document.body.style.overflow = 'hidden';
 
+        // Swipe for gallery
         let startX = 0;
-        let index = 0;
         const gallery = document.getElementById('detailImages');
         gallery.addEventListener('touchstart', (e) => startX = e.touches[0].clientX, {passive: true});
         gallery.addEventListener('touchend', (e) => {
             const diff = startX - e.changedTouches[0].clientX;
             if (Math.abs(diff) > 50) {
-                if (diff > 0 && index < p.images.length - 1) index++;
-                else if (diff < 0 && index > 0) index--;
-                setDetailImage(index);
+                if (diff > 0 && detailImageIndex < p.images.length - 1) detailImageIndex++;
+                else if (diff < 0 && detailImageIndex > 0) detailImageIndex--;
+                setDetailImage(detailImageIndex);
             }
         }, {passive: true});
     }
 
+    function renderDetailBottomBar(sku) {
+        const bar = document.getElementById('detailBottomBar');
+        const qty = state.cart[sku] || 0;
+        if (qty > 0) {
+            bar.innerHTML = `
+                <div class="detail-qty-controls">
+                    <button class="detail-qty-btn" onclick="updateDetailQty('${sku}', -1)">−</button>
+                    <span class="detail-qty-value">${qty}</span>
+                    <button class="detail-qty-btn" onclick="updateDetailQty('${sku}', 1)">+</button>
+                </div>
+                <button class="detail-goto-cart-btn" onclick="goToCartFromDetail()">Перейти в корзину</button>
+            `;
+        } else {
+            bar.innerHTML = `<button class="detail-add-btn" onclick="addToCartFromModal()">Добавить в корзину</button>`;
+        }
+    }
+
+    function updateDetailQty(sku, delta) {
+        state.cart[sku] = (state.cart[sku] || 0) + delta;
+        if (state.cart[sku] <= 0) delete state.cart[sku];
+        updateBadges();
+        renderDetailBottomBar(sku);
+    }
+
+    function goToCartFromDetail() {
+        closeModal();
+        showPage('cart');
+    }
+
     function setDetailImage(index) {
+        detailImageIndex = index;
         document.getElementById('detailImages').style.transform = `translateX(-${index * 100}%)`;
-        document.querySelectorAll('.gallery-dot').forEach((d, i) => d.classList.toggle('active', i === index));
+    }
+
+    function toggleDescription() {
+        const text = document.getElementById('descText');
+        const btn = document.getElementById('descToggle');
+        const collapsed = text.classList.toggle('collapsed');
+        if (collapsed) {
+            btn.innerHTML = 'Читать дальше <svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path d="M1 1L6 6L11 1" stroke="#909096" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            btn.classList.remove('expanded');
+        } else {
+            btn.innerHTML = 'Свернуть <svg width="12" height="7" viewBox="0 0 12 7" fill="none"><path d="M1 1L6 6L11 1" stroke="#909096" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            btn.classList.add('expanded');
+        }
+    }
+
+    function selectVolume(btn) {
+        btn.parentElement.querySelectorAll('.volume-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    function toggleFavoriteDetail(sku) {
+        toggleFavorite(sku);
+        // Update the fav button in detail view
+        const btn = document.getElementById('detailFavBtn');
+        const isFav = state.favorites.includes(sku);
+        btn.className = 'detail-img-btn' + (isFav ? ' fav-active' : '');
+        btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 17.5S2.5 13 2.5 7.5C2.5 4.46 5.01 2.5 7.5 2.5C8.96 2.5 10 3.24 10 3.24S11.04 2.5 12.5 2.5C14.99 2.5 17.5 4.46 17.5 7.5C17.5 13 10 17.5 10 17.5Z" stroke="${isFav?'#eb4444':'#000'}" stroke-width="1.3" stroke-linejoin="round" fill="${isFav?'#eb4444':'none'}"/></svg>`;
+    }
+
+    function shareProduct() {
+        if (navigator.share && state.currentProduct) {
+            navigator.share({ title: state.currentProduct.title, text: state.currentProduct.description });
+        }
+    }
+
+    function showDetailMenu() {
+        tg.showAlert('Меню в разработке');
+    }
+
+    // Image Viewer
+    function openImageViewer(index) {
+        const p = state.currentProduct;
+        if (!p) return;
+
+        const viewer = document.getElementById('imageViewer');
+        const main = document.getElementById('viewerMain');
+        const thumbs = document.getElementById('viewerThumbs');
+
+        main.innerHTML = `<img src="${p.images[index]}" id="viewerImg">`;
+        thumbs.innerHTML = p.images.map((img, i) => `
+            <div class="viewer-thumb ${i === index ? 'active' : ''}" onclick="switchViewerImage(${i})">
+                <img src="${img}">
+            </div>
+        `).join('');
+
+        viewer.classList.add('show');
+        document.body.classList.add('viewer-mode');
+    }
+
+    function switchViewerImage(index) {
+        const p = state.currentProduct;
+        if (!p) return;
+        document.getElementById('viewerImg').src = p.images[index];
+        document.querySelectorAll('.viewer-thumb').forEach((t, i) => t.classList.toggle('active', i === index));
+    }
+
+    function closeImageViewer() {
+        document.getElementById('imageViewer').classList.remove('show');
+        document.body.classList.remove('viewer-mode');
     }
 
     function closeModal() {
         document.getElementById('productModal').style.display = 'none';
+        document.body.classList.remove('detail-mode');
         document.body.style.overflow = '';
     }
 
@@ -2027,14 +2450,14 @@
     function quickAdd(sku) {
         state.cart[sku] = (state.cart[sku] || 0) + 1;
         updateBadges();
-        tg.HapticFeedback.impactOccurred('light');
+        try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
     }
 
     function addToCartFromModal() {
         if (!state.currentProduct) return;
-        quickAdd(state.currentProduct.sku);
-        showPage('cart');
-        closeModal();
+        const sku = state.currentProduct.sku;
+        quickAdd(sku);
+        renderDetailBottomBar(sku);
     }
 
     function updateQuantity(sku, delta) {
@@ -2090,19 +2513,18 @@
     }
 
     // Favorites
-    function toggleFavorite(sku, inModal = false) {
+    function toggleFavorite(sku) {
         const idx = state.favorites.indexOf(sku);
         if (idx > -1) {
             state.favorites.splice(idx, 1);
         } else {
             state.favorites.push(sku);
-            tg.HapticFeedback.impactOccurred('light');
+            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
         }
 
         localStorage.setItem('favorites', JSON.stringify(state.favorites));
         updateBadges();
         renderProducts();
-        if (inModal) openProduct(sku);
         if (document.getElementById('favoritesPage').classList.contains('active')) {
             renderFavorites();
         }
