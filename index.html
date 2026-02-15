@@ -1134,10 +1134,6 @@
 
         <!-- Products -->
         <div class="products-section">
-            <div class="section-title">
-                <span>Каталог</span>
-                <span style="font-size: 14px; color: #6B7280;" id="productsCount"></span>
-            </div>
             <div class="products" id="productsGrid"></div>
         </div>
     </div>
@@ -1230,7 +1226,8 @@
         <button class="tab active" onclick="showPage('main')">
             <div class="tab-icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M3.33 8.33L10 2.5L16.67 8.33V16.67C16.67 17.13 16.3 17.5 15.83 17.5H4.17C3.7 17.5 3.33 17.13 3.33 16.67V8.33Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M2.5 10L10 3.33L17.5 10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4.17 8.33V15.83C4.17 16.29 4.54 16.67 5 16.67H8.33V12.5H11.67V16.67H15C15.46 16.67 15.83 16.29 15.83 15.83V8.33" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <span class="tab-label">Главная</span>
@@ -1239,7 +1236,7 @@
         <button class="tab" onclick="showPage('favorites')">
             <div class="tab-icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M10 17.5S2.5 13 2.5 7.5C2.5 4.46 5.01 2.5 7.5 2.5C8.96 2.5 10 3.24 10 3.24S11.04 2.5 12.5 2.5C14.99 2.5 17.5 4.46 17.5 7.5C17.5 13 10 17.5 10 17.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/>
+                    <path d="M10 16.25C10 16.25 2.81 12.19 2.81 7.66C2.81 5.28 4.72 3.75 6.88 3.75C8.28 3.75 9.5 4.47 10 5.31C10.5 4.47 11.72 3.75 13.12 3.75C15.28 3.75 17.19 5.28 17.19 7.66C17.19 12.19 10 16.25 10 16.25Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
                 </svg>
             </div>
             <span class="tab-badge hidden" id="favBadge">0</span>
@@ -1249,9 +1246,9 @@
         <button class="tab" onclick="showPage('cart')">
             <div class="tab-icon">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M5 1.67L2.5 5V16.67C2.5 17.13 2.87 17.5 3.33 17.5H16.67C17.13 17.5 17.5 17.13 17.5 16.67V5L15 1.67H5Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                    <path d="M2.5 5H17.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-                    <path d="M13.33 8.33C13.33 10.17 11.84 11.67 10 11.67C8.16 11.67 6.67 10.17 6.67 8.33" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M5.83 1.67H14.17L16.67 5.83V15.83C16.67 16.75 15.92 17.5 15 17.5H5C4.08 17.5 3.33 16.75 3.33 15.83V5.83L5.83 1.67Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3.33 5.83H16.67" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    <path d="M13.33 9.17C13.33 11.01 11.84 12.5 10 12.5C8.16 12.5 6.67 11.01 6.67 9.17" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <span class="tab-badge hidden" id="cartBadge">0</span>
@@ -1486,9 +1483,6 @@
 
     function renderFilteredProducts(products, isTagFilter = false) {
         const grid = document.getElementById('productsGrid');
-        const count = document.getElementById('productsCount');
-
-        count.textContent = products.length + ' товаров';
 
         if (products.length === 0) {
             grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #6B7280;">Ничего не найдено</div>';
@@ -1498,13 +1492,13 @@
         grid.innerHTML = products.map((p) => `
             <div class="card" onclick="openProduct('${p.sku}')">
                 <div class="card-image-wrap">
-                    <div class="card-image" onclick="event.stopPropagation()">
+                    <div class="card-image">
                         <div class="product-images" id="imgs-${p.sku}" style="transform: translateX(0)">
                             ${p.images.map(img => `<img src="${img}" class="product-image" alt="${p.title}">`).join('')}
                         </div>
                         <div class="card-fav ${state.favorites.includes(p.sku)?'active':''}" onclick="event.stopPropagation(); toggleFavorite('${p.sku}')">
                             <svg viewBox="0 0 20 20" fill="none">
-                                <path d="M10 17.5S2.5 13 2.5 7.5C2.5 4.46 5.01 2.5 7.5 2.5C8.96 2.5 10 3.24 10 3.24S11.04 2.5 12.5 2.5C14.99 2.5 17.5 4.46 17.5 7.5C17.5 13 10 17.5 10 17.5Z" stroke="${state.favorites.includes(p.sku)?'#eb4444':'#000'}" stroke-width="1.2" stroke-linejoin="round" fill="${state.favorites.includes(p.sku)?'#eb4444':'none'}"/>
+                                <path d="M10 17.5S2.5 13 2.5 7.5C2.5 4.46 5.01 2.5 7.5 2.5C8.96 2.5 10 3.24 10 3.24S11.04 2.5 12.5 2.5C14.99 2.5 17.5 4.46 17.5 7.5C17.5 13 10 17.5 10 17.5Z" stroke="${state.favorites.includes(p.sku)?'#eb4444':'#000'}" stroke-width="1.5" stroke-linejoin="round" fill="${state.favorites.includes(p.sku)?'#eb4444':'white'}"/>
                             </svg>
                         </div>
                     </div>
