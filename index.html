@@ -7,7 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        
+
         :root {
             --primary: #8B5CF6;
             --primary-light: #A78BFA;
@@ -24,7 +24,7 @@
             --telegram-bg: #FFFFFF;
             --telegram-border: rgba(0,0,0,0.08);
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
@@ -34,7 +34,7 @@
             padding-top: 140px; /* Space for fixed header */
             padding-bottom: 90px; /* Space for bottom nav */
         }
-        
+
         /* TOP NAVIGATION - Telegram Style */
         .top-nav-container {
             position: fixed;
@@ -47,7 +47,7 @@
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--telegram-border);
         }
-        
+
         .top-nav-blur {
             position: absolute;
             top: -20px;
@@ -57,29 +57,29 @@
             background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.85) 100%);
             pointer-events: none;
         }
-        
+
         .top-nav {
             padding: 8px 16px 12px;
         }
-        
+
         .top-nav-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 12px;
         }
-        
+
         .app-title {
             font-size: 22px;
             font-weight: 700;
             color: var(--text);
         }
-        
+
         .top-nav-icons {
             display: flex;
             gap: 16px;
         }
-        
+
         .top-icon-btn {
             width: 40px;
             height: 40px;
@@ -94,16 +94,16 @@
             color: var(--text);
             transition: background 0.2s;
         }
-        
+
         .top-icon-btn:active {
             background: rgba(0,0,0,0.05);
         }
-        
+
         .search-container {
             position: relative;
             margin-bottom: 12px;
         }
-        
+
         .search-input {
             width: 100%;
             padding: 10px 40px 10px 16px;
@@ -114,12 +114,12 @@
             outline: none;
             transition: all 0.2s;
         }
-        
+
         .search-input:focus {
             border-color: var(--primary);
             background: var(--surface);
         }
-        
+
         .search-icon {
             position: absolute;
             right: 12px;
@@ -127,7 +127,7 @@
             transform: translateY(-50%);
             color: var(--text-secondary);
         }
-        
+
         /* Filters */
         .filters {
             display: flex;
@@ -136,9 +136,9 @@
             scrollbar-width: none;
             padding-bottom: 4px;
         }
-        
+
         .filters::-webkit-scrollbar { display: none; }
-        
+
         .filter-btn {
             padding: 8px 16px;
             border: 1px solid var(--border);
@@ -153,48 +153,52 @@
             align-items: center;
             gap: 4px;
         }
-        
+
         .filter-btn.active {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
         }
-        
+
         .sort-dropdown {
             position: relative;
         }
-        
+
         .sort-menu {
             display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 8px;
+            position: fixed;  /* ← изменить с absolute на fixed */
+            top: 180px;       /* ← позиция ниже верхнего меню */
+            left: 16px;
+            right: 16px;
             background: var(--surface);
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            min-width: 200px;
-            z-index: 200;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 3000;    /* ← выше всех */
             overflow: hidden;
+            border: 1px solid var(--border);
         }
-        
+
         .sort-menu.show { display: block; }
-        
+
         .sort-option {
-            padding: 12px 16px;
+            padding: 16px 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             transition: background 0.2s;
+            border-bottom: 1px solid var(--border);
         }
-        
+        .sort-option:last-child {
+            border-bottom: none;
+        }
+
         .sort-option:hover { background: var(--bg); }
         .sort-option.active { color: var(--primary); font-weight: 600; }
-        
+
         /* Banner Carousel */
         .banner-section {
             padding: 16px;
         }
-        
+
         .banner-carousel {
             position: relative;
             height: 160px;
@@ -202,13 +206,13 @@
             overflow: hidden;
             background: var(--primary);
         }
-        
+
         .banner-slides {
             display: flex;
             transition: transform 0.5s ease;
             height: 100%;
         }
-        
+
         .banner-slide {
             min-width: 100%;
             height: 100%;
@@ -220,10 +224,10 @@
             font-weight: bold;
             background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
         }
-        
+
         .banner-slide:nth-child(2) { background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%); }
         .banner-slide:nth-child(3) { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); }
-        
+
         .banner-dots {
             position: absolute;
             bottom: 12px;
@@ -232,7 +236,7 @@
             display: flex;
             gap: 6px;
         }
-        
+
         .dot {
             width: 6px;
             height: 6px;
@@ -241,13 +245,13 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        
+
         .dot.active {
             width: 20px;
             border-radius: 3px;
             background: white;
         }
-        
+
         /* Collections */
         .collections {
             padding: 0 16px 16px;
@@ -256,9 +260,9 @@
             overflow-x: auto;
             scrollbar-width: none;
         }
-        
+
         .collections::-webkit-scrollbar { display: none; }
-        
+
         .collection-item {
             min-width: 140px;
             height: 100px;
@@ -273,23 +277,23 @@
             overflow: hidden;
             cursor: pointer;
         }
-        
+
         .collection-item.gray { background: #9CA3AF; }
         .collection-item.pink { background: #F472B6; }
         .collection-item.blue { background: #60A5FA; }
         .collection-item.purple { background: #A78BFA; }
-        
+
         .collection-item span {
             position: relative;
             z-index: 2;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        
+
         /* Products Grid */
         .products-section {
             padding: 0 16px;
         }
-        
+
         .section-title {
             font-size: 20px;
             font-weight: 700;
@@ -298,13 +302,13 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .products-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
         }
-        
+
         .product-card {
             background: var(--surface);
             border-radius: 16px;
@@ -314,28 +318,28 @@
             transition: transform 0.2s, box-shadow 0.2s;
             position: relative;
         }
-        
+
         .product-card:active { transform: scale(0.98); }
-        
+
         .product-image-container {
             position: relative;
             height: 160px;
             background: var(--bg);
             overflow: hidden;
         }
-        
+
         .product-images {
             display: flex;
             transition: transform 0.3s;
             height: 100%;
         }
-        
+
         .product-image {
             min-width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .image-dots {
             position: absolute;
             bottom: 8px;
@@ -344,16 +348,16 @@
             display: flex;
             gap: 4px;
         }
-        
+
         .img-dot {
             width: 4px;
             height: 4px;
             border-radius: 50%;
             background: rgba(255,255,255,0.6);
         }
-        
+
         .img-dot.active { background: white; width: 12px; border-radius: 2px; }
-        
+
         .favorite-btn {
             position: absolute;
             top: 8px;
@@ -372,33 +376,33 @@
             transition: all 0.2s;
             z-index: 10;
         }
-        
+
         .favorite-btn.active { color: #EF4444; }
         .favorite-btn:active { transform: scale(0.9); }
-        
+
         .product-info {
             padding: 12px;
         }
-        
+
         .product-price {
             display: flex;
             align-items: center;
             gap: 8px;
             margin-bottom: 4px;
         }
-        
+
         .current-price {
             font-size: 18px;
             font-weight: 700;
             color: var(--text);
         }
-        
+
         .old-price {
             font-size: 14px;
             color: var(--text-secondary);
             text-decoration: line-through;
         }
-        
+
         .product-name {
             font-size: 14px;
             line-height: 1.4;
@@ -409,7 +413,7 @@
             overflow: hidden;
             height: 40px;
         }
-        
+
         .add-to-cart {
             position: absolute;
             bottom: 12px;
@@ -428,9 +432,9 @@
             box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
             transition: transform 0.2s;
         }
-        
+
         .add-to-cart:active { transform: scale(0.9); }
-        
+
         /* Product Detail Modal */
         .modal {
             display: none;
@@ -444,12 +448,12 @@
             overflow-y: auto;
             animation: slideUp 0.3s;
         }
-        
+
         @keyframes slideUp {
             from { transform: translateY(100%); }
             to { transform: translateY(0); }
         }
-        
+
         .modal-header {
             position: sticky;
             top: 0;
@@ -463,7 +467,7 @@
             z-index: 10;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .back-btn {
             width: 40px;
             height: 40px;
@@ -476,28 +480,28 @@
             cursor: pointer;
             font-size: 20px;
         }
-        
+
         .modal-content { padding-bottom: 100px; }
-        
+
         .detail-gallery {
             height: 350px;
             background: var(--bg);
             position: relative;
             overflow: hidden;
         }
-        
+
         .detail-images {
             display: flex;
             height: 100%;
             transition: transform 0.3s;
         }
-        
+
         .detail-image {
             min-width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .gallery-nav {
             position: absolute;
             bottom: 20px;
@@ -506,7 +510,7 @@
             display: flex;
             gap: 8px;
         }
-        
+
         .gallery-dot {
             width: 8px;
             height: 8px;
@@ -514,27 +518,27 @@
             background: rgba(255,255,255,0.5);
             cursor: pointer;
         }
-        
+
         .gallery-dot.active { background: white; width: 24px; border-radius: 4px; }
-        
+
         .detail-info {
             padding: 20px;
         }
-        
+
         .detail-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 16px;
         }
-        
+
         .detail-title {
             font-size: 24px;
             font-weight: 700;
             flex: 1;
             margin-right: 12px;
         }
-        
+
         .detail-fav {
             width: 44px;
             height: 44px;
@@ -548,46 +552,46 @@
             cursor: pointer;
             color: var(--text-secondary);
         }
-        
+
         .detail-fav.active { color: #EF4444; border-color: #EF4444; }
-        
+
         .detail-price-block {
             margin-bottom: 24px;
         }
-        
+
         .detail-price {
             font-size: 32px;
             font-weight: 700;
             color: var(--primary);
         }
-        
+
         .detail-old-price {
             font-size: 20px;
             color: var(--text-secondary);
             text-decoration: line-through;
             margin-left: 12px;
         }
-        
+
         .detail-section {
             margin-bottom: 24px;
         }
-        
+
         .detail-section h3 {
             font-size: 18px;
             margin-bottom: 12px;
             color: var(--text);
         }
-        
+
         .detail-section p {
             line-height: 1.6;
             color: var(--text-secondary);
         }
-        
+
         .characteristics {
             display: grid;
             gap: 12px;
         }
-        
+
         .char-item {
             display: flex;
             justify-content: space-between;
@@ -595,10 +599,10 @@
             background: var(--bg);
             border-radius: 12px;
         }
-        
+
         .char-label { color: var(--text-secondary); }
         .char-value { font-weight: 600; }
-        
+
         .detail-actions {
             position: fixed;
             bottom: 0;
@@ -611,7 +615,7 @@
             gap: 12px;
             box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
         }
-        
+
         .btn-primary {
             flex: 1;
             padding: 16px;
@@ -624,9 +628,9 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        
+
         .btn-primary:active { transform: scale(0.98); opacity: 0.9; }
-        
+
         /* Cart & Favorites Pages */
         .page {
             display: none;
@@ -634,9 +638,9 @@
             padding: 16px;
             padding-bottom: 100px;
         }
-        
+
         .page.active { display: block; }
-        
+
         .cart-item {
             display: flex;
             gap: 12px;
@@ -646,7 +650,7 @@
             margin-bottom: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-        
+
         .cart-item-image {
             width: 80px;
             height: 80px;
@@ -654,30 +658,30 @@
             object-fit: cover;
             background: var(--bg);
         }
-        
+
         .cart-item-info {
             flex: 1;
         }
-        
+
         .cart-item-title {
             font-weight: 600;
             margin-bottom: 4px;
             font-size: 16px;
         }
-        
+
         .cart-item-price {
             color: var(--primary);
             font-weight: 700;
             font-size: 18px;
         }
-        
+
         .cart-item-controls {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-top: 8px;
         }
-        
+
         .qty-btn {
             width: 32px;
             height: 32px;
@@ -691,7 +695,7 @@
             font-size: 18px;
             font-weight: 600;
         }
-        
+
         .cart-total {
             position: fixed;
             bottom: 100px;
@@ -706,22 +710,22 @@
             align-items: center;
             z-index: 100;
         }
-        
+
         .total-label { font-size: 16px; color: var(--text-secondary); }
         .total-price { font-size: 24px; font-weight: 700; color: var(--primary); }
-        
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: var(--text-secondary);
         }
-        
+
         .empty-icon {
             font-size: 64px;
             margin-bottom: 16px;
             opacity: 0.3;
         }
-        
+
         /* Profile */
         .profile-header {
             text-align: center;
@@ -730,7 +734,7 @@
             margin: -16px -16px 16px;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .avatar {
             width: 100px;
             height: 100px;
@@ -744,23 +748,23 @@
             margin: 0 auto 16px;
             font-weight: 600;
         }
-        
+
         .profile-name { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
         .profile-phone { color: var(--text-secondary); }
-        
+
         .orders-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-        
+
         .order-card {
             background: var(--surface);
             border-radius: 16px;
             padding: 16px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-        
+
         .order-header {
             display: flex;
             justify-content: space-between;
@@ -768,7 +772,7 @@
             padding-bottom: 12px;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .order-id { font-weight: 600; }
         .order-date { color: var(--text-secondary); font-size: 14px; }
         .order-status {
@@ -780,10 +784,10 @@
             background: #D1FAE5;
             color: #065F46;
         }
-        
+
         .order-items { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
         .order-total { margin-top: 12px; font-weight: 700; font-size: 18px; text-align: right; }
-        
+
         /* BOTTOM NAVIGATION - Telegram Style */
         .bottom-nav-container {
             position: fixed;
@@ -798,7 +802,7 @@
             -webkit-backdrop-filter: blur(20px);
             pointer-events: none; /* Let clicks pass through the gradient area */
         }
-        
+
         .bottom-nav {
             position: relative;
             background: var(--telegram-bg);
@@ -810,7 +814,7 @@
             border: 1px solid var(--telegram-border);
             pointer-events: auto;
         }
-        
+
         .nav-item {
             flex: 1;
             display: flex;
@@ -828,21 +832,21 @@
             border-radius: 16px;
             position: relative;
         }
-        
-        .nav-item.active { 
-            color: var(--primary); 
+
+        .nav-item.active {
+            color: var(--primary);
             background: rgba(139, 92, 246, 0.1);
         }
-        
-        .nav-icon { 
-            font-size: 24px; 
+
+        .nav-icon {
+            font-size: 24px;
             transition: transform 0.2s;
         }
-        
+
         .nav-item:active .nav-icon {
             transform: scale(0.9);
         }
-        
+
         .nav-badge {
             position: absolute;
             top: 4px;
@@ -857,19 +861,19 @@
             text-align: center;
             border: 2px solid var(--telegram-bg);
         }
-        
+
         /* Form Styles */
         .form-group {
             margin-bottom: 16px;
         }
-        
+
         .form-label {
             display: block;
             margin-bottom: 6px;
             font-weight: 500;
             color: var(--text);
         }
-        
+
         .form-input {
             width: 100%;
             padding: 14px;
@@ -879,9 +883,9 @@
             outline: none;
             transition: border-color 0.2s;
         }
-        
+
         .form-input:focus { border-color: var(--primary); }
-        
+
         .checkout-btn {
             width: 100%;
             padding: 18px;
@@ -895,7 +899,7 @@
             margin-top: 24px;
             box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
         }
-        
+
         /* Loading & Success */
         .loading-overlay {
             display: none;
@@ -907,7 +911,7 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .spinner {
             width: 50px;
             height: 50px;
@@ -916,9 +920,9 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin { to { transform: rotate(360deg); } }
-        
+
         .success-screen {
             display: none;
             position: fixed;
@@ -931,7 +935,7 @@
             text-align: center;
             padding: 40px;
         }
-        
+
         .success-icon {
             width: 100px;
             height: 100px;
@@ -945,14 +949,14 @@
             margin-bottom: 24px;
             animation: scaleIn 0.5s;
         }
-        
+
         @keyframes scaleIn {
             from { transform: scale(0); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
-        
+
         .hidden { display: none !important; }
-        
+
         /* Page Headers */
         .page-header {
             position: sticky;
@@ -966,7 +970,7 @@
             z-index: 100;
             text-align: center;
         }
-        
+
         .page-header h2 {
             font-size: 20px;
             font-weight: 700;
@@ -1006,7 +1010,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Main Page -->
     <div id="mainPage" class="page active">
         <!-- Banners -->
@@ -1020,7 +1024,7 @@
                 <div class="banner-dots" id="bannerDots"></div>
             </div>
         </div>
-        
+
         <!-- Collections -->
         <div class="collections" id="collections">
             <div class="collection-item gray" onclick="filterByTag('summer')"><span>Летние</span></div>
@@ -1028,7 +1032,7 @@
             <div class="collection-item purple" onclick="filterByTag('new')"><span>Новинки 2026</span></div>
             <div class="collection-item blue" onclick="filterByTag('gift')"><span>Подарки</span></div>
         </div>
-        
+
         <!-- Products -->
         <div class="products-section">
             <div class="section-title">
@@ -1038,7 +1042,7 @@
             <div class="products-grid" id="productsGrid"></div>
         </div>
     </div>
-    
+
     <!-- Product Detail Modal -->
     <div id="productModal" class="modal">
         <div class="modal-header">
@@ -1051,7 +1055,7 @@
             <button class="btn-primary" id="modalAddToCart" onclick="addToCartFromModal()">Добавить в корзину</button>
         </div>
     </div>
-    
+
     <!-- Favorites Page -->
     <div id="favoritesPage" class="page">
         <div class="page-header">
@@ -1063,7 +1067,7 @@
             <p>Добавьте товары в избранное</p>
         </div>
     </div>
-    
+
     <!-- Cart Page -->
     <div id="cartPage" class="page">
         <div class="page-header">
@@ -1074,7 +1078,7 @@
             <div class="empty-icon">🛒</div>
             <p>Ваша корзина пуста</p>
         </div>
-        
+
         <div id="checkoutForm" class="hidden" style="margin-top: 24px; background: var(--surface); padding: 20px; border-radius: 16px;">
             <h3 style="margin-bottom: 16px;">Оформление заказа</h3>
             <div class="form-group">
@@ -1095,13 +1099,13 @@
             </div>
             <button class="checkout-btn" onclick="submitOrder()">Подтвердить заказ</button>
         </div>
-        
+
         <div id="cartTotal" class="cart-total hidden">
             <span class="total-label">Итого:</span>
             <span class="total-price" id="totalPrice">0 ₽</span>
         </div>
     </div>
-    
+
     <!-- Profile Page -->
     <div id="profilePage" class="page">
         <div class="profile-header">
@@ -1109,7 +1113,7 @@
             <div class="profile-name" id="userName">Гость</div>
             <div class="profile-phone" id="userPhone">Войдите через Telegram</div>
         </div>
-        
+
         <h3 style="margin-bottom: 16px; font-size: 20px;">История заказов</h3>
         <div id="ordersList" class="orders-list">
             <div class="empty-state">
@@ -1118,7 +1122,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Bottom Navigation - Telegram Style -->
     <div class="bottom-nav-container">
         <nav class="bottom-nav">
@@ -1142,13 +1146,13 @@
             </button>
         </nav>
     </div>
-    
+
     <!-- Loading -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="spinner"></div>
         <p style="margin-top: 16px; color: var(--text-secondary);">Отправляем заказ...</p>
     </div>
-    
+
     <!-- Success -->
     <div id="successScreen" class="success-screen">
         <div class="success-icon">✓</div>
@@ -1160,14 +1164,14 @@
     <script>
         // ⚠️ ЗАМЕНИТЕ НА СВОЙ URL из Apps Script
         const API_URL = 'https://script.google.com/macros/s/AKfycbznwEQk930Y6N37did0gEjKu2QJmPsPBu-_p1uWALSa2lihR2KBcmgKRKRHVRj4ASIhrg/exec';
-        
+
         // Telegram WebApp
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
         tg.setHeaderColor('#FFFFFF');
         tg.setBackgroundColor('#F9FAFB');
-        
+
         // State
         let state = {
             products: [
@@ -1250,7 +1254,7 @@
             currentProduct: null,
             bannerIndex: 0
         };
-        
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             renderProducts();
@@ -1258,13 +1262,13 @@
             updateBadges();
             loadUserData();
             renderOrders();
-            
+
             // Search
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 state.searchQuery = e.target.value.toLowerCase();
                 renderProducts();
             });
-            
+
             // Category filters
             document.querySelectorAll('[data-category]').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -1274,7 +1278,7 @@
                     renderProducts();
                 });
             });
-            
+
             // Sort options
             document.querySelectorAll('.sort-option').forEach(opt => {
                 opt.addEventListener('click', () => {
@@ -1286,7 +1290,7 @@
                 });
             });
         });
-        
+
         // Banner Carousel
         function initBanner() {
             const dots = document.getElementById('bannerDots');
@@ -1297,12 +1301,12 @@
                 dot.onclick = () => setBanner(i);
                 dots.appendChild(dot);
             });
-            
+
             setInterval(() => {
                 setBanner((state.bannerIndex + 1) % slides.length);
             }, 10000);
         }
-        
+
         function setBanner(index) {
             state.bannerIndex = index;
             document.getElementById('bannerSlides').style.transform = `translateX(-${index * 100}%)`;
@@ -1310,18 +1314,26 @@
                 d.classList.toggle('active', i === index);
             });
         }
-        
+
         // Sort Dropdown
         function toggleSort() {
-            document.getElementById('sortMenu').classList.toggle('show');
+            const menu = document.getElementById('sortMenu');
+            menu.classList.toggle('show');
+
+            // Закрыть при клике вне меню
+            if (menu.classList.contains('show')) {
+                setTimeout(() => {
+                    document.addEventListener('click', closeSortMenu, {once: true});
+                }, 100);
+            }
         }
-        
-        document.addEventListener('click', (e) => {
+
+        function closeSortMenu(e) {
             if (!e.target.closest('.sort-dropdown')) {
                 document.getElementById('sortMenu').classList.remove('show');
             }
-        });
-        
+        }
+
         // Filter by Collection Tag
         function filterByTag(tag) {
             showPage('main');
@@ -1331,21 +1343,21 @@
             const filtered = state.products.filter(p => p.tags && p.tags.includes(tag));
             renderFilteredProducts(filtered, true);
         }
-        
+
         // Render Products
         function renderProducts() {
             let filtered = state.products;
-            
+
             // Category filter
             if (state.currentCategory !== 'all') {
                 filtered = filtered.filter(p => p.category === state.currentCategory);
             }
-            
+
             // Search filter
             if (state.searchQuery) {
                 filtered = filtered.filter(p => p.title.toLowerCase().includes(state.searchQuery));
             }
-            
+
             // Sort
             filtered = [...filtered];
             if (state.currentSort === 'price-asc') {
@@ -1355,21 +1367,21 @@
             } else if (state.currentSort === 'new') {
                 filtered.sort((a, b) => (b.isNew === a.isNew) ? 0 : b.isNew ? 1 : -1);
             }
-            
+
             renderFilteredProducts(filtered);
         }
-        
+
         function renderFilteredProducts(products, isTagFilter = false) {
             const grid = document.getElementById('productsGrid');
             const count = document.getElementById('productsCount');
-            
+
             count.textContent = products.length + ' товаров';
-            
+
             if (products.length === 0) {
                 grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">Ничего не найдено</div>';
                 return;
             }
-            
+
             grid.innerHTML = products.map((p, idx) => `
                 <div class="product-card" onclick="openProduct('${p.sku}')">
                     <div class="product-image-container" onclick="event.stopPropagation()">
@@ -1394,24 +1406,24 @@
                     </div>
                 </div>
             `).join('');
-            
+
             // Add swipe handlers for images
             products.forEach(p => initImageSwipe(p.sku, p.images.length));
         }
-        
+
         // Image Swipe
         function initImageSwipe(sku, count) {
             const container = document.getElementById(`imgs-${sku}`);
             if (!container || count <= 1) return;
-            
+
             let startX = 0;
             let currentX = 0;
             let index = 0;
-            
+
             container.addEventListener('touchstart', (e) => {
                 startX = e.touches[0].clientX;
             }, {passive: true});
-            
+
             container.addEventListener('touchend', (e) => {
                 const diff = startX - e.changedTouches[0].clientX;
                 if (Math.abs(diff) > 50) {
@@ -1424,16 +1436,16 @@
                 }
             }, {passive: true});
         }
-        
+
         // Product Detail
         function openProduct(sku) {
             const p = state.products.find(x => x.sku === sku);
             if (!p) return;
-            
+
             state.currentProduct = p;
             const modal = document.getElementById('productModal');
             const content = document.getElementById('modalContent');
-            
+
             content.innerHTML = `
                 <div class="detail-gallery">
                     <div class="detail-images" id="detailImages">
@@ -1471,10 +1483,10 @@
                     </div>
                 </div>
             `;
-            
+
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
-            
+
             // Init gallery swipe
             let index = 0;
             const gallery = document.getElementById('detailImages');
@@ -1488,51 +1500,51 @@
                 }
             }, {passive: true});
         }
-        
+
         let startX = 0;
         function setDetailImage(index) {
             document.getElementById('detailImages').style.transform = `translateX(-${index * 100}%)`;
             document.querySelectorAll('.gallery-dot').forEach((d, i) => d.classList.toggle('active', i === index));
         }
-        
+
         function closeModal() {
             document.getElementById('productModal').style.display = 'none';
             document.body.style.overflow = '';
         }
-        
+
         // Cart Functions
         function quickAdd(sku) {
             state.cart[sku] = (state.cart[sku] || 0) + 1;
             updateBadges();
             tg.HapticFeedback.impactOccurred('light');
-            
+
             // Visual feedback
             const btn = event.target;
             btn.style.transform = 'scale(0.8)';
             setTimeout(() => btn.style.transform = '', 200);
         }
-        
+
         function addToCartFromModal() {
             if (!state.currentProduct) return;
             quickAdd(state.currentProduct.sku);
             showPage('cart');
             closeModal();
         }
-        
+
         function updateQuantity(sku, delta) {
             state.cart[sku] = (state.cart[sku] || 0) + delta;
             if (state.cart[sku] <= 0) delete state.cart[sku];
             renderCart();
             updateBadges();
         }
-        
+
         function renderCart() {
             const items = Object.entries(state.cart);
             const container = document.getElementById('cartItems');
             const empty = document.getElementById('emptyCart');
             const total = document.getElementById('cartTotal');
             const form = document.getElementById('checkoutForm');
-            
+
             if (items.length === 0) {
                 container.innerHTML = '';
                 empty.classList.remove('hidden');
@@ -1540,11 +1552,11 @@
                 form.classList.add('hidden');
                 return;
             }
-            
+
             empty.classList.add('hidden');
             total.classList.remove('hidden');
             form.classList.remove('hidden');
-            
+
             container.innerHTML = items.map(([sku, qty]) => {
                 const p = state.products.find(x => x.sku === sku);
                 return `
@@ -1562,15 +1574,15 @@
                     </div>
                 `;
             }).join('');
-            
+
             const sum = items.reduce((s, [sku, qty]) => {
                 const p = state.products.find(x => x.sku === sku);
                 return s + p.price * qty;
             }, 0);
-            
+
             document.getElementById('totalPrice').textContent = sum.toLocaleString() + ' ₽';
         }
-        
+
         // Favorites
         function toggleFavorite(sku, inModal = false) {
             const idx = state.favorites.indexOf(sku);
@@ -1580,7 +1592,7 @@
                 state.favorites.push(sku);
                 tg.HapticFeedback.impactOccurred('light');
             }
-            
+
             localStorage.setItem('favorites', JSON.stringify(state.favorites));
             updateBadges();
             renderProducts();
@@ -1589,18 +1601,18 @@
                 renderFavorites();
             }
         }
-        
+
         function renderFavorites() {
             const grid = document.getElementById('favoritesGrid');
             const empty = document.getElementById('emptyFavorites');
             const favs = state.products.filter(p => state.favorites.includes(p.sku));
-            
+
             if (favs.length === 0) {
                 grid.innerHTML = '';
                 empty.classList.remove('hidden');
                 return;
             }
-            
+
             empty.classList.add('hidden');
             grid.innerHTML = favs.map(p => `
                 <div class="product-card" onclick="openProduct('${p.sku}')">
@@ -1617,13 +1629,13 @@
                 </div>
             `).join('');
         }
-        
+
         // Navigation
         function showPage(page) {
             // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
+
             // Show selected
             if (page === 'main') {
                 document.getElementById('mainPage').classList.add('active');
@@ -1640,29 +1652,29 @@
                 document.getElementById('profilePage').classList.add('active');
                 document.querySelectorAll('.nav-item')[3].classList.add('active');
             }
-            
+
             // Scroll to top
             window.scrollTo(0, 0);
         }
-        
+
         function toggleMenu() {
             // Placeholder for menu functionality
             tg.showAlert('Меню в разработке');
         }
-        
+
         function updateBadges() {
             const cartCount = Object.values(state.cart).reduce((a,b) => a+b, 0);
             const favCount = state.favorites.length;
-            
+
             const cartBadge = document.getElementById('cartBadge');
             const favBadge = document.getElementById('favBadge');
-            
+
             cartBadge.textContent = cartCount;
             cartBadge.classList.toggle('hidden', cartCount === 0);
-            
+
             favBadge.textContent = favCount;
             favBadge.classList.toggle('hidden', favCount === 0);
-            
+
             // Update Telegram MainButton if needed
             if (cartCount > 0) {
                 const total = Object.entries(state.cart).reduce((s, [sku, qty]) => {
@@ -1676,7 +1688,7 @@
                 tg.MainButton.hide();
             }
         }
-        
+
         // User & Orders
         function loadUserData() {
             const user = tg.initDataUnsafe?.user;
@@ -1686,10 +1698,10 @@
                 document.getElementById('userAvatar').textContent = user.first_name[0];
             }
         }
-        
+
         function renderOrders() {
             if (state.orders.length === 0) return;
-            
+
             const list = document.getElementById('ordersList');
             list.innerHTML = state.orders.map(order => `
                 <div class="order-card">
@@ -1707,42 +1719,42 @@
                 </div>
             `).join('');
         }
-        
+
         // Checkout
         async function submitOrder() {
             const name = document.getElementById('checkoutName').value.trim();
             const phone = document.getElementById('checkoutPhone').value.trim();
             const address = document.getElementById('checkoutAddress').value.trim();
             const comment = document.getElementById('checkoutComment').value.trim();
-            
+
             if (!name || !phone || !address) {
                 tg.showAlert('Заполните все обязательные поля');
                 return;
             }
-            
+
             const items = Object.entries(state.cart).map(([sku, qty]) => {
                 const p = state.products.find(x => x.sku === sku);
                 return {sku, title: p.title, qty, price_rub: p.price};
             });
-            
+
             const total = items.reduce((s, i) => s + i.price_rub * i.qty, 0);
             const orderId = 'AP-' + Date.now().toString().slice(-6);
-            
+
             const order = {
                 name, phone, address, comment, items, total,
                 userId: tg.initDataUnsafe?.user?.id,
                 username: tg.initDataUnsafe?.user?.username
             };
-            
+
             document.getElementById('loadingOverlay').style.display = 'flex';
-            
+
             try {
                 const res = await fetch(API_URL, {
                     method: 'POST',
                     body: JSON.stringify(order)
                 });
                 const data = await res.json();
-                
+
                 if (data.success) {
                     // Save to local history
                     const orderRecord = {
@@ -1753,11 +1765,11 @@
                     };
                     state.orders.unshift(orderRecord);
                     localStorage.setItem('orders', JSON.stringify(state.orders));
-                    
+
                     // Clear cart
                     state.cart = {};
                     updateBadges();
-                    
+
                     // Show success
                     document.getElementById('loadingOverlay').style.display = 'none';
                     document.getElementById('orderNumber').textContent = orderId;
@@ -1771,7 +1783,7 @@
                 tg.showAlert('Ошибка отправки. Проверьте соединение.');
             }
         }
-        
+
         function closeSuccess() {
             document.getElementById('successScreen').style.display = 'none';
             showPage('profile');
