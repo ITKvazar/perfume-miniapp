@@ -575,6 +575,13 @@
             line-height: 1.2;
         }
 
+        .tab-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
         .search-btn {
             width: 52px;
             height: 52px;
@@ -1794,8 +1801,14 @@
         if (user) {
             document.getElementById('userName').textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
             document.getElementById('userPhone').textContent = '@' + (user.username||'');
-            document.getElementById('userAvatar').textContent = user.first_name[0];
-            document.getElementById('tabAvatar').innerHTML = `<span>${user.first_name[0]}</span>`;
+            const initial = user.first_name[0];
+            if (user.photo_url) {
+                document.getElementById('userAvatar').innerHTML = `<img src="${user.photo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+                document.getElementById('tabAvatar').innerHTML = `<img src="${user.photo_url}" class="tab-avatar-img">`;
+            } else {
+                document.getElementById('userAvatar').textContent = initial;
+                document.getElementById('tabAvatar').innerHTML = `<span>${initial}</span>`;
+            }
         }
     }
 
