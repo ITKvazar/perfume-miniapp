@@ -814,7 +814,7 @@
         .page.active { display: block; }
 
         .page-no-filters {
-            padding-top: 96px;
+            padding-top: 0;
         }
 
         .page-title {
@@ -2148,25 +2148,30 @@
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
 
         const filtersWrap = document.querySelector('.filters-wrap');
+        const content = document.querySelector('.content');
 
         if (page === 'main') {
             document.getElementById('mainPage').classList.add('active');
             document.querySelectorAll('.tab')[0].classList.add('active');
             filtersWrap.classList.remove('hidden');
+            content.style.paddingTop = '148px';
         } else if (page === 'favorites') {
             document.getElementById('favoritesPage').classList.add('active');
             document.querySelectorAll('.tab')[1].classList.add('active');
             filtersWrap.classList.add('hidden');
+            content.style.paddingTop = '96px';
             renderFavorites();
         } else if (page === 'cart') {
             document.getElementById('cartPage').classList.add('active');
             document.querySelectorAll('.tab')[2].classList.add('active');
             filtersWrap.classList.add('hidden');
+            content.style.paddingTop = '96px';
             renderCart();
         } else if (page === 'profile') {
             document.getElementById('profilePage').classList.add('active');
             document.querySelectorAll('.tab')[3].classList.add('active');
             filtersWrap.classList.add('hidden');
+            content.style.paddingTop = '96px';
         }
 
         window.scrollTo(0, 0);
