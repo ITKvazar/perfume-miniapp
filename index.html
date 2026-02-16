@@ -2147,6 +2147,46 @@
         renderProducts();
     }
 
+    // Swipe-to-dismiss for bottom sheets
+    function setupSwipeDismiss(sheetEl, closeFn) {
+        let startY = 0;
+        let currentY = 0;
+        let dragging = false;
+
+        sheetEl.addEventListener('touchstart', function(e) {
+            const touch = e.touches[0];
+            startY = touch.clientY;
+            currentY = startY;
+            dragging = true;
+            sheetEl.style.transition = 'none';
+        }, { passive: true });
+
+        sheetEl.addEventListener('touchmove', function(e) {
+            if (!dragging) return;
+            currentY = e.touches[0].clientY;
+            const dy = currentY - startY;
+            if (dy > 0) {
+                sheetEl.style.transform = 'translateY(' + dy + 'px)';
+            }
+        }, { passive: true });
+
+        sheetEl.addEventListener('touchend', function() {
+            if (!dragging) return;
+            dragging = false;
+            const dy = currentY - startY;
+            sheetEl.style.transition = 'transform 0.3s ease';
+            if (dy > 80) {
+                closeFn();
+                setTimeout(() => { sheetEl.style.transform = ''; }, 300);
+            } else {
+                sheetEl.style.transform = 'translateY(0)';
+            }
+        });
+    }
+
+    setupSwipeDismiss(document.getElementById('sortSheet'), closeSortSheet);
+    setupSwipeDismiss(document.getElementById('brandSheet'), closeBrandSheet);
+
     function updateFilteredView() {
         const hasFilter = state.currentCategory !== 'all' || state.selectedBrands.length > 0;
         const banner = document.querySelector('.banner-section');
