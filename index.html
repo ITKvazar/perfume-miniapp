@@ -599,10 +599,10 @@
             height: 100%;
         }
 
-        .card-fav.active path {
-            fill: #eb4444;
-            stroke: #eb4444;
-        }
+        .card-fav .fav-fill { fill: white; }
+        .card-fav .fav-outline { fill: #9CA3AF; }
+        .card-fav.active .fav-fill { fill: #eb4444; }
+        .card-fav.active .fav-outline { fill: #eb4444; }
 
         .new-badge {
             position: absolute;
@@ -991,10 +991,10 @@
             -webkit-backdrop-filter: blur(5px);
         }
 
-        .detail-img-btn.fav-active svg path {
-            fill: #eb4444;
-            stroke: #eb4444;
-        }
+        .detail-img-btn .fav-fill { fill: white; }
+        .detail-img-btn .fav-outline { fill: #9CA3AF; }
+        .detail-img-btn.fav-active .fav-fill { fill: #eb4444; }
+        .detail-img-btn.fav-active .fav-outline { fill: #eb4444; }
 
         /* Volume selector */
         .volume-selector {
@@ -2259,7 +2259,8 @@
                         </div>
                         <div class="card-fav ${state.favorites.includes(p.sku)?'active':''}" onclick="event.stopPropagation(); toggleFavorite('${p.sku}')">
                             <svg viewBox="0 0 20 20" fill="none">
-                                <path d="M10 17.5S2.5 13 2.5 7.5C2.5 4.46 5.01 2.5 7.5 2.5C8.96 2.5 10 3.24 10 3.24S11.04 2.5 12.5 2.5C14.99 2.5 17.5 4.46 17.5 7.5C17.5 13 10 17.5 10 17.5Z" stroke="${state.favorites.includes(p.sku)?'#eb4444':'#000'}" stroke-width="1.5" stroke-linejoin="round" fill="${state.favorites.includes(p.sku)?'#eb4444':'white'}"/>
+                                <path class="fav-fill" d="M9.9974 17.7917L8.78906 16.6917C4.4974 12.8 1.66406 10.2333 1.66406 7.08333C1.66406 4.51667 3.68073 2.5 6.2474 2.5C7.6974 2.5 9.08906 3.175 9.9974 4.24167C10.9057 3.175 12.2974 2.5 13.7474 2.5C16.3141 2.5 18.3307 4.51667 18.3307 7.08333C18.3307 10.2333 15.4974 12.8 11.2057 16.7L9.9974 17.7917Z"/>
+                                <path class="fav-outline" d="M13.7474 2.5C12.2974 2.5 10.9057 3.175 9.9974 4.24167C9.08906 3.175 7.6974 2.5 6.2474 2.5C3.68073 2.5 1.66406 4.51667 1.66406 7.08333C1.66406 10.2333 4.4974 12.8 8.78906 16.7L9.9974 17.7917L11.2057 16.6917C15.4974 12.8 18.3307 10.2333 18.3307 7.08333C18.3307 4.51667 16.3141 2.5 13.7474 2.5ZM10.0807 15.4583L9.9974 15.5417L9.91406 15.4583C5.9474 11.8667 3.33073 9.49167 3.33073 7.08333C3.33073 5.41667 4.58073 4.16667 6.2474 4.16667C7.53073 4.16667 8.78073 4.99167 9.2224 6.13333H10.7807C11.2141 4.99167 12.4641 4.16667 13.7474 4.16667C15.4141 4.16667 16.6641 5.41667 16.6641 7.08333C16.6641 9.49167 14.0474 11.8667 10.0807 15.4583Z"/>
                             </svg>
                         </div>
                     </div>
@@ -2329,7 +2330,7 @@
                 </div>
                 <div class="detail-image-actions">
                     <button class="detail-img-btn ${isFav ? 'fav-active' : ''}" id="detailFavBtn" onclick="toggleFavoriteDetail('${sku}')">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 17.5S2.5 13 2.5 7.5C2.5 4.46 5.01 2.5 7.5 2.5C8.96 2.5 10 3.24 10 3.24S11.04 2.5 12.5 2.5C14.99 2.5 17.5 4.46 17.5 7.5C17.5 13 10 17.5 10 17.5Z" stroke="${isFav?'#eb4444':'#000'}" stroke-width="1.3" stroke-linejoin="round" fill="${isFav?'#eb4444':'none'}"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path class="fav-fill" d="M9.9974 17.7917L8.78906 16.6917C4.4974 12.8 1.66406 10.2333 1.66406 7.08333C1.66406 4.51667 3.68073 2.5 6.2474 2.5C7.6974 2.5 9.08906 3.175 9.9974 4.24167C10.9057 3.175 12.2974 2.5 13.7474 2.5C16.3141 2.5 18.3307 4.51667 18.3307 7.08333C18.3307 10.2333 15.4974 12.8 11.2057 16.7L9.9974 17.7917Z"/><path class="fav-outline" d="M13.7474 2.5C12.2974 2.5 10.9057 3.175 9.9974 4.24167C9.08906 3.175 7.6974 2.5 6.2474 2.5C3.68073 2.5 1.66406 4.51667 1.66406 7.08333C1.66406 10.2333 4.4974 12.8 8.78906 16.7L9.9974 17.7917L11.2057 16.6917C15.4974 12.8 18.3307 10.2333 18.3307 7.08333C18.3307 4.51667 16.3141 2.5 13.7474 2.5ZM10.0807 15.4583L9.9974 15.5417L9.91406 15.4583C5.9474 11.8667 3.33073 9.49167 3.33073 7.08333C3.33073 5.41667 4.58073 4.16667 6.2474 4.16667C7.53073 4.16667 8.78073 4.99167 9.2224 6.13333H10.7807C11.2141 4.99167 12.4641 4.16667 13.7474 4.16667C15.4141 4.16667 16.6641 5.41667 16.6641 7.08333C16.6641 9.49167 14.0474 11.8667 10.0807 15.4583Z"/></svg>
                     </button>
                     <button class="detail-img-btn" onclick="shareProduct()">
                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 11L13 5M13 5H8M13 5V10" stroke="#000" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 10V14C13 14.55 12.55 15 12 15H4C3.45 15 3 14.55 3 14V6C3 5.45 3.45 5 4 5H8" stroke="#000" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -2444,7 +2445,6 @@
         const btn = document.getElementById('detailFavBtn');
         const isFav = state.favorites.includes(sku);
         btn.className = 'detail-img-btn' + (isFav ? ' fav-active' : '');
-        btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 17.5S2.5 13 2.5 7.5C2.5 4.46 5.01 2.5 7.5 2.5C8.96 2.5 10 3.24 10 3.24S11.04 2.5 12.5 2.5C14.99 2.5 17.5 4.46 17.5 7.5C17.5 13 10 17.5 10 17.5Z" stroke="${isFav?'#eb4444':'#000'}" stroke-width="1.3" stroke-linejoin="round" fill="${isFav?'#eb4444':'none'}"/></svg>`;
     }
 
     function shareProduct() {
@@ -2598,7 +2598,8 @@
                         <img src="${p.images[0]}" style="width: 100%; height: 100%; object-fit: cover;">
                         <div class="card-fav active" onclick="event.stopPropagation(); toggleFavorite('${p.sku}')">
                             <svg viewBox="0 0 20 20" fill="none">
-                                <path d="M10 17.5S2.5 13 2.5 7.5C2.5 4.46 5.01 2.5 7.5 2.5C8.96 2.5 10 3.24 10 3.24S11.04 2.5 12.5 2.5C14.99 2.5 17.5 4.46 17.5 7.5C17.5 13 10 17.5 10 17.5Z" stroke="#eb4444" stroke-width="1.2" stroke-linejoin="round" fill="#eb4444"/>
+                                <path class="fav-fill" d="M9.9974 17.7917L8.78906 16.6917C4.4974 12.8 1.66406 10.2333 1.66406 7.08333C1.66406 4.51667 3.68073 2.5 6.2474 2.5C7.6974 2.5 9.08906 3.175 9.9974 4.24167C10.9057 3.175 12.2974 2.5 13.7474 2.5C16.3141 2.5 18.3307 4.51667 18.3307 7.08333C18.3307 10.2333 15.4974 12.8 11.2057 16.7L9.9974 17.7917Z"/>
+                                <path class="fav-outline" d="M13.7474 2.5C12.2974 2.5 10.9057 3.175 9.9974 4.24167C9.08906 3.175 7.6974 2.5 6.2474 2.5C3.68073 2.5 1.66406 4.51667 1.66406 7.08333C1.66406 10.2333 4.4974 12.8 8.78906 16.7L9.9974 17.7917L11.2057 16.6917C15.4974 12.8 18.3307 10.2333 18.3307 7.08333C18.3307 4.51667 16.3141 2.5 13.7474 2.5ZM10.0807 15.4583L9.9974 15.5417L9.91406 15.4583C5.9474 11.8667 3.33073 9.49167 3.33073 7.08333C3.33073 5.41667 4.58073 4.16667 6.2474 4.16667C7.53073 4.16667 8.78073 4.99167 9.2224 6.13333H10.7807C11.2141 4.99167 12.4641 4.16667 13.7474 4.16667C15.4141 4.16667 16.6641 5.41667 16.6641 7.08333C16.6641 9.49167 14.0474 11.8667 10.0807 15.4583Z"/>
                             </svg>
                         </div>
                     </div>
