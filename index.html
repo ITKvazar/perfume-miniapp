@@ -372,7 +372,7 @@
             flex-direction: column;
             align-items: center;
             gap: 4px;
-            padding: 12px 16px 0px 16px;
+            padding: 0 16px;
         }
 
         .banner-carousel {
@@ -808,14 +808,14 @@
         .page {
             display: none;
             min-height: 100vh;
-            padding: 0px;
+            padding: 16px;
             padding-bottom: 108px;
         }
 
         .page.active { display: block; }
 
         .page-no-filters {
-            padding: 0px 16px 0 px 16px;
+            padding-top: 0;
         }
 
         .page-title {
@@ -1699,7 +1699,7 @@
     </div>
 
     <!-- Favorites Page -->
-    <div id="favoritesPage" class="page-no-filters">
+    <div id="favoritesPage" class="page page-no-filters">
         <div class="page-title">Избранное</div>
         <div class="products" id="favoritesGrid"></div>
         <div id="emptyFavorites" class="empty-state hidden">
@@ -1709,7 +1709,7 @@
     </div>
 
     <!-- Cart Page -->
-    <div id="cartPage" class="page-no-filters">
+    <div id="cartPage" class="page">
         <div class="page-header">
             <h2>Корзина</h2>
         </div>
@@ -1747,7 +1747,7 @@
     </div>
 
     <!-- Profile Page -->
-    <div id="profilePage" class="page-no-filters">
+    <div id="profilePage" class="page">
         <div class="profile-header">
             <div class="avatar" id="userAvatar">👤</div>
             <div class="profile-name" id="userName">Гость</div>
