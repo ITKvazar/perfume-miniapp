@@ -2007,8 +2007,11 @@
     }
 
     function closeSortSheet() {
+        const sheet = document.getElementById('sortSheet');
+        sheet.style.transition = 'transform 0.3s ease';
+        sheet.style.transform = '';
         document.getElementById('sortOverlay').classList.remove('show');
-        document.getElementById('sortSheet').classList.remove('show');
+        sheet.classList.remove('show');
     }
 
     function updateSortRadio() {
@@ -2099,8 +2102,11 @@
     }
 
     function closeBrandSheet() {
+        const sheet = document.getElementById('brandSheet');
+        sheet.style.transition = 'transform 0.3s ease';
+        sheet.style.transform = '';
         document.getElementById('brandOverlay').classList.remove('show');
-        document.getElementById('brandSheet').classList.remove('show');
+        sheet.classList.remove('show');
     }
 
     function applyBrands() {
