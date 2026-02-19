@@ -846,7 +846,10 @@
             to { transform: translateY(0); }
         }
 
-        .modal-content { padding-bottom: 80px; padding-top: 80px; }
+        .modal-content {
+            padding-bottom: 80px;
+            padding-top: calc(var(--sys-safe-top, env(safe-area-inset-top, 0px)) + var(--tg-header-height, 44px));
+        }
 
         /* Nav-bar detail mode elements */
         .nav-back-btn {
@@ -931,6 +934,7 @@
             position: relative;
             overflow: hidden;
             aspect-ratio: 1 / 1;
+            border-radius: 20px;
         }
 
         .detail-images {
@@ -1043,7 +1047,8 @@
         /* Description card */
         .detail-desc-card {
             margin: 16px 16px 0;
-            background: #F9FAFB;
+            background: #FFFFFF;
+            border: 1px solid #F0F0F5;
             border-radius: 16px;
             padding: 20px;
         }
@@ -1092,7 +1097,8 @@
         /* Specs card */
         .detail-specs-card {
             margin: 12px 16px 0;
-            background: #F9FAFB;
+            background: #FFFFFF;
+            border: 1px solid #F0F0F5;
             border-radius: 16px;
             padding: 20px;
         }
@@ -1151,15 +1157,15 @@
         .detail-add-btn {
             flex: 1;
             height: 52px;
-            border-radius: 14px;
+            border-radius: 51px;
             border: none;
-            background: #000;
+            background: #007AFF;
             color: #fff;
             font-family: inherit;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 510;
             cursor: pointer;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.64px;
         }
 
         .detail-qty-controls {
@@ -1197,7 +1203,7 @@
         .detail-goto-cart-btn {
             flex: 1;
             height: 52px;
-            border-radius: 14px;
+            border-radius: 51px;
             border: none;
             background: #007AFF;
             color: #fff;
@@ -2360,6 +2366,11 @@
         document.body.classList.add('detail-mode');
         document.body.style.overflow = 'hidden';
 
+        if (tg.BackButton) {
+            tg.BackButton.onClick(closeModal);
+            tg.BackButton.show();
+        }
+
         // Swipe for gallery
         let startX = 0;
         const gallery = document.getElementById('detailImages');
@@ -2480,6 +2491,11 @@
         document.getElementById('productModal').style.display = 'none';
         document.body.classList.remove('detail-mode');
         document.body.style.overflow = '';
+
+        if (tg.BackButton) {
+            tg.BackButton.offClick(closeModal);
+            tg.BackButton.hide();
+        }
     }
 
     // Cart
