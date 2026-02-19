@@ -560,25 +560,36 @@
             background: #6e6e76;
         }
 
-        .card-fav {
+        .card-actions {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
+            bottom: 8px;
+            left: 8px;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 6px 4px;
             z-index: 10;
         }
 
-        .card-fav svg {
-            width: 100%;
-            height: 100%;
+        .card-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0 7px;
         }
 
-        .card-fav .fav-fill { fill: white; }
-        .card-fav .fav-outline { fill: #9CA3AF; }
-        .card-fav.active .fav-fill { fill: #eb4444; }
-        .card-fav.active .fav-outline { fill: #eb4444; }
+        .card-action-divider {
+            width: 1px;
+            height: 14px;
+            background: #D1D5DB;
+            flex-shrink: 0;
+        }
 
         .new-badge {
             position: absolute;
@@ -929,6 +940,7 @@
         /* Detail gallery */
         .detail-gallery {
             position: relative;
+            margin-top: 16px;
         }
 
         .detail-images {
@@ -2269,11 +2281,14 @@
                         <div class="product-images" id="imgs-${p.sku}" style="transform: translateX(0)">
                             ${p.images.map(img => `<img src="${img}" class="product-image" alt="${p.title}">`).join('')}
                         </div>
-                        <div class="card-fav ${state.favorites.includes(p.sku)?'active':''}" onclick="event.stopPropagation(); toggleFavorite('${p.sku}')">
-                            <svg viewBox="0 0 20 20" fill="none">
-                                <path class="fav-fill" d="M9.9974 17.7917L8.78906 16.6917C4.4974 12.8 1.66406 10.2333 1.66406 7.08333C1.66406 4.51667 3.68073 2.5 6.2474 2.5C7.6974 2.5 9.08906 3.175 9.9974 4.24167C10.9057 3.175 12.2974 2.5 13.7474 2.5C16.3141 2.5 18.3307 4.51667 18.3307 7.08333C18.3307 10.2333 15.4974 12.8 11.2057 16.7L9.9974 17.7917Z"/>
-                                <path class="fav-outline" d="M13.7474 2.5C12.2974 2.5 10.9057 3.175 9.9974 4.24167C9.08906 3.175 7.6974 2.5 6.2474 2.5C3.68073 2.5 1.66406 4.51667 1.66406 7.08333C1.66406 10.2333 4.4974 12.8 8.78906 16.7L9.9974 17.7917L11.2057 16.6917C15.4974 12.8 18.3307 10.2333 18.3307 7.08333C18.3307 4.51667 16.3141 2.5 13.7474 2.5ZM10.0807 15.4583L9.9974 15.5417L9.91406 15.4583C5.9474 11.8667 3.33073 9.49167 3.33073 7.08333C3.33073 5.41667 4.58073 4.16667 6.2474 4.16667C7.53073 4.16667 8.78073 4.99167 9.2224 6.13333H10.7807C11.2141 4.99167 12.4641 4.16667 13.7474 4.16667C15.4141 4.16667 16.6641 5.41667 16.6641 7.08333C16.6641 9.49167 14.0474 11.8667 10.0807 15.4583Z"/>
-                            </svg>
+                        <div class="card-actions">
+                            <button class="card-action-btn" onclick="event.stopPropagation(); toggleFavorite('${p.sku}')">
+                                <img src="icon/${state.favorites.includes(p.sku) ? 'favorite' : 'favorite_empty'}.svg" width="20" height="20">
+                            </button>
+                            <div class="card-action-divider"></div>
+                            <button class="card-action-btn" onclick="event.stopPropagation(); shareProductCard('${p.sku}')">
+                                <img src="icon/share.svg" width="20" height="20">
+                            </button>
                         </div>
                     </div>
                     <div class="image-dots">
@@ -2458,6 +2473,14 @@
         }
     }
 
+    function shareProductCard(sku) {
+        const p = state.products.find(x => x.sku === sku);
+        if (!p) return;
+        if (navigator.share) {
+            navigator.share({ title: p.title, text: p.description });
+        }
+    }
+
     function showDetailMenu() {
         tg.showAlert('Меню в разработке');
     }
@@ -2606,11 +2629,14 @@
                 <div class="card-image-wrap">
                     <div class="card-image">
                         <img src="${p.images[0]}" style="width: 100%; height: 100%; object-fit: cover;">
-                        <div class="card-fav active" onclick="event.stopPropagation(); toggleFavorite('${p.sku}')">
-                            <svg viewBox="0 0 20 20" fill="none">
-                                <path class="fav-fill" d="M9.9974 17.7917L8.78906 16.6917C4.4974 12.8 1.66406 10.2333 1.66406 7.08333C1.66406 4.51667 3.68073 2.5 6.2474 2.5C7.6974 2.5 9.08906 3.175 9.9974 4.24167C10.9057 3.175 12.2974 2.5 13.7474 2.5C16.3141 2.5 18.3307 4.51667 18.3307 7.08333C18.3307 10.2333 15.4974 12.8 11.2057 16.7L9.9974 17.7917Z"/>
-                                <path class="fav-outline" d="M13.7474 2.5C12.2974 2.5 10.9057 3.175 9.9974 4.24167C9.08906 3.175 7.6974 2.5 6.2474 2.5C3.68073 2.5 1.66406 4.51667 1.66406 7.08333C1.66406 10.2333 4.4974 12.8 8.78906 16.7L9.9974 17.7917L11.2057 16.6917C15.4974 12.8 18.3307 10.2333 18.3307 7.08333C18.3307 4.51667 16.3141 2.5 13.7474 2.5ZM10.0807 15.4583L9.9974 15.5417L9.91406 15.4583C5.9474 11.8667 3.33073 9.49167 3.33073 7.08333C3.33073 5.41667 4.58073 4.16667 6.2474 4.16667C7.53073 4.16667 8.78073 4.99167 9.2224 6.13333H10.7807C11.2141 4.99167 12.4641 4.16667 13.7474 4.16667C15.4141 4.16667 16.6641 5.41667 16.6641 7.08333C16.6641 9.49167 14.0474 11.8667 10.0807 15.4583Z"/>
-                            </svg>
+                        <div class="card-actions">
+                            <button class="card-action-btn" onclick="event.stopPropagation(); toggleFavorite('${p.sku}')">
+                                <img src="icon/favorite.svg" width="20" height="20">
+                            </button>
+                            <div class="card-action-divider"></div>
+                            <button class="card-action-btn" onclick="event.stopPropagation(); shareProductCard('${p.sku}')">
+                                <img src="icon/share.svg" width="20" height="20">
+                            </button>
                         </div>
                     </div>
                 </div>
