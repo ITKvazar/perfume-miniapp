@@ -55,7 +55,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 16px 8px;
+            padding: 44px 16px 8px;
+            position: relative;
         }
 
         .nav-logo-img {
@@ -847,7 +848,63 @@
         .modal-content { padding-bottom: 80px; padding-top: 80px; }
 
         /* Nav-bar detail mode elements */
+        .nav-back-btn {
+            display: none;
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #E5E7EB;
+            background: #fff;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
 
+        .nav-back-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .nav-actions-right {
+            display: none;
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            align-items: center;
+            gap: 0;
+            background: #fff;
+            border: 1px solid #E5E7EB;
+            border-radius: 20px;
+            padding: 6px 4px;
+            z-index: 10;
+        }
+
+        .nav-action-btn {
+            width: 28px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .nav-actions-divider {
+            width: 1px;
+            height: 16px;
+            background: #E5E7EB;
+        }
+
+        body.detail-mode .nav-back-btn { display: flex; }
+        body.detail-mode .nav-actions-right { display: flex; }
         body.detail-mode .filters-wrap { display: none !important; }
         body.detail-mode .tab-bar-wrap { display: none !important; }
         body.detail-mode .nav-bar {
@@ -858,6 +915,9 @@
 
         body.viewer-mode .tab-bar-wrap { display: none !important; }
         body.viewer-mode .detail-bottom-bar { display: none !important; }
+        body.viewer-mode .nav-actions-right { display: flex; }
+        body.viewer-mode .nav-back-btn { display: none !important; }
+        body.viewer-mode .nav-close-btn { display: flex; }
         body.viewer-mode .nav-bar {
             background: rgba(245,245,245,0.95);
             backdrop-filter: blur(20px);
@@ -1212,6 +1272,27 @@
             object-fit: cover;
         }
 
+        .nav-close-btn {
+            display: none;
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid #E5E7EB;
+            background: #fff;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .nav-close-btn svg {
+            width: 16px;
+            height: 16px;
+        }
 
         .btn-primary {
             flex: 1;
@@ -1474,7 +1555,21 @@
 <!-- ===== Navigation Bar ===== -->
 <div class="nav-bar">
     <div class="nav-header">
+        <!-- Back button (detail mode) -->
+        <button class="nav-back-btn" onclick="closeModal()">
+            <svg viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <!-- Close button (viewer mode) -->
+        <button class="nav-close-btn" onclick="closeImageViewer()">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M2 2L14 14M14 2L2 14" stroke="#000" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
         <img src="logo.png" alt="Ароматная Публика" class="nav-logo-img">
+        <!-- Right action buttons (detail mode) -->
+        <div class="nav-actions-right">
+            <button class="nav-action-btn" onclick="closeModal()"><svg width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1 1L7 7L13 1" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="nav-actions-divider"></div>
+            <button class="nav-action-btn" onclick="showDetailMenu()"><svg width="16" height="4" viewBox="0 0 16 4" fill="none"><circle cx="2" cy="2" r="1.5" fill="#000"/><circle cx="8" cy="2" r="1.5" fill="#000"/><circle cx="14" cy="2" r="1.5" fill="#000"/></svg></button>
+        </div>
     </div>
     <div class="filters-wrap">
         <div class="filters">
@@ -1728,6 +1823,9 @@
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
+    if (tg.disableVerticalSwipes) {
+        tg.disableVerticalSwipes();
+    }
     // Hide Telegram system header by requesting fullscreen
     if (tg.requestFullscreen) {
         tg.requestFullscreen();
