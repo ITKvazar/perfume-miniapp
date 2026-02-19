@@ -195,30 +195,16 @@
         }
 
         .sort-radio {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            border: 2px solid #D1D5DB;
-            position: relative;
+            width: 20px;
+            height: 20px;
             flex-shrink: 0;
-            transition: all 0.2s;
+            background-image: url('icon/circle-no.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
         }
 
         .sort-sheet-option input:checked + .sort-radio {
-            border-color: #007AFF;
-            background: #007AFF;
-        }
-
-        .sort-sheet-option input:checked + .sort-radio::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #fff;
+            background-image: url('icon/circle-yes.svg');
         }
 
         .sort-sheet-buttons {
@@ -342,30 +328,16 @@
         }
 
         .brand-checkbox {
-            width: 22px;
-            height: 22px;
-            border-radius: 6px;
-            border: 2px solid #D1D5DB;
-            position: relative;
+            width: 20px;
+            height: 20px;
             flex-shrink: 0;
-            transition: all 0.2s;
+            background-image: url('icon/square-no.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
         }
 
         .brand-sheet-option input:checked + .brand-checkbox {
-            border-color: #007AFF;
-            background: #007AFF;
-        }
-
-        .brand-sheet-option input:checked + .brand-checkbox::after {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: 6px;
-            width: 5px;
-            height: 9px;
-            border: solid #fff;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
+            background-image: url('icon/square-yes.svg');
         }
 
         /* ===== Main scrollable content ===== */
