@@ -253,9 +253,9 @@
             font-family: inherit;
         }
 
-        /* Sort button active state (circle border) */
+        /* Sort button active state (gray circle background) */
         .filter-btn.icon-only.sort-active {
-            border: 1.5px solid #000;
+            background: #E5E7EB;
         }
 
         /* Category filter active state with X */
@@ -1600,11 +1600,7 @@
     <div class="filters-wrap">
         <div class="filters">
             <button class="filter-btn icon-only" id="sortBtn" onclick="showSortSheet()">
-                <svg width="15" height="12" viewBox="0 0 15 12" fill="none">
-                    <path d="M0.5 1.5H14.5" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>
-                    <path d="M3 6H12" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>
-                    <path d="M5.5 10.5H9.5" stroke="#000" stroke-width="1.4" stroke-linecap="round"/>
-                </svg>
+                <img src="icon/sort.svg" width="20" height="20" alt="сортировка">
             </button>
             <button class="filter-btn with-icon" id="brandBtn" onclick="showBrandSheet()">
                 <span id="brandBtnText">Бренд</span>
