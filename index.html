@@ -972,33 +972,25 @@
 
         .detail-image-actions {
             position: absolute;
-            bottom: 16px;
-            left: 16px;
+            top: 16px;
+            right: 16px;
             display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 40px;
-            padding: 6px 4px;
+            gap: 8px;
             z-index: 5;
         }
 
         .detail-img-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: none;
-            border: none;
             cursor: pointer;
-            padding: 0 8px;
-        }
-
-        .detail-img-btn-divider {
-            width: 1px;
-            height: 14px;
-            background: #D1D5DB;
-            flex-shrink: 0;
         }
 
         /* Volume selector */
@@ -1887,7 +1879,7 @@
                 price: 6800,
                 oldPrice: 8900,
                 category: 'women',
-                images: ['Photo.png', 'Photo.png'],
+                images: ['Photo_detail.png', 'Photo_detail.png'],
                 volumes: ['50 мл', '100 мл'],
                 description: 'Роскошный восточный аромат с нотами розы, ладана и ванили. Идеален для особых случаев. В нём ощущаются глубокие нотки ладана и амбры, которые раскрываются постепенно, создавая многогранную композицию.',
                 characteristics: {Объем: '50', 'Тип продукта': 'Парфюмерная вода', 'Для кого': 'Для женщин', 'Группа ароматов': 'Восточные, Цветочные', Страна: 'Оман', Парфюмер: 'Renaud Busson', Сегмент: 'Нишевая', Стойкость: 'Стойкий 8-12 ч.'},
@@ -1902,7 +1894,7 @@
                 price: 10000,
                 oldPrice: 10500,
                 category: 'men',
-                images: ['Photo.png', 'Photo.png', 'Photo.png'],
+                images: ['Photo_detail.png', 'Photo_detail.png', 'Photo_detail.png'],
                 volumes: ['50 мл', '100 мл'],
                 description: 'Парфюмерная вода By Kilian Straight To Heaven — это красивый благородный запоминающийся аромат. В нем, непременно, присутствуют алкогольные нотки рома, которые открываются для обоняния самыми первыми. В продолжении наслаждения процессом раскрытия Straight To Heaven, ярко ощущаются древесные оттенки, дополненные необычайным сочетанием ванили и пряного пачули. Шлейф парфюмерной воды, который будет повсюду оставаться и напоминать о вашем присутствии, имеет в себе ярко выраженные томные ноты мускуса и серой амбры. By Kilian является мужским ароматом и относится к категории древесных. Несмотря на это, его предпочитает и прекрасная половина.',
                 characteristics: {Объем: '50', 'Тип продукта': 'Парфюмерная вода', 'Для кого': 'Для женщин', 'Группа ароматов': 'Древесные, Пряные', Страна: 'Франция', Парфюмер: 'Calice Becker', Сегмент: 'Селективная / Нишевая', Стойкость: 'Стойкий 7-12 ч.'},
@@ -1916,7 +1908,7 @@
                 brand: 'NOISE',
                 price: 4200,
                 category: 'unisex',
-                images: ['Photo.png', 'Photo.png'],
+                images: ['Photo_detail.png', 'Photo_detail.png'],
                 volumes: ['50 мл'],
                 description: 'Современный унисекс аромат с цитрусовыми нотами и древесной базой. Свежее открытие переходит в тёплую сердечную ноту с оттенками кедра и ветивера.',
                 characteristics: {Объем: '50', 'Тип продукта': 'Парфюмерная вода', 'Для кого': 'Унисекс', 'Группа ароматов': 'Цитрусовые, Древесные', Страна: 'Россия', Парфюмер: 'Алексей Маркин', Сегмент: 'Нишевая', Стойкость: 'Стойкий 6-8 ч.'},
@@ -1931,7 +1923,7 @@
                 price: 5800,
                 oldPrice: 6500,
                 category: 'women',
-                images: ['Photo.png', 'Photo.png'],
+                images: ['Photo_detail.png', 'Photo_detail.png'],
                 volumes: ['50 мл', '100 мл'],
                 description: 'Яркий цветочно-фруктовый аромат для уверенных в себе женщин. Сочные ноты персика и малины окружены нежной розой и жасмином.',
                 characteristics: {Объем: '50', 'Тип продукта': 'Экстракт духов', 'Для кого': 'Для женщин', 'Группа ароматов': 'Цветочные, Фруктовые', Страна: 'Турция', Парфюмер: 'Jorge Lee', Сегмент: 'Нишевая', Стойкость: 'Стойкий 10-14 ч.'},
@@ -1945,7 +1937,7 @@
                 brand: 'Chanel',
                 price: 8500,
                 category: 'women',
-                images: ['Photo.png'],
+                images: ['Photo_detail.png'],
                 volumes: ['50 мл', '100 мл', '200 мл'],
                 description: 'Легендарная классика. Цветочно-альдегидный шедевр, который остаётся иконой парфюмерного искусства уже более столетия.',
                 characteristics: {Объем: '50', 'Тип продукта': 'Парфюмерная вода', 'Для кого': 'Для женщин', 'Группа ароматов': 'Цветочные, Альдегидные', Страна: 'Франция', Парфюмер: 'Ernest Beaux', Сегмент: 'Селективная', Стойкость: 'Стойкий 6-10 ч.'},
@@ -1959,7 +1951,7 @@
                 brand: 'Dior',
                 price: 7200,
                 category: 'men',
-                images: ['Photo.png', 'Photo.png'],
+                images: ['Photo_detail.png', 'Photo_detail.png'],
                 volumes: ['60 мл', '100 мл'],
                 description: 'Свежий, пряный и древесный. Магнетический аромат, в котором раскрываются ноты бергамота, перца и амброксана.',
                 characteristics: {Объем: '100', 'Тип продукта': 'Туалетная вода', 'Для кого': 'Для мужчин', 'Группа ароматов': 'Древесные, Пряные', Страна: 'Франция', Парфюмер: 'François Demachy', Сегмент: 'Селективная', Стойкость: 'Стойкий 8-10 ч.'},
@@ -2348,7 +2340,6 @@
                     <button class="detail-img-btn" id="detailFavBtn" onclick="toggleFavoriteDetail('${sku}')">
                         <img id="detailFavImg" src="icon/${isFav ? 'favorite' : 'favorite_empty'}.svg" width="20" height="20">
                     </button>
-                    <div class="detail-img-btn-divider"></div>
                     <button class="detail-img-btn" onclick="shareProduct()">
                         <img src="icon/share.svg" width="20" height="20">
                     </button>
