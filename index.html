@@ -1083,7 +1083,7 @@
         }
 
         .detail-desc-text.collapsed {
-            max-height: 5.5em;
+            max-height: calc(8 * 1.55em);
         }
 
         .detail-desc-toggle {
@@ -1110,7 +1110,7 @@
 
         /* Specs card */
         .detail-specs-card {
-            margin: 12px 16px 0;
+            margin: 16px 16px 32px;
             background: #F6F6F6;
             border-radius: 16px;
             padding: 20px;
@@ -2376,6 +2376,16 @@
 
         modal.style.display = 'block';
         modal.scrollTop = 0;
+
+        // Hide "Read more" button if description fits within 8 lines
+        setTimeout(() => {
+            const text = document.getElementById('descText');
+            const toggle = document.getElementById('descToggle');
+            if (text && toggle && text.scrollHeight <= text.clientHeight + 2) {
+                toggle.style.display = 'none';
+                text.classList.remove('collapsed');
+            }
+        }, 0);
         document.body.classList.add('detail-mode');
         document.body.style.overflow = 'hidden';
 
