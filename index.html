@@ -1562,9 +1562,20 @@
         }
 
         .empty-icon {
-            font-size: 64px;
             margin-bottom: 16px;
-            opacity: 0.3;
+            opacity: 0.35;
+        }
+
+        .empty-action-btn {
+            margin-top: 20px;
+            padding: 14px 32px;
+            background: #E5E7EB;
+            color: #374151;
+            border: none;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
         }
 
         .hidden { display: none !important; }
@@ -1699,8 +1710,9 @@
         <div class="page-title">Избранное</div>
         <div class="products" id="favoritesGrid"></div>
         <div id="emptyFavorites" class="empty-state hidden">
-            <div class="empty-icon">🤍</div>
-            <p>Добавьте товары в избранное</p>
+            <div class="empty-icon"><img src="icon/like_big.svg" width="80" height="80"></div>
+            <p>Собирайте здесь товары,<br>которые вам приглянулись.</p>
+            <button class="empty-action-btn" onclick="showPage('main')">Перейти к товарам</button>
         </div>
     </div>
 
