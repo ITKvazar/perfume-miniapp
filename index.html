@@ -786,6 +786,163 @@
             font-size: 20px;
         }
 
+        .search-overlay {
+            display: none;
+            position: fixed;
+            top: calc(var(--sys-safe-top, env(safe-area-inset-top, 0px)) + var(--tg-header-height, 44px) + 52px);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            z-index: 2500;
+        }
+
+        .search-overlay.show {
+            display: block;
+        }
+
+        .search-scroll {
+            height: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 12px 16px 132px;
+        }
+
+        .search-section {
+            margin-bottom: 32px;
+        }
+
+        .search-section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+
+        .search-section-title,
+        .search-results-title {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.34px;
+            line-height: 1.2;
+            color: #B9B9BF;
+            margin-bottom: 4px;
+        }
+
+        .search-results-title {
+            margin-bottom: 12px;
+        }
+
+        .search-clear-history {
+            border: none;
+            background: transparent;
+            padding: 0;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: -0.32px;
+            line-height: 1.2;
+            color: #C3C3C8;
+            cursor: pointer;
+        }
+
+        .search-list {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .search-list-item {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #ECECF1;
+            background: transparent;
+            padding: 14px 0;
+            text-align: left;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: -0.32px;
+            line-height: 1.2;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .search-list-item.static {
+            cursor: default;
+        }
+
+        .search-list-item:active {
+            opacity: 0.72;
+        }
+
+        .search-input-wrap {
+            position: fixed;
+            left: 16px;
+            right: 16px;
+            bottom: max(16px, calc(env(safe-area-inset-bottom, 0px) + 8px));
+            z-index: 2601;
+        }
+
+        .search-input-shell {
+            height: 48px;
+            border-radius: 24px;
+            border: 1px solid #F0F0F2;
+            background: #F7F7F8;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+        }
+
+        .search-input-shell svg {
+            flex-shrink: 0;
+            margin-right: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            outline: none;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: -0.32px;
+            color: #2C2C31;
+        }
+
+        .search-input::placeholder {
+            color: #A8A8AE;
+        }
+
+        .search-clear-btn {
+            width: 24px;
+            height: 24px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin-left: 6px;
+            cursor: pointer;
+            color: #B5B5BB;
+        }
+
+        .search-clear-btn.show {
+            display: flex;
+        }
+
+        .search-products-grid {
+            margin-top: 0;
+        }
+
+        .search-empty {
+            text-align: center;
+            padding: 40px 0;
+            color: #909096;
+            font-size: 17px;
+        }
+
         /* ===== Pages ===== */
         .page {
             display: none;
@@ -869,9 +1026,15 @@
             z-index: 10;
         }
 
-        .nav-back-btn svg {
+        .nav-back-icon {
             width: 18px;
             height: 18px;
+        }
+
+        .nav-back-icon-close {
+            display: none;
+            width: 16px;
+            height: 16px;
         }
 
         .nav-actions-right {
@@ -921,6 +1084,17 @@
         body.viewer-mode .nav-back-btn { display: flex !important; }
         body.viewer-mode .nav-close-btn { display: none !important; }
         body.viewer-mode .nav-bar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        body.search-mode .tab-bar-wrap { display: none !important; }
+        body.search-mode .nav-back-btn { display: flex !important; }
+        body.search-mode .nav-actions-right { display: flex !important; }
+        body.search-mode .nav-back-icon-arrow { display: none; }
+        body.search-mode .nav-back-icon-close { display: block; }
+        body.search-mode .nav-bar {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -1646,7 +1820,8 @@
     <div class="nav-header">
         <!-- Back button (detail mode) -->
         <button class="nav-back-btn" onclick="handleNavBack()">
-            <svg viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="nav-back-icon nav-back-icon-arrow" viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="nav-back-icon nav-back-icon-close" viewBox="0 0 16 16" fill="none"><path d="M3 3L13 13M13 3L3 13" stroke="#000" stroke-width="1.8" stroke-linecap="round"/></svg>
         </button>
         <!-- Close button (viewer mode) -->
         <button class="nav-close-btn" onclick="closeImageViewer()">
@@ -1655,7 +1830,7 @@
         <img src="logo.png" alt="Ароматная Публика" class="nav-logo-img">
         <!-- Right action buttons (detail mode) -->
         <div class="nav-actions-right">
-            <button class="nav-action-btn" onclick="closeModal()"><svg width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1 1L7 7L13 1" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="nav-action-btn" onclick="handleHeaderPrimaryAction()"><svg width="14" height="8" viewBox="0 0 14 8" fill="none"><path d="M1 1L7 7L13 1" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <div class="nav-actions-divider"></div>
             <button class="nav-action-btn" onclick="showDetailMenu()"><svg width="16" height="4" viewBox="0 0 16 4" fill="none"><circle cx="2" cy="2" r="1.5" fill="#000"/><circle cx="8" cy="2" r="1.5" fill="#000"/><circle cx="14" cy="2" r="1.5" fill="#000"/></svg></button>
         </div>
@@ -1760,6 +1935,26 @@
         <!-- Products -->
         <div class="products-section">
             <div class="products" id="productsGrid"></div>
+        </div>
+
+        <div id="searchOverlay" class="search-overlay">
+            <div class="search-scroll" id="searchScroll">
+                <div id="searchContent"></div>
+            </div>
+            <div class="search-input-wrap">
+                <div class="search-input-shell">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="8.5" cy="8.5" r="6" stroke="#A8A8AE" stroke-width="1.5"/>
+                        <path d="M13 13L17.5 17.5" stroke="#A8A8AE" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <input id="searchInput" class="search-input" type="search" placeholder="Поиск" autocomplete="off" autocapitalize="none" spellcheck="false">
+                    <button id="searchClearBtn" class="search-clear-btn" onclick="clearSearchQuery()">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <path d="M4.5 4.5L13.5 13.5M13.5 4.5L4.5 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -2030,19 +2225,34 @@
         ],
         cart: {},
         favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
+        searchHistory: JSON.parse(localStorage.getItem('searchHistory') || '[]'),
         orders: JSON.parse(localStorage.getItem('orders') || '[]'),
         currentCategory: 'all',
         selectedBrands: [],
         currentSort: 'popular',
         searchQuery: '',
+        isSearchMode: false,
         currentProduct: null,
         bannerIndex: 0
     };
+
+    const searchRecommendations = [
+        'Хиты Kilian Paris',
+        'Свежесть и цитрусы',
+        'Редкая ниша',
+        'Ароматы-невидимки',
+        'Новинки недели',
+        'Хиты Kilian Paris',
+        'Свежесть и цитрусы',
+        'Редкая ниша',
+        'Ароматы-невидимки'
+    ];
 
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
         renderProducts();
         initBanner();
+        initSearch();
         updateBadges();
         loadUserData();
         renderOrders();
@@ -2283,15 +2493,227 @@
         }
     }
 
+    function escapeHtml(text) {
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function initSearch() {
+        const input = document.getElementById('searchInput');
+        if (!input) return;
+
+        input.addEventListener('input', (e) => {
+            state.searchQuery = e.target.value;
+            renderSearchOverlay();
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key !== 'Enter') return;
+            const query = state.searchQuery.trim();
+            if (query) saveSearchQuery(query);
+            e.preventDefault();
+            input.blur();
+        });
+    }
+
+    function saveSearchQuery(query) {
+        const normalized = query.trim();
+        if (!normalized) return;
+
+        state.searchHistory = state.searchHistory.filter((item) => item.toLowerCase() !== normalized.toLowerCase());
+        state.searchHistory.unshift(normalized);
+        state.searchHistory = state.searchHistory.slice(0, 10);
+        localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory));
+    }
+
+    function clearSearchHistory() {
+        state.searchHistory = [];
+        localStorage.setItem('searchHistory', JSON.stringify(state.searchHistory));
+        renderSearchOverlay();
+    }
+
+    function setSearchQuery(query, shouldFocus = true) {
+        const input = document.getElementById('searchInput');
+        state.searchQuery = query;
+        if (input) {
+            input.value = query;
+            if (shouldFocus) {
+                input.focus({ preventScroll: true });
+                const length = query.length;
+                try {
+                    input.setSelectionRange(length, length);
+                } catch (e) {}
+            }
+        }
+        renderSearchOverlay();
+    }
+
+    function clearSearchQuery() {
+        setSearchQuery('', true);
+    }
+
+    function getProductWord(count) {
+        const mod10 = count % 10;
+        const mod100 = count % 100;
+        if (mod10 === 1 && mod100 !== 11) return 'товар';
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'товара';
+        return 'товаров';
+    }
+
+    function renderSearchResults(query) {
+        const content = document.getElementById('searchContent');
+        if (!content) return;
+
+        const products = getFilteredProducts(query);
+        content.innerHTML = `
+            <div class="search-results-title">Найдено ${products.length} ${getProductWord(products.length)}</div>
+            <div class="products search-products-grid" id="searchProductsGrid"></div>
+        `;
+
+        const grid = document.getElementById('searchProductsGrid');
+        if (!grid) return;
+
+        if (products.length === 0) {
+            grid.innerHTML = '<div class="search-empty">Ничего не найдено</div>';
+            return;
+        }
+
+        renderCardsInGrid(grid, products, 'search-imgs');
+    }
+
+    function renderSearchHints() {
+        const content = document.getElementById('searchContent');
+        if (!content) return;
+
+        const hasHistory = state.searchHistory.length > 0;
+        const historySection = hasHistory ? `
+            <div class="search-section">
+                <div class="search-section-head">
+                    <div class="search-section-title">История поиска</div>
+                    <button class="search-clear-history" id="searchHistoryClearBtn">Очистить</button>
+                </div>
+                <div class="search-list">
+                    ${state.searchHistory.map((item, i) => `
+                        <button class="search-list-item" data-history-index="${i}">${escapeHtml(item)}</button>
+                    `).join('')}
+                </div>
+            </div>
+        ` : '';
+
+        content.innerHTML = `
+            ${historySection}
+            <div class="search-section">
+                <div class="search-section-title">Наши рекомендации</div>
+                <div class="search-list">
+                    ${searchRecommendations.map((item, i) => `
+                        <button class="search-list-item" data-recommend-index="${i}">${escapeHtml(item)}</button>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        const clearHistoryBtn = document.getElementById('searchHistoryClearBtn');
+        if (clearHistoryBtn) {
+            clearHistoryBtn.addEventListener('click', clearSearchHistory);
+        }
+
+        content.querySelectorAll('[data-history-index]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const index = Number(btn.dataset.historyIndex);
+                const value = state.searchHistory[index];
+                if (value) setSearchQuery(value, true);
+            });
+        });
+
+        content.querySelectorAll('[data-recommend-index]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const index = Number(btn.dataset.recommendIndex);
+                const value = searchRecommendations[index];
+                if (value) setSearchQuery(value, true);
+            });
+        });
+    }
+
+    function toggleSearchClearButton() {
+        const clearBtn = document.getElementById('searchClearBtn');
+        if (!clearBtn) return;
+        clearBtn.classList.toggle('show', state.searchQuery.trim().length > 0);
+    }
+
+    function renderSearchOverlay() {
+        if (!state.isSearchMode) return;
+        toggleSearchClearButton();
+
+        const query = state.searchQuery.trim();
+        if (query) {
+            renderSearchResults(query);
+        } else {
+            renderSearchHints();
+        }
+    }
+
+    function openSearchMode(shouldFocus = true) {
+        if (state.isSearchMode) {
+            if (shouldFocus) {
+                const input = document.getElementById('searchInput');
+                if (input) input.focus({ preventScroll: true });
+            }
+            return;
+        }
+
+        state.isSearchMode = true;
+        document.body.classList.add('search-mode');
+        document.getElementById('searchOverlay').classList.add('show');
+
+        const scroll = document.getElementById('searchScroll');
+        if (scroll) scroll.scrollTop = 0;
+
+        renderSearchOverlay();
+
+        if (shouldFocus) {
+            setTimeout(() => {
+                const input = document.getElementById('searchInput');
+                if (input) input.focus({ preventScroll: true });
+            }, 0);
+        }
+    }
+
+    function exitSearchMode(saveQuery = true) {
+        if (!state.isSearchMode) return;
+
+        const query = state.searchQuery.trim();
+        if (saveQuery && query) {
+            saveSearchQuery(query);
+        }
+
+        state.isSearchMode = false;
+        state.searchQuery = '';
+
+        const input = document.getElementById('searchInput');
+        if (input) {
+            input.value = '';
+            input.blur();
+        }
+
+        document.body.classList.remove('search-mode');
+        document.getElementById('searchOverlay').classList.remove('show');
+        toggleSearchClearButton();
+        renderProducts();
+    }
+
     // Filter by Tag
     function filterByTag(tag) {
         showPage('main');
         const filtered = state.products.filter(p => p.tags && p.tags.includes(tag));
-        renderFilteredProducts(filtered, true);
+        renderFilteredProducts(filtered);
     }
 
     // Render Products
-    function renderProducts() {
+    function getFilteredProducts(searchQuery = '') {
         let filtered = state.products;
 
         if (state.currentCategory !== 'all') {
@@ -2302,8 +2724,13 @@
             filtered = filtered.filter(p => state.selectedBrands.includes(p.brand));
         }
 
-        if (state.searchQuery) {
-            filtered = filtered.filter(p => p.title.toLowerCase().includes(state.searchQuery.toLowerCase()));
+        const normalizedQuery = (searchQuery || '').trim().toLowerCase();
+        if (normalizedQuery) {
+            filtered = filtered.filter((p) => {
+                const title = p.title.toLowerCase();
+                const brand = p.brand.toLowerCase();
+                return title.includes(normalizedQuery) || brand.includes(normalizedQuery);
+            });
         }
 
         filtered = [...filtered];
@@ -2315,25 +2742,18 @@
             filtered.sort((a, b) => b.price - a.price);
         }
 
-        renderFilteredProducts(filtered);
+        return filtered;
     }
 
-    function renderFilteredProducts(products, isTagFilter = false) {
-        const grid = document.getElementById('productsGrid');
-
-        if (products.length === 0) {
-            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #6B7280;">Ничего не найдено</div>';
-            return;
-        }
-
-        grid.innerHTML = products.map((p) => `
+    function buildProductCardMarkup(p, imageContainerId) {
+        return `
             <div class="card" onclick="openProduct('${p.sku}')">
                 <div class="card-image-wrap">
                     <div class="card-image">
-                        <div class="product-images" id="imgs-${p.sku}" style="transform: translateX(0)">
+                        <div class="product-images" id="${imageContainerId}" style="transform: translateX(0)">
                             ${p.images.map(img => `<img src="${img}" class="product-image" alt="${p.title}">`).join('')}
                         </div>
-                        <div class="card-fav ${state.favorites.includes(p.sku)?'active':''}" onclick="event.stopPropagation(); toggleFavorite('${p.sku}')">
+                        <div class="card-fav ${state.favorites.includes(p.sku) ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${p.sku}')">
                             <svg viewBox="0 0 20 20" fill="none">
                                 <path class="fav-fill" d="M9.9974 17.7917L8.78906 16.6917C4.4974 12.8 1.66406 10.2333 1.66406 7.08333C1.66406 4.51667 3.68073 2.5 6.2474 2.5C7.6974 2.5 9.08906 3.175 9.9974 4.24167C10.9057 3.175 12.2974 2.5 13.7474 2.5C16.3141 2.5 18.3307 4.51667 18.3307 7.08333C18.3307 10.2333 15.4974 12.8 11.2057 16.7L9.9974 17.7917Z"/>
                                 <path class="fav-outline" d="M13.7474 2.5C12.2974 2.5 10.9057 3.175 9.9974 4.24167C9.08906 3.175 7.6974 2.5 6.2474 2.5C3.68073 2.5 1.66406 4.51667 1.66406 7.08333C1.66406 10.2333 4.4974 12.8 8.78906 16.7L9.9974 17.7917L11.2057 16.6917C15.4974 12.8 18.3307 10.2333 18.3307 7.08333C18.3307 4.51667 16.3141 2.5 13.7474 2.5ZM10.0807 15.4583L9.9974 15.5417L9.91406 15.4583C5.9474 11.8667 3.33073 9.49167 3.33073 7.08333C3.33073 5.41667 4.58073 4.16667 6.2474 4.16667C7.53073 4.16667 8.78073 4.99167 9.2224 6.13333H10.7807C11.2141 4.99167 12.4641 4.16667 13.7474 4.16667C15.4141 4.16667 16.6641 5.41667 16.6641 7.08333C16.6641 9.49167 14.0474 11.8667 10.0807 15.4583Z"/>
@@ -2341,7 +2761,7 @@
                         </div>
                     </div>
                     <div class="image-dots">
-                        ${p.images.map((_, i) => `<div class="img-dot ${i===0?'active':''}"></div>`).join('')}
+                        ${p.images.map((_, i) => `<div class="img-dot ${i === 0 ? 'active' : ''}"></div>`).join('')}
                     </div>
                 </div>
                 <div class="card-info">
@@ -2352,13 +2772,40 @@
                     <div class="card-name">${p.title}</div>
                 </div>
             </div>
-        `).join('');
+        `;
+    }
 
-        products.forEach(p => initImageSwipe(p.sku, p.images.length));
+    function renderCardsInGrid(grid, products, idPrefix = 'imgs') {
+        if (!grid) return;
+
+        if (products.length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #6B7280;">Ничего не найдено</div>';
+            return;
+        }
+
+        grid.innerHTML = products.map((p) => buildProductCardMarkup(p, `${idPrefix}-${p.sku}`)).join('');
+        products.forEach(p => initImageSwipeById(`${idPrefix}-${p.sku}`, p.images.length));
+    }
+
+    function renderProducts() {
+        const filtered = getFilteredProducts(state.isSearchMode ? state.searchQuery : '');
+        renderFilteredProducts(filtered);
+        if (state.isSearchMode) {
+            renderSearchOverlay();
+        }
+    }
+
+    function renderFilteredProducts(products) {
+        const grid = document.getElementById('productsGrid');
+        renderCardsInGrid(grid, products, 'imgs');
     }
 
     function initImageSwipe(sku, count) {
-        const container = document.getElementById(`imgs-${sku}`);
+        initImageSwipeById(`imgs-${sku}`, count);
+    }
+
+    function initImageSwipeById(containerId, count) {
+        const container = document.getElementById(containerId);
         if (!container || count <= 1) return;
 
         let startX = 0;
@@ -2397,6 +2844,10 @@
     };
 
     function openProduct(sku) {
+        if (state.isSearchMode) {
+            exitSearchMode(true);
+        }
+
         const p = state.products.find(x => x.sku === sku);
         if (!p) return;
 
@@ -2550,7 +3001,17 @@
         tg.showAlert('Меню в разработке');
     }
 
+    function handleHeaderPrimaryAction() {
+        if (state.isSearchMode) return;
+        closeModal();
+    }
+
     function handleNavBack() {
+        if (state.isSearchMode) {
+            exitSearchMode(true);
+            return;
+        }
+
         if (document.body.classList.contains('viewer-mode')) {
             closeImageViewer();
             return;
@@ -2852,6 +3313,10 @@
 
     // Navigation
     function showPage(page) {
+        if (page !== 'main' && state.isSearchMode) {
+            exitSearchMode(false);
+        }
+
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
 
@@ -2886,8 +3351,8 @@
     }
 
     function focusSearch() {
-        // Implement search focus
-        tg.showAlert('Поиск в разработке');
+        showPage('main');
+        openSearchMode(true);
     }
 
     function closeApp() {
