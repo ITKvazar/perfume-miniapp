@@ -917,11 +917,11 @@
 
         body.viewer-mode .tab-bar-wrap { display: none !important; }
         body.viewer-mode .detail-bottom-bar { display: none !important; }
-        body.viewer-mode .nav-actions-right { display: flex; }
-        body.viewer-mode .nav-back-btn { display: none !important; }
-        body.viewer-mode .nav-close-btn { display: flex; }
+        body.viewer-mode .nav-actions-right { display: none !important; }
+        body.viewer-mode .nav-back-btn { display: flex !important; }
+        body.viewer-mode .nav-close-btn { display: none !important; }
         body.viewer-mode .nav-bar {
-            background: rgba(245,245,245,0.95);
+            background: rgba(255,255,255,0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
@@ -1279,16 +1279,33 @@
 
         .image-viewer-main {
             flex: 1;
+            position: relative;
+            overflow: hidden;
+            padding-top: calc(var(--sys-safe-top, env(safe-area-inset-top, 0px)) + var(--tg-header-height, 44px));
+            touch-action: pan-y;
+        }
+
+        .viewer-track {
+            height: 100%;
+            display: flex;
+            will-change: transform;
+        }
+
+        .viewer-slide {
+            min-width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
-            padding-top: 80px;
+            padding: 0 16px;
+            box-sizing: border-box;
         }
 
-        .image-viewer-main img {
+        .viewer-slide img {
             max-width: 100%;
             max-height: 100%;
+            width: auto;
+            height: auto;
             object-fit: contain;
         }
 
@@ -1624,7 +1641,7 @@
 <div class="nav-bar">
     <div class="nav-header">
         <!-- Back button (detail mode) -->
-        <button class="nav-back-btn" onclick="closeModal()">
+        <button class="nav-back-btn" onclick="handleNavBack()">
             <svg viewBox="0 0 18 18" fill="none"><path d="M11 4L6 9L11 14" stroke="#000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <!-- Close button (viewer mode) -->
@@ -2365,6 +2382,15 @@
 
     // Product Detail
     let detailImageIndex = 0;
+    const viewerState = {
+        images: [],
+        realIndex: 0,
+        virtualIndex: 0,
+        touchStartX: 0,
+        touchDeltaX: 0,
+        isSwiping: false,
+        isAnimating: false
+    };
 
     function openProduct(sku) {
         const p = state.products.find(x => x.sku === sku);
@@ -2442,7 +2468,7 @@
         document.body.style.overflow = 'hidden';
 
         if (tg.BackButton) {
-            tg.BackButton.onClick(closeModal);
+            tg.BackButton.onClick(handleNavBack);
             tg.BackButton.show();
         }
 
@@ -2520,45 +2546,183 @@
         tg.showAlert('Меню в разработке');
     }
 
+    function handleNavBack() {
+        if (document.body.classList.contains('viewer-mode')) {
+            closeImageViewer();
+            return;
+        }
+        closeModal();
+    }
+
     // Image Viewer
     function openImageViewer(index) {
         const p = state.currentProduct;
-        if (!p) return;
+        if (!p || !Array.isArray(p.images) || p.images.length === 0) return;
 
-        const viewer = document.getElementById('imageViewer');
-        const main = document.getElementById('viewerMain');
-        const thumbs = document.getElementById('viewerThumbs');
+        viewerState.images = p.images.slice();
+        viewerState.realIndex = Math.max(0, Math.min(index, viewerState.images.length - 1));
+        viewerState.virtualIndex = viewerState.images.length > 1 ? viewerState.realIndex + 1 : 0;
+        viewerState.touchDeltaX = 0;
+        viewerState.isSwiping = false;
+        viewerState.isAnimating = false;
 
-        main.innerHTML = `<img src="${p.images[index]}" id="viewerImg">`;
-        thumbs.innerHTML = p.images.map((img, i) => `
-            <div class="viewer-thumb ${i === index ? 'active' : ''}" onclick="switchViewerImage(${i})">
-                <img src="${img}">
-            </div>
-        `).join('');
+        renderViewerMain();
+        renderViewerThumbs();
+        updateViewerThumbs();
 
-        viewer.classList.add('show');
+        document.getElementById('imageViewer').classList.add('show');
         document.body.classList.add('viewer-mode');
     }
 
     function switchViewerImage(index) {
-        const p = state.currentProduct;
-        if (!p) return;
-        document.getElementById('viewerImg').src = p.images[index];
-        document.querySelectorAll('.viewer-thumb').forEach((t, i) => t.classList.toggle('active', i === index));
+        if (index < 0 || index >= viewerState.images.length) return;
+
+        viewerState.isAnimating = false;
+        viewerState.realIndex = index;
+        if (viewerState.images.length > 1) {
+            viewerState.virtualIndex = index + 1;
+            setViewerTrackPosition(false);
+        }
+        updateViewerThumbs();
     }
 
     function closeImageViewer() {
         document.getElementById('imageViewer').classList.remove('show');
         document.body.classList.remove('viewer-mode');
+        viewerState.touchDeltaX = 0;
+        viewerState.isSwiping = false;
+        viewerState.isAnimating = false;
+    }
+
+    function renderViewerMain() {
+        const main = document.getElementById('viewerMain');
+        const images = viewerState.images;
+        if (!main) return;
+
+        if (images.length === 1) {
+            main.innerHTML = `
+                <div class="viewer-track" id="viewerTrack">
+                    <div class="viewer-slide">
+                        <img src="${images[0]}" alt="">
+                    </div>
+                </div>
+            `;
+            main.ontouchstart = null;
+            main.ontouchmove = null;
+            main.ontouchend = null;
+            main.ontouchcancel = null;
+            return;
+        }
+
+        const loopedImages = [images[images.length - 1], ...images, images[0]];
+        main.innerHTML = `
+            <div class="viewer-track" id="viewerTrack">
+                ${loopedImages.map(img => `
+                    <div class="viewer-slide">
+                        <img src="${img}" alt="">
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        setViewerTrackPosition(false);
+
+        const track = document.getElementById('viewerTrack');
+        if (track) {
+            track.addEventListener('transitionend', onViewerTrackTransitionEnd);
+        }
+
+        main.ontouchstart = onViewerTouchStart;
+        main.ontouchmove = onViewerTouchMove;
+        main.ontouchend = onViewerTouchEnd;
+        main.ontouchcancel = onViewerTouchEnd;
+    }
+
+    function renderViewerThumbs() {
+        const thumbs = document.getElementById('viewerThumbs');
+        if (!thumbs) return;
+        thumbs.innerHTML = viewerState.images.map((img, i) => `
+            <div class="viewer-thumb ${i === viewerState.realIndex ? 'active' : ''}" onclick="switchViewerImage(${i})">
+                <img src="${img}">
+            </div>
+        `).join('');
+    }
+
+    function updateViewerThumbs() {
+        document.querySelectorAll('.viewer-thumb').forEach((t, i) => {
+            t.classList.toggle('active', i === viewerState.realIndex);
+        });
+    }
+
+    function setViewerTrackPosition(animated) {
+        const track = document.getElementById('viewerTrack');
+        if (!track) return;
+        track.style.transition = animated ? 'transform 0.28s ease' : 'none';
+        track.style.transform = `translateX(-${viewerState.virtualIndex * 100}%)`;
+    }
+
+    function moveViewer(step) {
+        const total = viewerState.images.length;
+        if (total <= 1 || viewerState.isAnimating) return;
+
+        viewerState.isAnimating = true;
+        viewerState.virtualIndex += step;
+        viewerState.realIndex = (viewerState.realIndex + step + total) % total;
+        setViewerTrackPosition(true);
+        updateViewerThumbs();
+    }
+
+    function onViewerTrackTransitionEnd() {
+        const total = viewerState.images.length;
+        if (total <= 1) {
+            viewerState.isAnimating = false;
+            return;
+        }
+
+        if (viewerState.virtualIndex === 0) {
+            viewerState.virtualIndex = total;
+            setViewerTrackPosition(false);
+        } else if (viewerState.virtualIndex === total + 1) {
+            viewerState.virtualIndex = 1;
+            setViewerTrackPosition(false);
+        }
+
+        viewerState.isAnimating = false;
+    }
+
+    function onViewerTouchStart(e) {
+        if (viewerState.images.length <= 1 || viewerState.isAnimating) return;
+        viewerState.isSwiping = true;
+        viewerState.touchStartX = e.touches[0].clientX;
+        viewerState.touchDeltaX = 0;
+    }
+
+    function onViewerTouchMove(e) {
+        if (!viewerState.isSwiping) return;
+        viewerState.touchDeltaX = e.touches[0].clientX - viewerState.touchStartX;
+    }
+
+    function onViewerTouchEnd() {
+        if (!viewerState.isSwiping) return;
+
+        const diffX = viewerState.touchDeltaX;
+        viewerState.isSwiping = false;
+        viewerState.touchDeltaX = 0;
+
+        if (Math.abs(diffX) < 50) return;
+        if (diffX < 0) moveViewer(1);
+        else moveViewer(-1);
     }
 
     function closeModal() {
         document.getElementById('productModal').style.display = 'none';
+        document.getElementById('imageViewer').classList.remove('show');
+        document.body.classList.remove('viewer-mode');
         document.body.classList.remove('detail-mode');
         document.body.style.overflow = '';
 
         if (tg.BackButton) {
-            tg.BackButton.offClick(closeModal);
+            tg.BackButton.offClick(handleNavBack);
             tg.BackButton.hide();
         }
     }
