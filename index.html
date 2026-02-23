@@ -1017,26 +1017,30 @@
         /* Volume selector */
         .volume-selector {
             display: flex;
-            gap: 8px;
-            padding: 16px 16px 0;
+            gap: 4px;
+            padding: 4px;
+            margin: 16px 16px 0;
+            background: #EFEFEF;
+            border-radius: 50px;
+            width: fit-content;
         }
 
         .volume-btn {
-            height: 36px;
-            padding: 0 20px;
-            border-radius: 20px;
+            height: 40px;
+            padding: 0 22px;
+            border-radius: 50px;
             border: none;
             font-family: inherit;
-            font-size: 14px;
-            font-weight: 510;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
-            background: #F3F4F6;
-            color: #000;
+            transition: background 0.2s, color 0.2s;
+            background: transparent;
+            color: #8E8E93;
         }
 
         .volume-btn.active {
-            background: #000;
+            background: #007AFF;
             color: #fff;
         }
 
@@ -1230,8 +1234,12 @@
         .detail-qty-value {
             font-size: 16px;
             font-weight: 600;
-            min-width: 20px;
+            min-width: 32px;
             text-align: center;
+            background: #fff;
+            border-radius: 10px;
+            padding: 4px 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         }
 
         .detail-goto-cart-btn {
