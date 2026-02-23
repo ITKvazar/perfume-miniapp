@@ -983,20 +983,23 @@
             right: 16px;
             display: flex;
             align-items: center;
-            gap: 2px;
+            justify-content: space-between;
             z-index: 8;
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            border-radius: 50px;
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            width: 80px;
+            height: 40px;
+            box-sizing: border-box;
+            border-radius: 40px;
+            border: 1px solid #FFFFFF;
             box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
             padding: 4px;
         }
 
         .detail-img-btn {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: transparent;
             border: none;
@@ -1007,6 +1010,8 @@
         }
 
         .detail-img-btn img {
+            width: 32px;
+            height: 32px;
             opacity: 0.45;
             transition: opacity 0.2s;
         }
