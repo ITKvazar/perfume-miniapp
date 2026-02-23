@@ -2266,22 +2266,6 @@
             opacity: 0.35;
         }
 
-        #emptyFavorites {
-            padding-top: 80px;
-        }
-
-        .empty-action-btn {
-            margin-top: 20px;
-            padding: 14px 32px;
-            background: #E5E7EB;
-            color: #374151;
-            border: none;
-            border-radius: 50px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
         .hidden { display: none !important; }
     </style>
 </head>
@@ -2434,10 +2418,12 @@
     <div id="favoritesPage" class="page page-no-filters">
         <div class="page-title">Избранное</div>
         <div class="products" id="favoritesGrid"></div>
-        <div id="emptyFavorites" class="empty-state hidden">
-            <div class="empty-icon"><img src="icon/like_big.svg" width="80" height="80"></div>
-            <p>Собирайте здесь товары,<br>которые вам приглянулись.</p>
-            <button class="empty-action-btn" onclick="showPage('main')">Перейти к товарам</button>
+        <div id="emptyFavorites" class="cart-empty hidden">
+            <div class="cart-empty-icon">
+                <img src="icon/like_big.svg" alt="">
+            </div>
+            <p class="cart-empty-text">Собирайте здесь товары,<br>которые вам приглянулись.</p>
+            <button class="cart-empty-btn" onclick="showPage('main')">Перейти к товарам</button>
         </div>
     </div>
 
