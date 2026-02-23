@@ -1090,10 +1090,8 @@
         }
 
         body.search-mode .tab-bar-wrap { display: none !important; }
-        body.search-mode .nav-back-btn { display: flex !important; }
-        body.search-mode .nav-actions-right { display: flex !important; }
-        body.search-mode .nav-back-icon-arrow { display: none; }
-        body.search-mode .nav-back-icon-close { display: block; }
+        body.search-mode .nav-back-btn { display: none !important; }
+        body.search-mode .nav-actions-right { display: none !important; }
         body.search-mode .nav-bar {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(20px);
@@ -3153,6 +3151,12 @@
         document.body.classList.add('search-mode');
         document.getElementById('searchOverlay').classList.add('show');
 
+        if (tg.BackButton) {
+            tg.BackButton.offClick(handleNavBack);
+            tg.BackButton.onClick(handleNavBack);
+            tg.BackButton.show();
+        }
+
         const scroll = document.getElementById('searchScroll');
         if (scroll) scroll.scrollTop = 0;
 
@@ -3187,6 +3191,11 @@
         document.getElementById('searchOverlay').classList.remove('show');
         toggleSearchClearButton();
         renderProducts();
+
+        if (tg.BackButton && !document.body.classList.contains('detail-mode') && !document.body.classList.contains('viewer-mode')) {
+            tg.BackButton.offClick(handleNavBack);
+            tg.BackButton.hide();
+        }
     }
 
     // Filter by Tag
