@@ -2646,6 +2646,11 @@
         const tgHeaderH = tg.contentSafeAreaInset?.top ?? 44;
         document.documentElement.style.setProperty('--sys-safe-top', sysTop + 'px');
         document.documentElement.style.setProperty('--tg-header-height', tgHeaderH + 'px');
+
+        // Keep a stable 32px gap from logo bottom to page titles on non-main pages.
+        // Logo is 36px tall and vertically centered in nav header.
+        const logoBottom = sysTop + ((tgHeaderH - 36) / 2) + 36;
+        document.documentElement.style.setProperty('--content-top-no-filters', (logoBottom + 32) + 'px');
     }
     applyNavSafeArea();
     tg.onEvent('safeAreaChanged', applyNavSafeArea);
@@ -4209,19 +4214,19 @@
             document.getElementById('favoritesPage').classList.add('active');
             document.querySelectorAll('.tab')[1].classList.add('active');
             filtersWrap.classList.add('hidden');
-            content.style.paddingTop = '96px';
+            content.style.paddingTop = 'var(--content-top-no-filters, 96px)';
             renderFavorites();
         } else if (page === 'cart') {
             document.getElementById('cartPage').classList.add('active');
             document.querySelectorAll('.tab')[2].classList.add('active');
             filtersWrap.classList.add('hidden');
-            content.style.paddingTop = '96px';
+            content.style.paddingTop = 'var(--content-top-no-filters, 96px)';
             renderCart();
         } else if (page === 'profile') {
             document.getElementById('profilePage').classList.add('active');
             document.querySelectorAll('.tab')[3].classList.add('active');
             filtersWrap.classList.add('hidden');
-            content.style.paddingTop = '96px';
+            content.style.paddingTop = 'var(--content-top-no-filters, 96px)';
         }
 
         window.scrollTo(0, 0);
