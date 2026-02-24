@@ -870,6 +870,10 @@
             cursor: pointer;
         }
 
+        .search-list-item.no-divider {
+            border-bottom: none;
+        }
+
         .search-list-item.static {
             cursor: default;
         }
@@ -3244,7 +3248,7 @@
                 <div class="search-section-title">Наши рекомендации</div>
                 <div class="search-list">
                     ${searchRecommendations.map((item, i) => `
-                        <button class="search-list-item" data-recommend-index="${i}">${escapeHtml(item)}</button>
+                        <button class="search-list-item${i === searchRecommendations.length - 1 ? ' no-divider' : ''}" data-recommend-index="${i}">${escapeHtml(item)}</button>
                     `).join('')}
                 </div>
             </div>
