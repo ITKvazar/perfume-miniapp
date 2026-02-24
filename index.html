@@ -55,7 +55,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: var(--tg-header-height, 44px);
+            height: max(var(--tg-header-height, 44px), 44px);
+            min-height: 44px;
             padding: 0 16px;
             position: relative;
         }
@@ -2618,7 +2619,15 @@
     // Telegram WebApp
     const tg = window.Telegram.WebApp;
     tg.ready();
-    tg.expand();
+    const desktopPlatforms = new Set(['macos', 'tdesktop', 'web', 'weba', 'webk', 'unigram']);
+    const isDesktopPlatform = desktopPlatforms.has(tg.platform);
+
+    if (!isDesktopPlatform && tg.expand) {
+        tg.expand();
+    }
+    if (isDesktopPlatform && tg.exitFullscreen) {
+        tg.exitFullscreen();
+    }
     if (tg.disableVerticalSwipes) {
         tg.disableVerticalSwipes();
     }
@@ -2627,18 +2636,16 @@
     // safeAreaInset.top = высота статусбара устройства,
     // contentSafeAreaInset.top = высота строки с кнопками Телеграма
     function applyNavSafeArea() {
-        const sysTop = tg.safeAreaInset?.top ?? 0;
-        const tgHeaderH = tg.contentSafeAreaInset?.top ?? 44;
+        const safeTopRaw = Number(tg.safeAreaInset?.top);
+        const headerTopRaw = Number(tg.contentSafeAreaInset?.top);
+        const sysTop = Number.isFinite(safeTopRaw) ? Math.max(safeTopRaw, 0) : 0;
+        const tgHeaderH = Number.isFinite(headerTopRaw) ? Math.max(headerTopRaw, 44) : 44;
         document.documentElement.style.setProperty('--sys-safe-top', sysTop + 'px');
         document.documentElement.style.setProperty('--tg-header-height', tgHeaderH + 'px');
     }
     applyNavSafeArea();
     tg.onEvent('safeAreaChanged', applyNavSafeArea);
     tg.onEvent('contentSafeAreaChanged', applyNavSafeArea);
-    // Hide Telegram system header by requesting fullscreen
-    if (tg.requestFullscreen) {
-        tg.requestFullscreen();
-    }
     if (tg.setHeaderColor) {
         tg.setHeaderColor('#ffffff');
     }
