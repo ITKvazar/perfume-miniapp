@@ -66,19 +66,6 @@
             object-fit: contain;
         }
 
-        body.is-desktop-webapp .nav-header {
-            height: 44px;
-            min-height: 44px;
-        }
-
-        body.is-desktop-webapp .nav-logo-img {
-            display: block;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, calc(-50% + 3px));
-        }
-
         /* ===== Filters - DESIGNER STYLE ===== */
         .filters-wrap {
             padding: 8px 16px 12px;
@@ -2633,9 +2620,6 @@
     tg.ready();
     const desktopPlatforms = new Set(['macos', 'tdesktop', 'web', 'weba', 'webk', 'unigram']);
     const isDesktopPlatform = desktopPlatforms.has(tg.platform);
-    if (isDesktopPlatform && document.body) {
-        document.body.classList.add('is-desktop-webapp');
-    }
 
     if (!isDesktopPlatform && tg.expand) {
         tg.expand();
@@ -2651,10 +2635,8 @@
     // safeAreaInset.top = высота статусбара устройства,
     // contentSafeAreaInset.top = высота строки с кнопками Телеграма
     function applyNavSafeArea() {
-        const safeTopRaw = Number(tg.safeAreaInset?.top);
-        const headerTopRaw = Number(tg.contentSafeAreaInset?.top);
-        const sysTop = Number.isFinite(safeTopRaw) ? Math.max(safeTopRaw, 0) : 0;
-        const tgHeaderH = Number.isFinite(headerTopRaw) ? Math.max(headerTopRaw, 44) : 44;
+        const sysTop = tg.safeAreaInset?.top ?? 0;
+        const tgHeaderH = tg.contentSafeAreaInset?.top ?? 44;
         document.documentElement.style.setProperty('--sys-safe-top', sysTop + 'px');
         document.documentElement.style.setProperty('--tg-header-height', tgHeaderH + 'px');
     }
