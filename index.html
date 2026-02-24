@@ -1838,6 +1838,10 @@
             object-fit: contain;
         }
 
+        #emptyFavorites .cart-empty-icon img {
+            filter: brightness(0);
+        }
+
         .cart-empty-text {
             font-size: 16px;
             font-weight: 500;
@@ -2425,7 +2429,7 @@
         <div class="products" id="favoritesGrid"></div>
         <div id="emptyFavorites" class="cart-empty hidden">
             <div class="cart-empty-icon">
-                <img src="icon/like_big.svg" alt="">
+                <img src="icon/like_big.svg?v=2" alt="">
             </div>
             <p class="cart-empty-text">Собирайте здесь товары,<br>которые вам приглянулись.</p>
             <button class="cart-empty-btn" onclick="showPage('main')">Перейти к товарам</button>
