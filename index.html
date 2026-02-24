@@ -793,7 +793,7 @@
         .search-overlay {
             display: none;
             position: fixed;
-            top: calc(var(--sys-safe-top, env(safe-area-inset-top, 0px)) + var(--tg-header-height, 44px) + 52px);
+            top: 0;
             left: 0;
             right: 0;
             bottom: 0;
@@ -809,7 +809,7 @@
             height: 100%;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            padding: 20px 16px 132px;
+            padding: calc(var(--sys-safe-top, env(safe-area-inset-top, 0px)) + var(--tg-header-height, 44px) + 72px) 16px 132px;
         }
 
         .search-section {
