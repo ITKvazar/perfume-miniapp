@@ -55,8 +55,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: max(var(--tg-header-height, 44px), 44px);
-            min-height: 44px;
+            height: var(--tg-header-height, 44px);
             padding: 0 16px;
             position: relative;
         }
@@ -65,6 +64,19 @@
             height: 36px;
             width: 36px;
             object-fit: contain;
+        }
+
+        body.is-desktop-webapp .nav-header {
+            height: 44px;
+            min-height: 44px;
+        }
+
+        body.is-desktop-webapp .nav-logo-img {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, calc(-50% + 3px));
         }
 
         /* ===== Filters - DESIGNER STYLE ===== */
@@ -2621,6 +2633,9 @@
     tg.ready();
     const desktopPlatforms = new Set(['macos', 'tdesktop', 'web', 'weba', 'webk', 'unigram']);
     const isDesktopPlatform = desktopPlatforms.has(tg.platform);
+    if (isDesktopPlatform && document.body) {
+        document.body.classList.add('is-desktop-webapp');
+    }
 
     if (!isDesktopPlatform && tg.expand) {
         tg.expand();
