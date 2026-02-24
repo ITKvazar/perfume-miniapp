@@ -1377,8 +1377,9 @@
         }
 
         .spec-row {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: minmax(120px, 44%) 1fr;
+            column-gap: 12px;
             align-items: flex-start;
             padding: 14px 0;
             border-bottom: 1px solid #E8E8ED;
@@ -1402,7 +1403,7 @@
         .spec-value {
             font-size: 15px;
             color: #000;
-            text-align: right;
+            text-align: left;
         }
 
         /* Detail bottom bar */
