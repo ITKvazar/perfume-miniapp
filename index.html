@@ -3236,7 +3236,7 @@
                 </div>
                 <div class="search-list">
                     ${state.searchHistory.map((item, i) => `
-                        <button class="search-list-item" data-history-index="${i}">${escapeHtml(item)}</button>
+                        <button class="search-list-item${i === state.searchHistory.length - 1 ? ' no-divider' : ''}" data-history-index="${i}">${escapeHtml(item)}</button>
                     `).join('')}
                 </div>
             </div>
