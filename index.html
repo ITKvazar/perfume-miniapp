@@ -2618,15 +2618,7 @@
     // Telegram WebApp
     const tg = window.Telegram.WebApp;
     tg.ready();
-    const desktopPlatforms = new Set(['macos', 'tdesktop', 'web', 'weba', 'webk', 'unigram']);
-    const isDesktopPlatform = desktopPlatforms.has(tg.platform);
-
-    if (!isDesktopPlatform && tg.expand) {
-        tg.expand();
-    }
-    if (isDesktopPlatform && tg.exitFullscreen) {
-        tg.exitFullscreen();
-    }
+    tg.expand();
     if (tg.disableVerticalSwipes) {
         tg.disableVerticalSwipes();
     }
@@ -2643,6 +2635,10 @@
     applyNavSafeArea();
     tg.onEvent('safeAreaChanged', applyNavSafeArea);
     tg.onEvent('contentSafeAreaChanged', applyNavSafeArea);
+    // Hide Telegram system header by requesting fullscreen
+    if (tg.requestFullscreen) {
+        tg.requestFullscreen();
+    }
     if (tg.setHeaderColor) {
         tg.setHeaderColor('#ffffff');
     }
