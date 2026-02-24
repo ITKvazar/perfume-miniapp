@@ -1036,7 +1036,7 @@
         }
 
         .modal-content {
-            padding-bottom: 80px;
+            padding-bottom: calc(68px + max(12px, env(safe-area-inset-bottom, 12px)));
             padding-top: calc(var(--sys-safe-top, env(safe-area-inset-top, 0px)) + var(--tg-header-height, 44px));
         }
 
@@ -1363,7 +1363,7 @@
 
         /* Specs card */
         .detail-specs-card {
-            margin: 16px 16px 32px;
+            margin: 16px 16px 16px;
             background: #F6F6F6;
             border-radius: 16px;
             padding: 20px;
