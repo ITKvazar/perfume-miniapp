@@ -2118,66 +2118,536 @@
         .cart-share-more { background: #EFEFF1; color: #333; }
 
         /* ===== Profile ===== */
-        .profile-header {
+        .profile-view {
+            display: none;
+        }
+
+        .profile-view.active {
+            display: block;
+        }
+
+        .profile-home-top {
+            padding: 10px 0 12px;
             text-align: center;
-            padding: 32px 16px;
-            background: #fff;
-            margin: -16px -16px 16px;
-            border-bottom: 1px solid #E5E7EB;
         }
 
         .avatar {
-            width: 100px;
-            height: 100px;
+            width: 108px;
+            height: 108px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(180deg, #9EDD7D 0%, #55CB68 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            color: white;
-            margin: 0 auto 16px;
-            font-weight: 600;
+            font-size: 48px;
+            font-weight: 500;
+            color: #fff;
+            margin: 0 auto 14px;
+            overflow: hidden;
         }
 
-        .profile-name { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
-        .profile-phone { color: #6B7280; }
+        .profile-name {
+            font-size: 30px;
+            font-weight: 600;
+            letter-spacing: -0.7px;
+            line-height: 1.1;
+            color: #1A1A1D;
+        }
 
-        .orders-list {
+        .profile-phone {
+            margin-top: 6px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.2;
+            color: #8E8E95;
+        }
+
+        .profile-home-shortcut-btn {
+            width: 100%;
+            min-height: 38px;
+            border: 1px solid #D6D6DB;
+            border-radius: 20px;
+            background: transparent;
+            color: #66666F;
+            font-size: 16px;
+            font-weight: 510;
+            letter-spacing: -0.35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .profile-home-shortcut-icon {
+            width: 18px;
+            height: 18px;
+            border: 1.4px solid #9999A1;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .profile-home-shortcut-note {
+            margin: 8px 10px 18px;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: -0.15px;
+            line-height: 1.25;
+            color: #9D9DA5;
+            text-align: center;
+        }
+
+        .profile-menu-group {
+            background: #F2F2F4;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .profile-menu-item {
+            width: 100%;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 14px;
+            color: #222328;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 17px;
+            font-weight: 510;
+            letter-spacing: -0.33px;
+            line-height: 1.2;
+            text-align: left;
+        }
+
+        .profile-menu-item + .profile-menu-item {
+            border-top: 1px solid #DFDFE4;
+        }
+
+        .profile-menu-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .profile-menu-icon.orders { background: #FF2D55; }
+        .profile-menu-icon.viewed { background: #0A84FF; }
+        .profile-menu-icon.support { background: #34C759; }
+        .profile-menu-icon.loyalty { background: #FF9F0A; }
+        .profile-menu-icon.invite { background: #32ADE6; }
+        .profile-menu-icon.rules { background: #B0B0B5; }
+        .profile-menu-icon.policy { background: #AEAEB2; }
+
+        .profile-menu-chevron {
+            margin-left: auto;
+            color: #9A9AA2;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .profile-orders-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
-        .order-card {
-            background: #fff;
+        .profile-order-card {
             border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: #F2F2F4;
+            padding: 14px;
+            cursor: pointer;
         }
 
-        .order-header {
+        .profile-order-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .profile-order-status {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .profile-order-status.shipped { color: #007AFF; }
+        .profile-order-status.delivered { color: #1F1F23; }
+        .profile-order-status.cancelled { color: #8E8E95; }
+
+        .profile-order-grid {
+            border-top: 1px solid #DFDFE4;
+        }
+
+        .profile-order-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #E5E7EB;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #DFDFE4;
+            padding: 8px 0;
         }
 
-        .order-id { font-weight: 600; }
-        .order-date { color: #6B7280; font-size: 14px; }
-        .order-status {
-            display: inline-block;
-            padding: 4px 12px;
+        .profile-order-row:last-child {
+            border-bottom: none;
+        }
+
+        .profile-order-key {
+            color: #8E8E95;
+            font-size: 15px;
+            font-weight: 400;
+            letter-spacing: -0.18px;
+        }
+
+        .profile-order-value {
+            color: #202026;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: -0.18px;
+            text-align: right;
+        }
+
+        .profile-order-thumbs {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .profile-order-thumb {
+            width: 66px;
+            height: 86px;
+            border-radius: 10px;
+            background: #fff;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-order-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .profile-order-action {
+            width: 100%;
+            border: none;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            background: #D1FAE5;
-            color: #065F46;
+            height: 38px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 510;
+            letter-spacing: -0.33px;
+            cursor: pointer;
         }
 
-        .order-items { font-size: 14px; color: #6B7280; line-height: 1.6; }
-        .order-total { margin-top: 12px; font-weight: 700; font-size: 18px; text-align: right; }
+        .profile-order-action.track {
+            background: #007AFF;
+            color: #fff;
+        }
+
+        .profile-order-action.repeat {
+            background: #DEDEE2;
+            color: #8C8C94;
+        }
+
+        .profile-detail-card {
+            border-radius: 16px;
+            background: #F2F2F4;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+
+        .profile-detail-card-title {
+            margin-bottom: 8px;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #1F1F24;
+        }
+
+        .profile-detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid #DFDFE4;
+            padding: 7px 0;
+        }
+
+        .profile-detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .profile-detail-key {
+            color: #8E8E95;
+            font-size: 15px;
+            font-weight: 400;
+            letter-spacing: -0.18px;
+        }
+
+        .profile-detail-value {
+            color: #202026;
+            font-size: 15px;
+            font-weight: 510;
+            letter-spacing: -0.18px;
+            text-align: right;
+            white-space: pre-line;
+        }
+
+        .profile-detail-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 14px 0 10px;
+        }
+
+        .profile-detail-section-title {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #1F1F24;
+        }
+
+        .profile-detail-section-meta {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: -0.14px;
+            color: #8E8E95;
+        }
+
+        .profile-detail-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .profile-detail-item {
+            background: #F2F2F4;
+            border-radius: 16px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .profile-detail-item-image {
+            width: 62px;
+            height: 82px;
+            border-radius: 10px;
+            background: #fff;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .profile-detail-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .profile-detail-item-title {
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+            color: #1E1E22;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .profile-detail-item-meta {
+            font-size: 14px;
+            font-weight: 400;
+            color: #8E8E95;
+            line-height: 1.25;
+            letter-spacing: -0.1px;
+        }
+
+        .profile-detail-item-price {
+            margin-top: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.15px;
+            color: #1E1E22;
+        }
+
+        .profile-viewed-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px 8px;
+        }
+
+        .profile-viewed-card {
+            cursor: pointer;
+        }
+
+        .profile-viewed-image-wrap {
+            width: 100%;
+            aspect-ratio: 168 / 220;
+            border-radius: 18px;
+            background: #F2F2F4;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-viewed-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .profile-viewed-fav {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: #B5B5BC;
+            padding: 0;
+        }
+
+        .profile-viewed-fav.active {
+            color: #EB4444;
+        }
+
+        .profile-viewed-dots {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            margin: 4px 0 6px;
+        }
+
+        .profile-viewed-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: #BDBDC4;
+        }
+
+        .profile-viewed-dot.active {
+            background: #75757F;
+        }
+
+        .profile-viewed-prices {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            margin-bottom: 2px;
+        }
+
+        .profile-viewed-price {
+            font-size: 15px;
+            font-weight: 590;
+            letter-spacing: -0.22px;
+            color: #1E1E22;
+        }
+
+        .profile-viewed-old {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: -0.14px;
+            color: #9A9AA2;
+            text-decoration: line-through;
+        }
+
+        .profile-viewed-title {
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: -0.2px;
+            line-height: 1.2;
+            color: #1E1E22;
+        }
+
+        .profile-doc-wrap {
+            border-radius: 16px;
+            overflow: hidden;
+            background: #F2F2F4;
+            border: 1px solid #E4E4E9;
+            height: calc(100vh - var(--content-top-no-filters, 96px) - 170px);
+            min-height: 420px;
+        }
+
+        .profile-doc-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+        }
+
+        .profile-popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.32);
+            z-index: 3500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .profile-popup-overlay.show {
+            display: flex;
+        }
+
+        .profile-popup {
+            width: min(420px, 100%);
+            background: #fff;
+            border-radius: 18px;
+            padding: 18px 16px 20px;
+            position: relative;
+            box-shadow: 0 14px 36px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 15px;
+            background: #EFEFF3;
+            color: #707078;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .profile-popup-title {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #1E1E22;
+            padding-right: 40px;
+        }
+
+        .profile-popup-text {
+            margin-top: 10px;
+            font-size: 17px;
+            font-weight: 400;
+            letter-spacing: -0.18px;
+            line-height: 1.3;
+            color: #62626A;
+        }
 
         /* ===== Forms ===== */
         .form-group {
@@ -2479,22 +2949,101 @@
     </div>
 
     <!-- Profile Page -->
-    <div id="profilePage" class="page">
-        <div class="profile-header">
-            <div class="avatar" id="userAvatar">👤</div>
-            <div class="profile-name" id="userName">Гость</div>
-            <div class="profile-phone" id="userPhone">Войдите через Telegram</div>
+    <div id="profilePage" class="page page-no-filters">
+        <div id="profileHomeView" class="profile-view active">
+            <div class="profile-home-top">
+                <div class="avatar" id="userAvatar">Г</div>
+                <div class="profile-name" id="userName">Гость</div>
+                <div class="profile-phone" id="userPhone">Войдите через Telegram</div>
+            </div>
+
+            <button class="profile-home-shortcut-btn" onclick="handleAddToHomeScreen()">
+                <span class="profile-home-shortcut-icon">+</span>
+                Добавить на экран «Домой»
+            </button>
+            <p class="profile-home-shortcut-note">Добавьте иконку магазина на главный экран смартфона, чтобы он всегда был под рукой.</p>
+
+            <div class="profile-menu-group">
+                <button class="profile-menu-item" onclick="openProfileOrders()">
+                    <span class="profile-menu-icon orders">O</span>
+                    <span>История заказов</span>
+                    <span class="profile-menu-chevron">›</span>
+                </button>
+                <button class="profile-menu-item" onclick="openProfileViewed()">
+                    <span class="profile-menu-icon viewed">V</span>
+                    <span>Просмотренные товары</span>
+                    <span class="profile-menu-chevron">›</span>
+                </button>
+                <button class="profile-menu-item" onclick="showProfilePlaceholder('Поддержка')">
+                    <span class="profile-menu-icon support">S</span>
+                    <span>Поддержка</span>
+                    <span class="profile-menu-chevron">›</span>
+                </button>
+            </div>
+
+            <div class="profile-menu-group">
+                <button class="profile-menu-item" onclick="showProfilePlaceholder('Уровень лояльности')">
+                    <span class="profile-menu-icon loyalty">L</span>
+                    <span>Уровень лояльности</span>
+                    <span class="profile-menu-chevron">›</span>
+                </button>
+                <button class="profile-menu-item" onclick="showProfilePlaceholder('Пригласить друга')">
+                    <span class="profile-menu-icon invite">I</span>
+                    <span>Пригласить друга</span>
+                    <span class="profile-menu-chevron">›</span>
+                </button>
+            </div>
+
+            <div class="profile-menu-group">
+                <button class="profile-menu-item" onclick="openProfileDocument('rules')">
+                    <span class="profile-menu-icon rules">R</span>
+                    <span>Условия использования</span>
+                    <span class="profile-menu-chevron">›</span>
+                </button>
+                <button class="profile-menu-item" onclick="openProfileDocument('policy')">
+                    <span class="profile-menu-icon policy">P</span>
+                    <span>Политика конфиденциальности</span>
+                    <span class="profile-menu-chevron">›</span>
+                </button>
+            </div>
         </div>
 
-        <h3 style="margin-bottom: 16px; font-size: 20px;">История заказов</h3>
-        <div id="ordersList" class="orders-list">
-            <div class="empty-state">
-                <div class="empty-icon">📋</div>
-                <p>История заказов пуста</p>
+        <div id="profileOrdersView" class="profile-view">
+            <div class="page-title">История заказов</div>
+            <div id="profileOrdersList" class="profile-orders-list"></div>
+        </div>
+
+        <div id="profileOrderDetailView" class="profile-view">
+            <div class="page-title">Детали заказа</div>
+            <div id="profileOrderDetailContent"></div>
+        </div>
+
+        <div id="profileViewedView" class="profile-view">
+            <div class="page-title">Просмотренные товары</div>
+            <div id="profileViewedGrid" class="profile-viewed-grid"></div>
+            <div id="profileViewedEmpty" class="empty-state hidden">
+                <div class="empty-icon">👀</div>
+                <p>Вы еще не смотрели товары</p>
+            </div>
+        </div>
+
+        <div id="profileDocView" class="profile-view">
+            <div id="profileDocTitle" class="page-title">Документ</div>
+            <div class="profile-doc-wrap">
+                <iframe id="profileDocFrame" class="profile-doc-frame" title="Документ"></iframe>
             </div>
         </div>
     </div>
 
+</div>
+
+<!-- ===== Profile Popup ===== -->
+<div id="profilePopupOverlay" class="profile-popup-overlay" onclick="closeProfilePopup()">
+    <div class="profile-popup" onclick="event.stopPropagation()">
+        <button class="profile-popup-close" onclick="closeProfilePopup()">×</button>
+        <div id="profilePopupTitle" class="profile-popup-title">В разработке</div>
+        <div id="profilePopupText" class="profile-popup-text">В разработке</div>
+    </div>
 </div>
 
 <!-- ===== Product Detail Modal ===== -->
@@ -2760,12 +3309,16 @@
         favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
         searchHistory: JSON.parse(localStorage.getItem('searchHistory') || '[]'),
         orders: JSON.parse(localStorage.getItem('orders') || '[]'),
+        viewedSkus: JSON.parse(localStorage.getItem('viewedSkus') || '[]'),
         currentCategory: 'all',
         selectedBrands: [],
         currentSort: 'popular',
         searchQuery: '',
         isSearchMode: false,
         currentProduct: null,
+        profileView: 'home',
+        profileSelectedOrderId: null,
+        profileDocument: null,
         bannerIndex: 0
     };
 
@@ -2781,6 +3334,17 @@
         'Ароматы-невидимки'
     ];
 
+    let deferredInstallPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+    });
+
+    window.addEventListener('appinstalled', () => {
+        deferredInstallPrompt = null;
+    });
+
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
         renderProducts();
@@ -2789,6 +3353,8 @@
         updateBadges();
         loadUserData();
         renderOrders();
+        renderViewedProducts();
+        setProfileView('home', { skipScroll: true, skipBackSync: true });
 
         // Set default sort radio to match state
         updateSortRadio();
@@ -3314,12 +3880,7 @@
         state.isSearchMode = true;
         document.body.classList.add('search-mode');
         document.getElementById('searchOverlay').classList.add('show');
-
-        if (tg.BackButton) {
-            tg.BackButton.offClick(handleNavBack);
-            tg.BackButton.onClick(handleNavBack);
-            tg.BackButton.show();
-        }
+        syncTelegramBackButton();
 
         const scroll = document.getElementById('searchScroll');
         if (scroll) scroll.scrollTop = 0;
@@ -3355,11 +3916,7 @@
         document.getElementById('searchOverlay').classList.remove('show');
         toggleSearchClearButton();
         renderProducts();
-
-        if (tg.BackButton && !document.body.classList.contains('detail-mode') && !document.body.classList.contains('viewer-mode')) {
-            tg.BackButton.offClick(handleNavBack);
-            tg.BackButton.hide();
-        }
+        syncTelegramBackButton();
     }
 
     // Filter by Tag
@@ -3515,12 +4072,12 @@
         if (!p) return;
 
         state.currentProduct = p;
+        trackViewedProduct(sku);
         detailImageIndex = 0;
         const modal = document.getElementById('productModal');
         const content = document.getElementById('modalContent');
 
         const isFav = state.favorites.includes(sku);
-        const inCart = state.cart[sku] || 0;
 
         content.innerHTML = `
             <div class="detail-gallery">
@@ -3584,11 +4141,7 @@
         }, 0);
         document.body.classList.add('detail-mode');
         document.body.style.overflow = 'hidden';
-
-        if (tg.BackButton) {
-            tg.BackButton.onClick(handleNavBack);
-            tg.BackButton.show();
-        }
+        syncTelegramBackButton();
 
     }
 
@@ -3679,7 +4232,19 @@
             closeImageViewer();
             return;
         }
-        closeModal();
+
+        if (document.body.classList.contains('detail-mode')) {
+            closeModal();
+            return;
+        }
+
+        const profilePage = document.getElementById('profilePage');
+        if (profilePage && profilePage.classList.contains('active') && state.profileView !== 'home') {
+            handleProfileBackNavigation();
+            return;
+        }
+
+        syncTelegramBackButton();
     }
 
     // Image Viewer
@@ -3720,6 +4285,7 @@
         viewerState.touchDeltaX = 0;
         viewerState.isSwiping = false;
         viewerState.isAnimating = false;
+        syncTelegramBackButton();
     }
 
     function renderViewerMain() {
@@ -3848,11 +4414,7 @@
         document.body.classList.remove('viewer-mode');
         document.body.classList.remove('detail-mode');
         document.body.style.overflow = '';
-
-        if (tg.BackButton) {
-            tg.BackButton.offClick(handleNavBack);
-            tg.BackButton.hide();
-        }
+        syncTelegramBackButton();
     }
 
     // Cart
@@ -4153,6 +4715,9 @@
         if (document.getElementById('favoritesPage').classList.contains('active')) {
             renderFavorites();
         }
+        if (document.getElementById('profilePage').classList.contains('active') && state.profileView === 'viewed') {
+            renderViewedProducts();
+        }
     }
 
     function renderFavorites() {
@@ -4188,6 +4753,496 @@
                 </div>
             </div>
         `).join('');
+    }
+
+    function shouldShowTelegramBackButton() {
+        if (state.isSearchMode) return true;
+        if (document.body.classList.contains('detail-mode')) return true;
+        if (document.body.classList.contains('viewer-mode')) return true;
+        const profilePage = document.getElementById('profilePage');
+        if (profilePage && profilePage.classList.contains('active') && state.profileView !== 'home') return true;
+        return false;
+    }
+
+    function syncTelegramBackButton() {
+        if (!tg.BackButton) return;
+        tg.BackButton.offClick(handleNavBack);
+
+        if (shouldShowTelegramBackButton()) {
+            tg.BackButton.onClick(handleNavBack);
+            tg.BackButton.show();
+        } else {
+            tg.BackButton.hide();
+        }
+    }
+
+    function trackViewedProduct(sku) {
+        const idx = state.viewedSkus.indexOf(sku);
+        if (idx > -1) {
+            state.viewedSkus.splice(idx, 1);
+        }
+        state.viewedSkus.unshift(sku);
+        state.viewedSkus = state.viewedSkus.slice(0, 80);
+        localStorage.setItem('viewedSkus', JSON.stringify(state.viewedSkus));
+
+        if (document.getElementById('profilePage').classList.contains('active') && state.profileView === 'viewed') {
+            renderViewedProducts();
+        }
+    }
+
+    function getViewedProducts() {
+        return state.viewedSkus
+            .map((sku) => state.products.find((p) => p.sku === sku))
+            .filter(Boolean);
+    }
+
+    function renderViewedProducts() {
+        const grid = document.getElementById('profileViewedGrid');
+        const empty = document.getElementById('profileViewedEmpty');
+        if (!grid || !empty) return;
+
+        const viewed = getViewedProducts();
+        if (viewed.length === 0) {
+            grid.innerHTML = '';
+            empty.classList.remove('hidden');
+            return;
+        }
+
+        empty.classList.add('hidden');
+        grid.innerHTML = viewed.map((p) => {
+            const isFav = state.favorites.includes(p.sku);
+            const dotsCount = Math.min(3, Math.max(1, (p.images || []).length));
+            const dots = Array.from({ length: dotsCount }, (_, idx) => `<span class="profile-viewed-dot${idx === 0 ? ' active' : ''}"></span>`).join('');
+
+            return `
+                <div class="profile-viewed-card" onclick="openProduct('${p.sku}')">
+                    <div class="profile-viewed-image-wrap">
+                        <img src="${p.images && p.images[0] ? p.images[0] : 'Photo_detail.png'}" alt="${p.title}">
+                        <button class="profile-viewed-fav${isFav ? ' active' : ''}" onclick="event.stopPropagation(); toggleFavorite('${p.sku}')">
+                            <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
+                                <path d="M9.9974 17.7917L8.78906 16.6917C4.4974 12.8 1.66406 10.2333 1.66406 7.08333C1.66406 4.51667 3.68073 2.5 6.2474 2.5C7.6974 2.5 9.08906 3.175 9.9974 4.24167C10.9057 3.175 12.2974 2.5 13.7474 2.5C16.3141 2.5 18.3307 4.51667 18.3307 7.08333C18.3307 10.2333 15.4974 12.8 11.2057 16.7L9.9974 17.7917Z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="profile-viewed-dots">${dots}</div>
+                    <div class="profile-viewed-prices">
+                        <span class="profile-viewed-price">${formatRub(p.price)}</span>
+                        ${p.oldPrice ? `<span class="profile-viewed-old">${formatRub(p.oldPrice)}</span>` : ''}
+                    </div>
+                    <div class="profile-viewed-title">${p.title}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function showProfilePopup(title, text = 'В разработке') {
+        const overlay = document.getElementById('profilePopupOverlay');
+        if (!overlay) return;
+        document.getElementById('profilePopupTitle').textContent = title;
+        document.getElementById('profilePopupText').textContent = text;
+        overlay.classList.add('show');
+    }
+
+    function closeProfilePopup() {
+        const overlay = document.getElementById('profilePopupOverlay');
+        if (!overlay) return;
+        overlay.classList.remove('show');
+    }
+
+    function showProfilePlaceholder(title) {
+        showProfilePopup(title, 'В разработке');
+    }
+
+    async function handleAddToHomeScreen() {
+        if (tg.addToHomeScreen) {
+            try {
+                tg.addToHomeScreen();
+                return;
+            } catch (e) {}
+        }
+
+        if (deferredInstallPrompt) {
+            try {
+                await deferredInstallPrompt.prompt();
+                if (deferredInstallPrompt.userChoice) {
+                    await deferredInstallPrompt.userChoice;
+                }
+                deferredInstallPrompt = null;
+                return;
+            } catch (e) {}
+        }
+
+        showProfilePopup(
+            'Добавить на экран «Домой»',
+            'На этом устройстве автоматическое добавление недоступно. Используйте пункт «Добавить на главный экран» в меню браузера.'
+        );
+    }
+
+    function formatProfileDate(value) {
+        if (!value) {
+            return new Date().toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        const parsed = new Date(value);
+        if (!Number.isNaN(parsed.getTime())) {
+            return parsed.toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        return String(value);
+    }
+
+    function resolveProductByOrderItem(item) {
+        if (!item) return null;
+        if (item.sku) {
+            const bySku = state.products.find((p) => p.sku === item.sku);
+            if (bySku) return bySku;
+        }
+        if (item.title) {
+            const needle = String(item.title).trim().toLowerCase();
+            return state.products.find((p) => p.title.trim().toLowerCase() === needle) || null;
+        }
+        return null;
+    }
+
+    function getOrderStatusMeta(status, index) {
+        const value = String(status || '').toLowerCase();
+        if (value.includes('отмен') || value.includes('cancel')) {
+            return { key: 'cancelled', label: 'Отменен', actionType: 'repeat' };
+        }
+        if (value.includes('достав') || value.includes('deliver')) {
+            return { key: 'delivered', label: 'Доставлен', actionType: 'repeat' };
+        }
+        if (value.includes('отправ') || value.includes('ship') || value.includes('transit')) {
+            return { key: 'shipped', label: 'Отправлен', actionType: 'track' };
+        }
+
+        if (index === 0) {
+            return { key: 'shipped', label: 'Отправлен', actionType: 'track' };
+        }
+        return { key: 'delivered', label: 'Доставлен', actionType: 'repeat' };
+    }
+
+    function getProfileOrders() {
+        const rawOrders = Array.isArray(state.orders) ? state.orders : [];
+        return rawOrders.map((order, index) => {
+            const items = (Array.isArray(order.items) ? order.items : []).map((item) => {
+                const product = resolveProductByOrderItem(item);
+                const qty = Math.max(1, Number(item.qty) || 1);
+                const price = Number(item.price_rub ?? item.price ?? product?.price ?? 0);
+                const volume = item.volume || (product?.volumes && product.volumes[0]) || '50 мл';
+                return {
+                    sku: item.sku || product?.sku || '',
+                    title: item.title || product?.title || 'Товар',
+                    qty,
+                    price,
+                    volume,
+                    image: item.image || (product?.images && product.images[0]) || 'Photo_detail.png'
+                };
+            });
+
+            const itemCount = items.reduce((sum, item) => sum + item.qty, 0);
+            const total = Number(order.total) || items.reduce((sum, item) => sum + item.price * item.qty, 0);
+            const status = getOrderStatusMeta(order.status, index);
+            const isShipped = status.key === 'shipped';
+
+            return {
+                id: String(order.id || `AP-${String(index + 1).padStart(6, '0')}`),
+                date: formatProfileDate(order.date || order.createdAt),
+                items,
+                itemCount,
+                total,
+                statusKey: status.key,
+                statusLabel: status.label,
+                actionType: status.actionType,
+                actionLabel: status.actionType === 'track' ? 'Отследить заказ' : 'Повторить заказ',
+                deliveryService: order.deliveryService || 'СДЭК',
+                deliveryMethod: order.deliveryMethod || (isShipped ? 'Пункт выдачи' : 'Курьером до двери'),
+                address: order.address || (isShipped
+                    ? 'г. Москва, ул. Маросейка, 4/2с1 (ПВЗ СДЭК)'
+                    : 'г. Москва, ул. Маросейка, д. 4/2с1, кв. 15, под. 2, эт. 4'),
+                recipient: order.recipient || order.name || '—',
+                paymentType: order.paymentType || (isShipped ? 'Карта (**** 1234)' : 'При получении'),
+                paymentMethod: order.paymentMethod || (isShipped ? 'Картой онлайн' : 'Картой или наличными'),
+                deliveryCost: Number(order.deliveryCost ?? 0),
+                previewImages: items.slice(0, 2).map((item) => item.image)
+            };
+        });
+    }
+
+    function getProfileOrderById(orderId) {
+        return getProfileOrders().find((order) => String(order.id) === String(orderId)) || null;
+    }
+
+    function renderOrders() {
+        const list = document.getElementById('profileOrdersList');
+        if (!list) return;
+
+        const orders = getProfileOrders();
+        if (orders.length === 0) {
+            list.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <p>История заказов пока пуста</p>
+                </div>
+            `;
+            return;
+        }
+
+        list.innerHTML = orders.map((order) => {
+            const openDetailCall = `openProfileOrderDetail(${JSON.stringify(order.id)})`;
+            const actionCall = `handleProfileOrderAction(${JSON.stringify(order.id)})`;
+            const thumbs = order.previewImages.map((img) => `
+                <div class="profile-order-thumb">
+                    <img src="${img}" alt="">
+                </div>
+            `).join('');
+
+            return `
+                <div class="profile-order-card" onclick='${openDetailCall}'>
+                    <div class="profile-order-top">
+                        <span class="profile-order-status ${order.statusKey}">${order.statusLabel}</span>
+                        <span class="profile-menu-chevron">›</span>
+                    </div>
+                    <div class="profile-order-grid">
+                        <div class="profile-order-row">
+                            <span class="profile-order-key">Номер заказа</span>
+                            <span class="profile-order-value">${order.id}</span>
+                        </div>
+                        <div class="profile-order-row">
+                            <span class="profile-order-key">Дата заказа</span>
+                            <span class="profile-order-value">${order.date}</span>
+                        </div>
+                        <div class="profile-order-row">
+                            <span class="profile-order-key">Сумма заказа</span>
+                            <span class="profile-order-value">${formatRub(order.total)}</span>
+                        </div>
+                        <div class="profile-order-row">
+                            <span class="profile-order-key">Количество позиций</span>
+                            <span class="profile-order-value">${order.itemCount} шт.</span>
+                        </div>
+                    </div>
+                    <div class="profile-order-thumbs">${thumbs}</div>
+                    <button class="profile-order-action ${order.actionType === 'track' ? 'track' : 'repeat'}" onclick='event.stopPropagation(); ${actionCall}'>${order.actionLabel}</button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderProfileDetailRows(rows) {
+        return rows.map(([key, value]) => `
+            <div class="profile-detail-row">
+                <span class="profile-detail-key">${key}</span>
+                <span class="profile-detail-value">${value}</span>
+            </div>
+        `).join('');
+    }
+
+    function renderProfileOrderDetail() {
+        const container = document.getElementById('profileOrderDetailContent');
+        if (!container) return;
+
+        const order = getProfileOrderById(state.profileSelectedOrderId);
+        if (!order) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📦</div>
+                    <p>Заказ не найден</p>
+                </div>
+            `;
+            return;
+        }
+
+        const deliveryAddress = String(order.address || '—').replace(/,\s+/g, ',\n');
+        const shippingRows = [
+            ['Статус', order.statusLabel],
+            ['Служба доставки', order.deliveryService],
+            ['Способ доставки', order.deliveryMethod],
+            ['Адрес', deliveryAddress],
+            ['Получатель', order.recipient]
+        ];
+        const paymentRows = [
+            ['Способ оплаты', order.paymentType],
+            ['Метод оплаты', order.paymentMethod],
+            ['Товары', formatRub(order.total)],
+            ['Доставка', order.deliveryCost > 0 ? formatRub(order.deliveryCost) : 'Бесплатно'],
+            ['Итого', formatRub(order.total + order.deliveryCost)]
+        ];
+
+        container.innerHTML = `
+            <div class="profile-detail-card">
+                ${renderProfileDetailRows([
+                    ['Номер заказа', order.id],
+                    ['Дата заказа', order.date]
+                ])}
+            </div>
+
+            <div class="profile-detail-card">
+                <div class="profile-detail-card-title">Информация о доставке</div>
+                ${renderProfileDetailRows(shippingRows)}
+                <button class="profile-order-action ${order.actionType === 'track' ? 'track' : 'repeat'}" onclick="handleProfileOrderAction(${JSON.stringify(order.id)})">${order.actionLabel}</button>
+            </div>
+
+            <div class="profile-detail-section">
+                <div class="profile-detail-section-title">Состав заказа</div>
+                <div class="profile-detail-section-meta">${order.itemCount} шт.</div>
+            </div>
+
+            <div class="profile-detail-items">
+                ${order.items.map((item) => `
+                    <div class="profile-detail-item">
+                        <div class="profile-detail-item-image"><img src="${item.image}" alt=""></div>
+                        <div>
+                            <div class="profile-detail-item-title">${item.title}</div>
+                            <div class="profile-detail-item-meta">Объем: ${item.volume}</div>
+                            <div class="profile-detail-item-meta">Количество: ${item.qty} шт.</div>
+                            <div class="profile-detail-item-price">${formatRub(item.price * item.qty)}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+
+            <div class="profile-detail-card">
+                <div class="profile-detail-card-title">Детали платежа</div>
+                ${renderProfileDetailRows(paymentRows)}
+            </div>
+        `;
+    }
+
+    function repeatProfileOrder(orderId) {
+        const order = getProfileOrderById(orderId);
+        if (!order) return;
+
+        let addedQty = 0;
+        order.items.forEach((item) => {
+            if (!item.sku) return;
+            state.cart[item.sku] = (state.cart[item.sku] || 0) + item.qty;
+            addedQty += item.qty;
+        });
+
+        updateBadges();
+        if (document.getElementById('cartPage').classList.contains('active')) {
+            renderCart();
+        }
+
+        if (addedQty > 0) {
+            tg.showAlert('Товары добавлены в корзину');
+        } else {
+            showProfilePopup('Повторить заказ', 'Для этого заказа пока нет доступных товаров для повторения.');
+        }
+    }
+
+    function handleProfileOrderAction(orderId) {
+        const order = getProfileOrderById(orderId);
+        if (!order) return;
+
+        if (order.actionType === 'track') {
+            showProfilePopup('Отследить заказ', 'В разработке');
+            return;
+        }
+
+        repeatProfileOrder(orderId);
+    }
+
+    function openProfileOrders() {
+        setProfileView('orders');
+    }
+
+    function openProfileOrderDetail(orderId) {
+        state.profileSelectedOrderId = String(orderId);
+        setProfileView('orderDetail');
+    }
+
+    function openProfileViewed() {
+        setProfileView('viewed');
+    }
+
+    function renderProfileDocument() {
+        const titleEl = document.getElementById('profileDocTitle');
+        const frameEl = document.getElementById('profileDocFrame');
+        if (!titleEl || !frameEl) return;
+
+        const doc = state.profileDocument || { title: 'Документ', src: '' };
+        titleEl.textContent = doc.title;
+        if (frameEl.getAttribute('src') !== doc.src) {
+            frameEl.setAttribute('src', doc.src);
+        }
+    }
+
+    function openProfileDocument(type) {
+        const docs = {
+            rules: {
+                title: 'Условия использования',
+                src: 'docs/rules.pdf'
+            },
+            policy: {
+                title: 'Политика конфиденциальности',
+                src: 'docs/policy.pdf'
+            }
+        };
+
+        const selected = docs[type];
+        if (!selected) return;
+        state.profileDocument = selected;
+        setProfileView('doc');
+    }
+
+    function handleProfileBackNavigation() {
+        if (state.profileView === 'orderDetail') {
+            setProfileView('orders');
+            return;
+        }
+
+        if (state.profileView === 'orders' || state.profileView === 'viewed' || state.profileView === 'doc') {
+            state.profileSelectedOrderId = null;
+            setProfileView('home');
+            return;
+        }
+
+        syncTelegramBackButton();
+    }
+
+    function setProfileView(view, options = {}) {
+        const views = {
+            home: 'profileHomeView',
+            orders: 'profileOrdersView',
+            orderDetail: 'profileOrderDetailView',
+            viewed: 'profileViewedView',
+            doc: 'profileDocView'
+        };
+
+        const normalizedView = views[view] ? view : 'home';
+        state.profileView = normalizedView;
+
+        Object.values(views).forEach((id) => {
+            const node = document.getElementById(id);
+            if (!node) return;
+            node.classList.toggle('active', id === views[normalizedView]);
+        });
+
+        if (normalizedView === 'orders') {
+            renderOrders();
+        } else if (normalizedView === 'orderDetail') {
+            renderProfileOrderDetail();
+        } else if (normalizedView === 'viewed') {
+            renderViewedProducts();
+        } else if (normalizedView === 'doc') {
+            renderProfileDocument();
+        }
+
+        if (!options.skipBackSync) {
+            syncTelegramBackButton();
+        }
+        if (!options.skipScroll) {
+            window.scrollTo(0, 0);
+        }
     }
 
     // Navigation
@@ -4227,9 +5282,12 @@
             document.querySelectorAll('.tab')[3].classList.add('active');
             filtersWrap.classList.add('hidden');
             content.style.paddingTop = 'var(--content-top-no-filters, 96px)';
+            state.profileSelectedOrderId = null;
+            setProfileView('home', { skipScroll: true, skipBackSync: true });
         }
 
         window.scrollTo(0, 0);
+        syncTelegramBackButton();
     }
 
     function focusSearch() {
@@ -4260,40 +5318,34 @@
     }
 
     function loadUserData() {
+        const nameEl = document.getElementById('userName');
+        const phoneEl = document.getElementById('userPhone');
+        const avatarEl = document.getElementById('userAvatar');
+        const tabAvatarEl = document.getElementById('tabAvatar');
         const user = tg.initDataUnsafe?.user;
-        if (user) {
-            document.getElementById('userName').textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-            document.getElementById('userPhone').textContent = '@' + (user.username||'');
-            const initial = user.first_name[0];
-            if (user.photo_url) {
-                document.getElementById('userAvatar').innerHTML = `<img src="${user.photo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-                document.getElementById('tabAvatar').innerHTML = `<img src="${user.photo_url}" class="tab-avatar-img">`;
-            } else {
-                document.getElementById('userAvatar').textContent = initial;
-                document.getElementById('tabAvatar').innerHTML = `<span>${initial}</span>`;
-            }
+
+        if (!nameEl || !phoneEl || !avatarEl || !tabAvatarEl) return;
+
+        if (!user) {
+            nameEl.textContent = 'Гость';
+            phoneEl.textContent = 'Войдите через Telegram';
+            avatarEl.textContent = 'Г';
+            tabAvatarEl.innerHTML = '<span>Г</span>';
+            return;
         }
-    }
 
-    function renderOrders() {
-        if (state.orders.length === 0) return;
+        const fullName = [user.first_name, user.last_name].filter(Boolean).join(' ').trim();
+        nameEl.textContent = fullName || user.username || 'Пользователь';
+        phoneEl.textContent = user.username ? `@${user.username}` : 'Пользователь Telegram';
 
-        const list = document.getElementById('ordersList');
-        list.innerHTML = state.orders.map(order => `
-            <div class="order-card">
-                <div class="order-header">
-                    <div>
-                        <div class="order-id">Заказ ${order.id}</div>
-                        <div class="order-date">${order.date}</div>
-                    </div>
-                    <span class="order-status">Выполнен</span>
-                </div>
-                <div class="order-items">
-                    ${order.items.map(i => `${i.title} × ${i.qty}`).join('<br>')}
-                </div>
-                <div class="order-total">${order.total.toLocaleString()} ₽</div>
-            </div>
-        `).join('');
+        const initial = (fullName || user.first_name || user.username || 'Г').trim().charAt(0).toUpperCase();
+        if (user.photo_url) {
+            avatarEl.innerHTML = `<img src="${user.photo_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+            tabAvatarEl.innerHTML = `<img src="${user.photo_url}" class="tab-avatar-img">`;
+        } else {
+            avatarEl.textContent = initial || 'Г';
+            tabAvatarEl.innerHTML = `<span>${initial || 'Г'}</span>`;
+        }
     }
 
     // Checkout
@@ -4334,15 +5386,30 @@
             if (data.success) {
                 const orderRecord = {
                     id: orderId,
-                    date: new Date().toLocaleDateString('ru-RU'),
-                    items: items.map(i => ({title: i.title, qty: i.qty})),
-                    total: total
+                    date: new Date().toISOString(),
+                    items: items.map((i) => ({
+                        sku: i.sku,
+                        title: i.title,
+                        qty: i.qty,
+                        price_rub: i.price_rub
+                    })),
+                    total: total,
+                    status: 'Отправлен',
+                    deliveryService: 'СДЭК',
+                    deliveryMethod: 'Пункт выдачи',
+                    address: address,
+                    recipient: name,
+                    paymentType: 'Карта (**** 1234)',
+                    paymentMethod: 'Картой онлайн',
+                    deliveryCost: 0
                 };
                 state.orders.unshift(orderRecord);
                 localStorage.setItem('orders', JSON.stringify(state.orders));
 
                 state.cart = {};
+                state.cartSelection = {};
                 updateBadges();
+                renderOrders();
 
                 document.getElementById('loadingOverlay').style.display = 'none';
                 document.getElementById('orderNumber').textContent = orderId;
