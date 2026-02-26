@@ -3442,6 +3442,9 @@
         'Ароматы-невидимки'
     ];
 
+    const DETAIL_FAVORITE_ICON_ACTIVE = 'icon/favorite.svg?v=2';
+    const DETAIL_FAVORITE_ICON_EMPTY = 'icon/favorite_empty.svg?v=2';
+
     let deferredInstallPrompt = null;
 
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -4197,7 +4200,7 @@
                 </div>
                 <div class="detail-gallery-actions">
                     <button class="detail-img-btn${isFav ? ' fav-active' : ''}" id="detailFavBtn" onclick="toggleFavoriteDetail('${sku}')">
-                        <img id="detailFavImg" src="icon/${isFav ? 'favorite' : 'favorite_empty'}.svg" width="20" height="20">
+                        <img id="detailFavImg" src="${isFav ? DETAIL_FAVORITE_ICON_ACTIVE : DETAIL_FAVORITE_ICON_EMPTY}" width="20" height="20">
                     </button>
                     <button class="detail-img-btn" onclick="shareProduct()">
                         <img src="icon/share.svg" width="20" height="20">
@@ -4309,7 +4312,7 @@
         toggleFavorite(sku);
         const isFav = state.favorites.includes(sku);
         const img = document.getElementById('detailFavImg');
-        if (img) img.src = isFav ? 'icon/favorite.svg' : 'icon/favorite_empty.svg';
+        if (img) img.src = isFav ? DETAIL_FAVORITE_ICON_ACTIVE : DETAIL_FAVORITE_ICON_EMPTY;
         const btn = document.getElementById('detailFavBtn');
         if (btn) btn.classList.toggle('fav-active', isFav);
     }
