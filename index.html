@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ароматная Публика</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
@@ -30,11 +33,28 @@
         }
 
         body {
-            font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+            font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", "Helvetica Neue", Arial, sans-serif;
             background: #fff;
             color: #000;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+        }
+
+        body.platform-ios,
+        body.platform-macos {
+            font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body.platform-android {
+            font-family: "Roboto", "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body.platform-windows {
+            font-family: "Segoe UI", "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body.platform-linux {
+            font-family: "Noto Sans", "DejaVu Sans", "Liberation Sans", "Helvetica Neue", Arial, sans-serif;
         }
 
         /* ===== Navigation Bar (fixed top) - DESIGNER STYLE ===== */
@@ -3183,6 +3203,42 @@
     if (tg.disableVerticalSwipes) {
         tg.disableVerticalSwipes();
     }
+
+    function applyPlatformFontClass() {
+        const body = document.body;
+        if (!body) return;
+
+        const classes = ['platform-ios', 'platform-macos', 'platform-android', 'platform-windows', 'platform-linux'];
+        body.classList.remove(...classes);
+
+        const tgPlatform = String(tg.platform || '').toLowerCase();
+        const ua = String(navigator.userAgent || '').toLowerCase();
+        const navPlatform = String(navigator.platform || '').toLowerCase();
+
+        if (tgPlatform.includes('android') || ua.includes('android')) {
+            body.classList.add('platform-android');
+            return;
+        }
+
+        if (tgPlatform.includes('ios') || /iphone|ipad|ipod/.test(ua)) {
+            body.classList.add('platform-ios');
+            return;
+        }
+
+        if (tgPlatform.includes('macos') || navPlatform.includes('mac')) {
+            body.classList.add('platform-macos');
+            return;
+        }
+
+        if (tgPlatform.includes('linux') || navPlatform.includes('linux') || ua.includes('x11')) {
+            body.classList.add('platform-linux');
+            return;
+        }
+
+        body.classList.add('platform-windows');
+    }
+
+    applyPlatformFontClass();
 
     // Динамически задаём высоту шапки по данным SDK —
     // safeAreaInset.top = высота статусбара устройства,
