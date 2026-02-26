@@ -1296,6 +1296,30 @@
             opacity: 1;
         }
 
+        #detailFavBtn .detail-fav-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.45;
+            transition: opacity 0.2s;
+        }
+
+        #detailFavBtn .fav-fill {
+            fill: #FFFFFF;
+        }
+
+        #detailFavBtn .fav-outline {
+            fill: #9CA3AF;
+        }
+
+        #detailFavBtn.fav-active .detail-fav-icon {
+            opacity: 1;
+        }
+
+        #detailFavBtn.fav-active .fav-fill,
+        #detailFavBtn.fav-active .fav-outline {
+            fill: #EB4444;
+        }
+
         /* Volume selector */
         .volume-selector {
             display: flex;
@@ -3442,9 +3466,6 @@
         'Ароматы-невидимки'
     ];
 
-    const DETAIL_FAVORITE_ICON_ACTIVE = 'icon/favorite.svg?v=2';
-    const DETAIL_FAVORITE_ICON_EMPTY = 'icon/favorite_empty.svg?v=2';
-
     let deferredInstallPrompt = null;
 
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -4200,7 +4221,10 @@
                 </div>
                 <div class="detail-gallery-actions">
                     <button class="detail-img-btn${isFav ? ' fav-active' : ''}" id="detailFavBtn" onclick="toggleFavoriteDetail('${sku}')">
-                        <img id="detailFavImg" src="${isFav ? DETAIL_FAVORITE_ICON_ACTIVE : DETAIL_FAVORITE_ICON_EMPTY}" width="20" height="20">
+                        <svg class="detail-fav-icon" viewBox="0 0 20 20" fill="none">
+                            <path class="fav-fill" d="M9.9974 17.7917L8.78906 16.6917C4.4974 12.8 1.66406 10.2333 1.66406 7.08333C1.66406 4.51667 3.68073 2.5 6.2474 2.5C7.6974 2.5 9.08906 3.175 9.9974 4.24167C10.9057 3.175 12.2974 2.5 13.7474 2.5C16.3141 2.5 18.3307 4.51667 18.3307 7.08333C18.3307 10.2333 15.4974 12.8 11.2057 16.7L9.9974 17.7917Z"/>
+                            <path class="fav-outline" d="M13.7474 2.5C12.2974 2.5 10.9057 3.175 9.9974 4.24167C9.08906 3.175 7.6974 2.5 6.2474 2.5C3.68073 2.5 1.66406 4.51667 1.66406 7.08333C1.66406 10.2333 4.4974 12.8 8.78906 16.7L9.9974 17.7917L11.2057 16.6917C15.4974 12.8 18.3307 10.2333 18.3307 7.08333C18.3307 4.51667 16.3141 2.5 13.7474 2.5ZM10.0807 15.4583L9.9974 15.5417L9.91406 15.4583C5.9474 11.8667 3.33073 9.49167 3.33073 7.08333C3.33073 5.41667 4.58073 4.16667 6.2474 4.16667C7.53073 4.16667 8.78073 4.99167 9.2224 6.13333H10.7807C11.2141 4.99167 12.4641 4.16667 13.7474 4.16667C15.4141 4.16667 16.6641 5.41667 16.6641 7.08333C16.6641 9.49167 14.0474 11.8667 10.0807 15.4583Z"/>
+                        </svg>
                     </button>
                     <button class="detail-img-btn" onclick="shareProduct()">
                         <img src="icon/share.svg" width="20" height="20">
@@ -4311,8 +4335,6 @@
     function toggleFavoriteDetail(sku) {
         toggleFavorite(sku);
         const isFav = state.favorites.includes(sku);
-        const img = document.getElementById('detailFavImg');
-        if (img) img.src = isFav ? DETAIL_FAVORITE_ICON_ACTIVE : DETAIL_FAVORITE_ICON_EMPTY;
         const btn = document.getElementById('detailFavBtn');
         if (btn) btn.classList.toggle('fav-active', isFav);
     }
