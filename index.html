@@ -3996,11 +3996,21 @@
         if (!input) return;
 
         const wrap = document.querySelector('.search-input-wrap');
+        let baseViewportH = tg.viewportHeight;
+
+        const setSearchKbPadding = (keyboardVisible) => {
+            if (wrap) wrap.style.paddingBottom = keyboardVisible ? '16px' : '';
+        };
+
         input.addEventListener('focus', () => {
-            if (wrap) wrap.style.paddingBottom = '16px';
+            baseViewportH = tg.viewportHeight;
+            setSearchKbPadding(true);
         });
-        input.addEventListener('blur', () => {
-            if (wrap) wrap.style.paddingBottom = '';
+        input.addEventListener('blur', () => setSearchKbPadding(false));
+
+        tg.onEvent('viewportChanged', () => {
+            if (document.activeElement !== input) return;
+            setSearchKbPadding(tg.viewportHeight < baseViewportH - 50);
         });
 
         input.addEventListener('input', (e) => {
