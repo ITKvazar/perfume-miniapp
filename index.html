@@ -3995,6 +3995,16 @@
         const input = document.getElementById('searchInput');
         if (!input) return;
 
+        if (window.visualViewport) {
+            const updateSearchPadding = () => {
+                const wrap = document.querySelector('.search-input-wrap');
+                if (!wrap) return;
+                const keyboardH = window.innerHeight - window.visualViewport.height;
+                wrap.style.paddingBottom = keyboardH > 100 ? '16px' : '';
+            };
+            window.visualViewport.addEventListener('resize', updateSearchPadding);
+        }
+
         input.addEventListener('input', (e) => {
             state.searchQuery = e.target.value;
             renderSearchOverlay();
