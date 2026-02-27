@@ -41,6 +41,15 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        body.sheet-open {
+            position: fixed;
+            left: 0;
+            right: 0;
+            width: 100%;
+            overflow: hidden;
+            overscroll-behavior: none;
+        }
+
         body.platform-ios,
         body.platform-macos {
             font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
@@ -161,6 +170,8 @@
             bottom: 0;
             background: rgba(0,0,0,0.4);
             z-index: 3010;
+            touch-action: none;
+            overscroll-behavior: contain;
         }
 
         .sort-overlay.show { display: block; }
@@ -176,6 +187,8 @@
             padding: 0 16px max(16px, env(safe-area-inset-bottom, 16px));
             transform: translateY(100%);
             transition: transform 0.3s ease;
+            touch-action: pan-y;
+            overscroll-behavior: contain;
         }
 
         .sort-sheet.show {
@@ -187,7 +200,7 @@
             height: 4px;
             background: #D1D5DB;
             border-radius: 2px;
-            margin: 4px auto 20px;
+            margin: 6px auto 20px;
         }
 
         .sort-sheet-title {
@@ -336,6 +349,8 @@
         .brand-sheet-options {
             flex: 1;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: contain;
         }
 
         .brand-sheet-option {
@@ -2106,7 +2121,7 @@
             height: 4px;
             border-radius: 4px;
             background: #E5E5EA;
-            margin: 0 auto 20px;
+            margin: 6px auto 20px;
         }
 
         .cart-delete-title {
@@ -3692,19 +3707,51 @@
         });
     }
 
+    let sheetOpenDepth = 0;
+    let sheetScrollTop = 0;
+
+    function lockSheetBackgroundScroll() {
+        if (sheetOpenDepth === 0) {
+            sheetScrollTop = window.scrollY || window.pageYOffset || 0;
+            document.body.classList.add('sheet-open');
+            document.body.style.top = `-${sheetScrollTop}px`;
+        }
+        sheetOpenDepth += 1;
+    }
+
+    function unlockSheetBackgroundScroll() {
+        if (sheetOpenDepth === 0) return;
+        sheetOpenDepth -= 1;
+        if (sheetOpenDepth > 0) return;
+
+        document.body.classList.remove('sheet-open');
+        document.body.style.top = '';
+        window.scrollTo(0, sheetScrollTop);
+    }
+
     // Sort Bottom Sheet
     function showSortSheet() {
         updateSortRadio();
-        document.getElementById('sortOverlay').classList.add('show');
-        document.getElementById('sortSheet').classList.add('show');
+        const overlay = document.getElementById('sortOverlay');
+        const sheet = document.getElementById('sortSheet');
+        if (!overlay.classList.contains('show')) {
+            lockSheetBackgroundScroll();
+        }
+        overlay.classList.add('show');
+        sheet.classList.add('show');
     }
 
     function closeSortSheet() {
+        const overlay = document.getElementById('sortOverlay');
         const sheet = document.getElementById('sortSheet');
+        const wasOpen = overlay.classList.contains('show');
         sheet.style.transition = 'transform 0.3s ease';
         sheet.style.transform = '';
-        document.getElementById('sortOverlay').classList.remove('show');
+        overlay.classList.remove('show');
         sheet.classList.remove('show');
+        if (wasOpen) {
+            unlockSheetBackgroundScroll();
+        }
     }
 
     function updateSortRadio() {
@@ -3790,16 +3837,26 @@
         document.querySelectorAll('#brandOptions input[name="brand"]').forEach(cb => {
             cb.checked = state.selectedBrands.includes(cb.value);
         });
-        document.getElementById('brandOverlay').classList.add('show');
-        document.getElementById('brandSheet').classList.add('show');
+        const overlay = document.getElementById('brandOverlay');
+        const sheet = document.getElementById('brandSheet');
+        if (!overlay.classList.contains('show')) {
+            lockSheetBackgroundScroll();
+        }
+        overlay.classList.add('show');
+        sheet.classList.add('show');
     }
 
     function closeBrandSheet() {
+        const overlay = document.getElementById('brandOverlay');
         const sheet = document.getElementById('brandSheet');
+        const wasOpen = overlay.classList.contains('show');
         sheet.style.transition = 'transform 0.3s ease';
         sheet.style.transform = '';
-        document.getElementById('brandOverlay').classList.remove('show');
+        overlay.classList.remove('show');
         sheet.classList.remove('show');
+        if (wasOpen) {
+            unlockSheetBackgroundScroll();
+        }
     }
 
     function applyBrands() {
@@ -3851,9 +3908,12 @@
         let startY = 0;
         let currentY = 0;
         let dragging = false;
+        let scrollableParent = null;
 
         sheetEl.addEventListener('touchstart', function(e) {
-            const touch = e.touches[0];
+            const touch = e.touches && e.touches[0];
+            if (!touch) return;
+            scrollableParent = e.target.closest('.brand-sheet-options');
             startY = touch.clientY;
             currentY = startY;
             dragging = true;
@@ -3862,29 +3922,52 @@
 
         sheetEl.addEventListener('touchmove', function(e) {
             if (!dragging) return;
-            currentY = e.touches[0].clientY;
+            const touch = e.touches && e.touches[0];
+            if (!touch) return;
+            currentY = touch.clientY;
             const dy = currentY - startY;
-            if (dy > 0) {
+            const atTop = !scrollableParent || scrollableParent.scrollTop <= 0;
+            if (dy > 0 && atTop) {
+                e.preventDefault();
                 sheetEl.style.transform = 'translateY(' + dy + 'px)';
+            } else if (dy <= 0) {
+                sheetEl.style.transform = 'translateY(0)';
             }
-        }, { passive: true });
+        }, { passive: false });
 
         sheetEl.addEventListener('touchend', function() {
             if (!dragging) return;
             dragging = false;
             const dy = currentY - startY;
+            const atTop = !scrollableParent || scrollableParent.scrollTop <= 0;
             sheetEl.style.transition = 'transform 0.3s ease';
-            if (dy > 80) {
+            if (dy > 80 && atTop) {
                 closeFn();
                 setTimeout(() => { sheetEl.style.transform = ''; }, 300);
             } else {
                 sheetEl.style.transform = 'translateY(0)';
             }
+            scrollableParent = null;
+        });
+
+        sheetEl.addEventListener('touchcancel', function() {
+            dragging = false;
+            scrollableParent = null;
+            sheetEl.style.transition = 'transform 0.3s ease';
+            sheetEl.style.transform = 'translateY(0)';
         });
     }
 
     setupSwipeDismiss(document.getElementById('sortSheet'), closeSortSheet);
     setupSwipeDismiss(document.getElementById('brandSheet'), closeBrandSheet);
+
+    ['sortOverlay', 'brandOverlay'].forEach((id) => {
+        const overlay = document.getElementById(id);
+        if (!overlay) return;
+        overlay.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+    });
 
     function updateFilteredView() {
         const hasFilter = state.currentCategory !== 'all' || state.selectedBrands.length > 0;
