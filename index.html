@@ -30,6 +30,7 @@
             --men: #3B82F6;
             --women: #EC4899;
             --unisex: #8B5CF6;
+            --content-top-main: 148px;
         }
 
         body {
@@ -375,7 +376,7 @@
 
         /* ===== Main scrollable content ===== */
         .content {
-            padding-top: 148px;
+            padding-top: var(--content-top-main, 148px);
             padding-bottom: 108px;
         }
 
@@ -3332,6 +3333,9 @@
         const tgHeaderH = tg.contentSafeAreaInset?.top ?? 44;
         document.documentElement.style.setProperty('--sys-safe-top', sysTop + 'px');
         document.documentElement.style.setProperty('--tg-header-height', tgHeaderH + 'px');
+        const filtersBlockHeight = 60;
+        const mainBannerGap = 24;
+        document.documentElement.style.setProperty('--content-top-main', (sysTop + tgHeaderH + filtersBlockHeight + mainBannerGap) + 'px');
 
         // Keep a stable 32px gap from logo bottom to page titles on non-main pages.
         // Logo is 36px tall and vertically centered in nav header.
@@ -5404,7 +5408,7 @@
             document.getElementById('mainPage').classList.add('active');
             document.querySelectorAll('.tab')[0].classList.add('active');
             filtersWrap.classList.remove('hidden');
-            content.style.paddingTop = '148px';
+            content.style.paddingTop = 'var(--content-top-main, 148px)';
         } else if (page === 'favorites') {
             document.getElementById('favoritesPage').classList.add('active');
             document.querySelectorAll('.tab')[1].classList.add('active');
