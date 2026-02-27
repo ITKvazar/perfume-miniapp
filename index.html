@@ -3331,7 +3331,10 @@
     function applyMainContentTop() {
         const sysTop = tg.safeAreaInset?.top ?? 0;
         const tgHeaderH = tg.contentSafeAreaInset?.top ?? 44;
-        const fallbackTop = sysTop + tgHeaderH + 72;
+        const desiredBannerGap = 24;
+        const mainPage = document.getElementById('mainPage');
+        const mainPageTopPadding = mainPage ? (parseFloat(getComputedStyle(mainPage).paddingTop) || 0) : 0;
+        const fallbackTop = sysTop + tgHeaderH + 56;
         const filters = document.querySelector('.filters');
 
         if (!filters || filters.offsetParent === null) {
@@ -3345,7 +3348,8 @@
             return;
         }
 
-        document.documentElement.style.setProperty('--content-top-main', Math.round(rect.bottom + 24) + 'px');
+        const topForExactGap = Math.round(rect.bottom + desiredBannerGap - mainPageTopPadding);
+        document.documentElement.style.setProperty('--content-top-main', Math.max(0, topForExactGap) + 'px');
     }
 
     function applyNavSafeArea() {
