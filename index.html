@@ -3328,14 +3328,32 @@
     // Динамически задаём высоту шапки по данным SDK —
     // safeAreaInset.top = высота статусбара устройства,
     // contentSafeAreaInset.top = высота строки с кнопками Телеграма
+    function applyMainContentTop() {
+        const sysTop = tg.safeAreaInset?.top ?? 0;
+        const tgHeaderH = tg.contentSafeAreaInset?.top ?? 44;
+        const fallbackTop = sysTop + tgHeaderH + 72;
+        const filters = document.querySelector('.filters');
+
+        if (!filters || filters.offsetParent === null) {
+            document.documentElement.style.setProperty('--content-top-main', fallbackTop + 'px');
+            return;
+        }
+
+        const rect = filters.getBoundingClientRect();
+        if (rect.height <= 0) {
+            document.documentElement.style.setProperty('--content-top-main', fallbackTop + 'px');
+            return;
+        }
+
+        document.documentElement.style.setProperty('--content-top-main', Math.round(rect.bottom + 24) + 'px');
+    }
+
     function applyNavSafeArea() {
         const sysTop = tg.safeAreaInset?.top ?? 0;
         const tgHeaderH = tg.contentSafeAreaInset?.top ?? 44;
         document.documentElement.style.setProperty('--sys-safe-top', sysTop + 'px');
         document.documentElement.style.setProperty('--tg-header-height', tgHeaderH + 'px');
-        const filtersBlockHeight = 60;
-        const mainBannerGap = 24;
-        document.documentElement.style.setProperty('--content-top-main', (sysTop + tgHeaderH + filtersBlockHeight + mainBannerGap) + 'px');
+        applyMainContentTop();
 
         // Keep a stable 32px gap from logo bottom to page titles on non-main pages.
         // Logo is 36px tall and vertically centered in nav header.
@@ -3345,6 +3363,7 @@
     applyNavSafeArea();
     tg.onEvent('safeAreaChanged', applyNavSafeArea);
     tg.onEvent('contentSafeAreaChanged', applyNavSafeArea);
+    window.addEventListener('resize', applyMainContentTop);
     // Hide Telegram system header by requesting fullscreen
     if (tg.requestFullscreen) {
         tg.requestFullscreen();
@@ -5408,6 +5427,7 @@
             document.getElementById('mainPage').classList.add('active');
             document.querySelectorAll('.tab')[0].classList.add('active');
             filtersWrap.classList.remove('hidden');
+            applyMainContentTop();
             content.style.paddingTop = 'var(--content-top-main, 148px)';
         } else if (page === 'favorites') {
             document.getElementById('favoritesPage').classList.add('active');
