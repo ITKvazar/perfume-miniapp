@@ -3529,12 +3529,18 @@
         if (!element) return;
 
         const threshold = options.threshold || 50;
+        const axisLockSlop = options.axisLockSlop || 8;
+        const horizontalLockBias = options.horizontalLockBias || 0.85;
+        const verticalLockBias = options.verticalLockBias || 1.15;
+        const horizontalIntentRatio = options.horizontalIntentRatio || 0.75;
+        const dragClickThreshold = options.dragClickThreshold || 12;
         let startX = 0;
         let startY = 0;
         let lastX = 0;
         let lastY = 0;
         let locked = null;
         let swipedAt = 0;
+        let blockClickUntil = 0;
 
         element.addEventListener('touchstart', (e) => {
             const touch = e.touches && e.touches[0];
@@ -3555,9 +3561,17 @@
 
             const dx = lastX - startX;
             const dy = lastY - startY;
+            const absDx = Math.abs(dx);
+            const absDy = Math.abs(dy);
 
-            if (locked === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
-                locked = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+            // Delay axis lock a bit and require directional advantage.
+            // This keeps diagonal iOS gestures from being locked to vertical too early.
+            if (locked === null && (absDx > axisLockSlop || absDy > axisLockSlop)) {
+                if (absDx >= absDy * horizontalLockBias) {
+                    locked = 'x';
+                } else if (absDy >= absDx * verticalLockBias) {
+                    locked = 'y';
+                }
             }
 
             if (locked === 'x') {
@@ -3573,23 +3587,39 @@
             }
             const dx = lastX - startX;
             const dy = lastY - startY;
-            const isHorizontal = Math.abs(dx) > Math.abs(dy);
-            const isSwipe = isHorizontal && Math.abs(dx) >= threshold;
+            const absDx = Math.abs(dx);
+            const absDy = Math.abs(dy);
+            const isHorizontal = absDx >= absDy * horizontalIntentRatio;
+            const isSwipe = isHorizontal && absDx >= threshold;
+            const hasHorizontalDrag = isHorizontal && absDx >= dragClickThreshold;
+
+            if (hasHorizontalDrag && options.preventClickOnDrag) {
+                blockClickUntil = Date.now() + 350;
+            }
 
             if (isSwipe) {
                 swipedAt = Date.now();
+                if (options.preventClickAfterSwipe) {
+                    blockClickUntil = Math.max(blockClickUntil, swipedAt + 350);
+                }
                 if (dx < 0 && typeof options.onSwipeLeft === 'function') options.onSwipeLeft();
                 if (dx > 0 && typeof options.onSwipeRight === 'function') options.onSwipeRight();
             }
+
+            locked = null;
         }, { passive: true });
 
         element.addEventListener('touchcancel', () => {
             locked = null;
         }, { passive: true });
 
-        if (options.preventClickAfterSwipe) {
+        if (options.preventClickAfterSwipe || options.preventClickOnDrag) {
             element.addEventListener('click', (e) => {
-                if (Date.now() - swipedAt < 350) {
+                const now = Date.now();
+                if (
+                    (options.preventClickAfterSwipe && now - swipedAt < 350) ||
+                    (options.preventClickOnDrag && now < blockClickUntil)
+                ) {
                     e.preventDefault();
                     e.stopPropagation();
                 }
@@ -4198,8 +4228,10 @@
         };
 
         attachHorizontalSwipe(container, {
-            threshold: 36,
+            threshold: 28,
             preventClickAfterSwipe: true,
+            preventClickOnDrag: true,
+            dragClickThreshold: 10,
             onSwipeLeft: () => {
                 if (index < count - 1) {
                     index += 1;
