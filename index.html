@@ -3368,8 +3368,15 @@
     }
 
     function applyNavSafeArea() {
-        const sysTop = tg.safeAreaInset?.top ?? 0;
-        const tgHeaderH = tg.contentSafeAreaInset?.top ?? 44;
+        const isDesktop = ['tdesktop', 'macos', 'web', 'weba'].includes(String(tg.platform || '').toLowerCase());
+        let sysTop, tgHeaderH;
+        if (isDesktop) {
+            sysTop = 10;
+            tgHeaderH = 36;
+        } else {
+            sysTop = tg.safeAreaInset?.top ?? 0;
+            tgHeaderH = tg.contentSafeAreaInset?.top ?? 44;
+        }
         document.documentElement.style.setProperty('--sys-safe-top', sysTop + 'px');
         document.documentElement.style.setProperty('--tg-header-height', tgHeaderH + 'px');
         applyMainContentTop();
