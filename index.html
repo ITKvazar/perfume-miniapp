@@ -3384,8 +3384,10 @@
     tg.onEvent('contentSafeAreaChanged', applyNavSafeArea);
     window.addEventListener('resize', applyMainContentTop);
     // Hide Telegram system header by requesting fullscreen
-    if (tg.requestFullscreen) {
-        tg.requestFullscreen();
+    const _platform = String(tg.platform || '').toLowerCase();
+    const _isMobile = _platform === 'ios' || _platform.startsWith('android');
+    if (tg.requestFullscreen && _isMobile) {
+        try { tg.requestFullscreen(); } catch(e) {}
     }
     if (tg.setHeaderColor) {
         tg.setHeaderColor('#ffffff');
