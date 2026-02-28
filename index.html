@@ -98,6 +98,10 @@
             padding: 8px 16px 12px;
         }
 
+        body.platform-desktop .filters-wrap {
+            padding-top: 10px;
+        }
+
         .filters {
             display: flex;
             gap: 4px;
@@ -3369,6 +3373,7 @@
 
     function applyNavSafeArea() {
         const isDesktop = ['tdesktop', 'macos', 'web', 'weba'].includes(String(tg.platform || '').toLowerCase());
+        if (isDesktop) document.body.classList.add('platform-desktop');
         let sysTop, tgHeaderH;
         if (isDesktop) {
             sysTop = 10;
