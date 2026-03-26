@@ -3305,7 +3305,7 @@
 
 <script>
     // API URL
-    const API_URL = 'https://script.google.com/macros/s/AKfycby3hcrVnE5Q-HXsN1eg5j-nKJK7tfUCK5ABfQ9su7mmSH2P-r9CnlLOCqaNMHszxsJL/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzGKSMoYcrb6c97GMW_8uUhBnYVAOqo5EuQKJ07XgogVqpVEqn_yeLsMCyzx28VHgSQ8A/exec';
 
     // Telegram WebApp
     const tg = window.Telegram.WebApp;
@@ -3412,9 +3412,8 @@
         tg.setHeaderColor('#ffffff');
     }
 
-    // State
-    let state = {
-        products: [
+    // Fallback-каталог — используется если API недоступен
+    const FALLBACK_PRODUCTS = [
             {
                 sku: 'p001',
                 title: 'Amouage Guidance',
@@ -3502,7 +3501,11 @@
                 popularity: 6,
                 tags: ['summer']
             }
-        ],
+    ];
+
+    // State
+    let state = {
+        products: [...FALLBACK_PRODUCTS],
         cart: {},
         cartSelection: {},
         cartShareSkus: [],
@@ -3545,6 +3548,22 @@
         deferredInstallPrompt = null;
     });
 
+    // Загрузка каталога из API
+    async function fetchProductsFromAPI() {
+        try {
+            const res = await fetch(API_URL + '?action=products');
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+            if (data.success && Array.isArray(data.products) && data.products.length > 0) {
+                state.products = data.products;
+                renderProducts();
+                buildBrandList();
+            }
+        } catch (_) {
+            // Тихо используем fallback — каталог уже загружен из FALLBACK_PRODUCTS
+        }
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
         renderProducts();
@@ -3559,6 +3578,9 @@
         // Set default sort radio to match state
         updateSortRadio();
         buildBrandList();
+
+        // Загружаем актуальный каталог из API (асинхронно, с fallback)
+        fetchProductsFromAPI();
     });
 
     function attachHorizontalSwipe(element, options = {}) {
@@ -5014,10 +5036,99 @@
         closeCartSheets();
     }
 
-    function handleCartBottomAction() {
+    async function handleCartBottomAction() {
         const selected = getSelectedCartItems(getCartItemsDetailed());
         if (selected.length === 0) return;
-        tg.showAlert('Оформление выбранных товаров скоро будет доступно');
+
+        const confirmed = await confirmSelectedItemsOrder(selected);
+        if (!confirmed) return;
+
+        await submitOrder(selected);
+    }
+
+    function confirmSelectedItemsOrder(selectedItems) {
+        const itemCount = selectedItems.reduce((sum, item) => sum + item.qty, 0);
+        const total = selectedItems.reduce((sum, item) => sum + ((item.product?.price || 0) * item.qty), 0);
+        const message = `Оформить заказ на ${itemCount} ${getProductWord(itemCount)} на сумму ${formatRub(total)}? После подтверждения магазин закроется, а заказ придет вам в чат с ботом.`;
+
+        if (typeof tg.showPopup === 'function') {
+            return new Promise((resolve) => {
+                tg.showPopup({
+                    title: 'Подтвердите заказ',
+                    message,
+                    buttons: [
+                        { id: 'submit', type: 'default', text: 'Да, заказать' },
+                        { id: 'stay', type: 'cancel', text: 'Остаться в магазине' }
+                    ]
+                }, (buttonId) => {
+                    resolve(buttonId === 'submit');
+                });
+            });
+        }
+
+        return Promise.resolve(window.confirm(message));
+    }
+
+    function getTelegramCustomerProfile() {
+        const user = tg.initDataUnsafe?.user || null;
+        if (!user) return null;
+
+        const fullName = [user.first_name, user.last_name].filter(Boolean).join(' ').trim();
+        const customerName = fullName || (user.username ? `@${user.username}` : 'Клиент Telegram');
+
+        return {
+            id: user.id,
+            username: user.username || '',
+            fullName,
+            customerName
+        };
+    }
+
+    function requestTelegramWriteAccess() {
+        if (typeof tg.requestWriteAccess !== 'function') {
+            return Promise.resolve(true);
+        }
+
+        return new Promise((resolve) => {
+            try {
+                tg.requestWriteAccess((granted) => resolve(granted !== false));
+            } catch (_) {
+                resolve(true);
+            }
+        });
+    }
+
+    function removeOrderedItemsFromCart(selectedItems) {
+        selectedItems.forEach(({ sku }) => {
+            delete state.cart[sku];
+            delete state.cartSelection[sku];
+        });
+    }
+
+    function saveOrderToLocalHistory(orderId, selectedItems, total, customerName) {
+        const orderRecord = {
+            id: orderId,
+            date: new Date().toISOString(),
+            items: selectedItems.map(({ sku, qty, product }) => ({
+                sku,
+                title: product.title,
+                qty,
+                price_rub: product.price,
+                image: Array.isArray(product.images) ? product.images[0] : ''
+            })),
+            total,
+            status: 'Отправлен',
+            deliveryService: 'Уточняется',
+            deliveryMethod: 'Уточняется в чате',
+            address: 'Уточняется в чате',
+            recipient: customerName,
+            paymentType: 'Уточняется',
+            paymentMethod: 'Уточняется',
+            deliveryCost: 0
+        };
+
+        state.orders.unshift(orderRecord);
+        localStorage.setItem('orders', JSON.stringify(state.orders));
     }
 
     // Favorites
@@ -5671,29 +5782,45 @@
     }
 
     // Checkout
-    async function submitOrder() {
-        const name = document.getElementById('checkoutName').value.trim();
-        const phone = document.getElementById('checkoutPhone').value.trim();
-        const address = document.getElementById('checkoutAddress').value.trim();
-        const comment = document.getElementById('checkoutComment').value.trim();
+    async function submitOrder(selectedCartItems = null) {
+        const selected = Array.isArray(selectedCartItems) && selectedCartItems.length
+            ? selectedCartItems
+            : getSelectedCartItems(getCartItemsDetailed());
 
-        if (!name || !phone || !address) {
-            tg.showAlert('Заполните все обязательные поля');
-            return;
+        if (selected.length === 0) {
+            tg.showAlert('Сначала выберите товары для заказа');
+            return false;
         }
 
-        const items = Object.entries(state.cart).map(([sku, qty]) => {
-            const p = state.products.find(x => x.sku === sku);
-            return {sku, title: p.title, qty, price_rub: p.price};
-        });
+        const customer = getTelegramCustomerProfile();
+        if (!customer?.id) {
+            tg.showAlert('Откройте магазин через чат с ботом, чтобы оформить заказ.');
+            return false;
+        }
 
-        const total = items.reduce((s, i) => s + i.price_rub * i.qty, 0);
-        const orderId = 'AP-' + Date.now().toString().slice(-6);
+        const writeAllowed = await requestTelegramWriteAccess();
+        if (!writeAllowed) {
+            tg.showAlert('Нужно разрешить боту писать вам, чтобы заказ пришел в чат.');
+            return false;
+        }
 
+        const items = selected.map(({ sku, qty, product }) => ({
+            sku,
+            title: product.title,
+            qty,
+            price_rub: product.price
+        }));
+
+        const total = items.reduce((sum, item) => sum + item.price_rub * item.qty, 0);
         const order = {
-            name, phone, address, comment, items, total,
-            userId: tg.initDataUnsafe?.user?.id,
-            username: tg.initDataUnsafe?.user?.username
+            name: customer.customerName,
+            phone: '',
+            address: '',
+            comment: 'Оформлено из корзины. Детали уточняются в чате.',
+            items,
+            total,
+            userId: customer.id,
+            username: customer.username
         };
 
         document.getElementById('loadingOverlay').style.display = 'flex';
@@ -5705,44 +5832,36 @@
             });
             const data = await res.json();
 
-            if (data.success) {
-                const orderRecord = {
-                    id: orderId,
-                    date: new Date().toISOString(),
-                    items: items.map((i) => ({
-                        sku: i.sku,
-                        title: i.title,
-                        qty: i.qty,
-                        price_rub: i.price_rub
-                    })),
-                    total: total,
-                    status: 'Отправлен',
-                    deliveryService: 'СДЭК',
-                    deliveryMethod: 'Пункт выдачи',
-                    address: address,
-                    recipient: name,
-                    paymentType: 'Карта (**** 1234)',
-                    paymentMethod: 'Картой онлайн',
-                    deliveryCost: 0
-                };
-                state.orders.unshift(orderRecord);
-                localStorage.setItem('orders', JSON.stringify(state.orders));
-
-                state.cart = {};
-                state.cartSelection = {};
-                updateBadges();
-                renderOrders();
-
-                document.getElementById('loadingOverlay').style.display = 'none';
-                document.getElementById('orderNumber').textContent = orderId;
-                document.getElementById('successScreen').style.display = 'flex';
-                tg.HapticFeedback.notificationOccurred('success');
-            } else {
-                throw new Error(data.error);
+            if (!data.success) {
+                throw new Error(data.error || 'Не удалось оформить заказ');
             }
+
+            const orderId = data.orderId || ('AP-' + Date.now().toString().slice(-6));
+            saveOrderToLocalHistory(orderId, selected, total, customer.customerName);
+            removeOrderedItemsFromCart(selected);
+
+            updateBadges();
+            renderCart();
+            renderOrders();
+
+            document.getElementById('loadingOverlay').style.display = 'none';
+            try { tg.HapticFeedback.notificationOccurred('success'); } catch (e) {}
+
+            const warning = String(data.warning || '');
+            if (warning.includes('клиенту в чат бота')) {
+                tg.showAlert('Заказ сохранен, но Telegram не смог автоматически отправить его вам в чат. Откройте чат бота вручную.');
+                return true;
+            }
+
+            window.setTimeout(() => {
+                try { tg.close(); } catch (e) {}
+            }, 250);
+
+            return true;
         } catch (e) {
             document.getElementById('loadingOverlay').style.display = 'none';
-            tg.showAlert('Ошибка отправки. Проверьте соединение.');
+            tg.showAlert('Не удалось оформить заказ. Проверьте соединение и попробуйте еще раз.');
+            return false;
         }
     }
 
