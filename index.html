@@ -4,11 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ароматная Публика</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* ===== SF Pro Text ===== */
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-Ultralight.otf') format('opentype'); font-weight: 100; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-UltralightItalic.otf') format('opentype'); font-weight: 100; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-Thin.otf') format('opentype'); font-weight: 200; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-ThinItalic.otf') format('opentype'); font-weight: 200; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-Light.otf') format('opentype'); font-weight: 300; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-LightItalic.otf') format('opentype'); font-weight: 300; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-RegularItalic.otf') format('opentype'); font-weight: 400; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-Medium.otf') format('opentype'); font-weight: 500; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-MediumItalic.otf') format('opentype'); font-weight: 500; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-SemiboldItalic.otf') format('opentype'); font-weight: 600; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-BoldItalic.otf') format('opentype'); font-weight: 700; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-Heavy.otf') format('opentype'); font-weight: 800; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-HeavyItalic.otf') format('opentype'); font-weight: 800; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-Black.otf') format('opentype'); font-weight: 900; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Text"; src: url('fonts/SF-Pro-Text-BlackItalic.otf') format('opentype'); font-weight: 900; font-style: italic; font-display: swap; }
+
+        /* ===== SF Pro Display ===== */
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-Ultralight.otf') format('opentype'); font-weight: 100; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-UltralightItalic.otf') format('opentype'); font-weight: 100; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-Thin.otf') format('opentype'); font-weight: 200; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-ThinItalic.otf') format('opentype'); font-weight: 200; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-Light.otf') format('opentype'); font-weight: 300; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-LightItalic.otf') format('opentype'); font-weight: 300; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-RegularItalic.otf') format('opentype'); font-weight: 400; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-Medium.otf') format('opentype'); font-weight: 500; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-MediumItalic.otf') format('opentype'); font-weight: 500; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-SemiboldItalic.otf') format('opentype'); font-weight: 600; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-BoldItalic.otf') format('opentype'); font-weight: 700; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-Heavy.otf') format('opentype'); font-weight: 800; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-HeavyItalic.otf') format('opentype'); font-weight: 800; font-style: italic; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-Black.otf') format('opentype'); font-weight: 900; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Display"; src: url('fonts/SF-Pro-Display-BlackItalic.otf') format('opentype'); font-weight: 900; font-style: italic; font-display: swap; }
+
+        /* ===== SF Pro Rounded ===== */
+        @font-face { font-family: "SF Pro Rounded"; src: url('fonts/SF-Pro-Rounded-Ultralight.otf') format('opentype'); font-weight: 100; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Rounded"; src: url('fonts/SF-Pro-Rounded-Thin.otf') format('opentype'); font-weight: 200; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Rounded"; src: url('fonts/SF-Pro-Rounded-Light.otf') format('opentype'); font-weight: 300; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Rounded"; src: url('fonts/SF-Pro-Rounded-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Rounded"; src: url('fonts/SF-Pro-Rounded-Medium.otf') format('opentype'); font-weight: 500; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Rounded"; src: url('fonts/SF-Pro-Rounded-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Rounded"; src: url('fonts/SF-Pro-Rounded-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Rounded"; src: url('fonts/SF-Pro-Rounded-Heavy.otf') format('opentype'); font-weight: 800; font-style: normal; font-display: swap; }
+        @font-face { font-family: "SF Pro Rounded"; src: url('fonts/SF-Pro-Rounded-Black.otf') format('opentype'); font-weight: 900; font-style: normal; font-display: swap; }
+
         * {
             margin: 0;
             padding: 0;
@@ -33,11 +81,18 @@
             --content-top-main: 148px;
         }
 
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            font-kerning: normal;
+        }
+
         body {
-            font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+            font-family: "SF Pro Text", "SF Pro Display", sans-serif;
             background: #fff;
             color: #000;
             overflow-x: hidden;
+            font-synthesis: none;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -52,19 +107,19 @@
 
         body.platform-ios,
         body.platform-macos {
-            font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            font-family: "SF Pro Text", "SF Pro Display", sans-serif;
         }
 
         body.platform-android {
-            font-family: "Roboto", "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+            font-family: "SF Pro Text", "SF Pro Display", sans-serif;
         }
 
         body.platform-windows {
-            font-family: "Segoe UI", "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+            font-family: "SF Pro Text", "SF Pro Display", sans-serif;
         }
 
         body.platform-linux {
-            font-family: "Noto Sans", "DejaVu Sans", "Liberation Sans", "Helvetica Neue", Arial, sans-serif;
+            font-family: "SF Pro Text", "SF Pro Display", sans-serif;
         }
 
         /* ===== Navigation Bar (fixed top) - DESIGNER STYLE ===== */
@@ -131,12 +186,12 @@
             border-radius: 36px;
             border: none;
             background: transparent;
-            font-family: inherit;
+            font-family: "SF Pro Text";
             font-style: normal;
             font-size: 12px;
             font-weight: 510;
-            letter-spacing: -0.48px;
-            line-height: 120%;
+            line-height: 14.4px;
+            letter-spacing: -0.04em;
             color: #000;
             cursor: pointer;
             white-space: nowrap;
@@ -208,11 +263,12 @@
         }
 
         .sort-sheet-title {
+            font-family: "SF Pro Text";
             font-size: 20px;
             font-weight: 510;
             font-style: normal;
-            line-height: 120%;
-            letter-spacing: -0.6px;
+            line-height: 24px;
+            letter-spacing: -0.03em;
             margin-bottom: 20px;
         }
 
@@ -223,11 +279,12 @@
             padding: 18px 0;
             border-bottom: 1px solid #E5E7EB;
             cursor: pointer;
+            font-family: "SF Pro Text";
             font-size: 14px;
             font-weight: 400;
             font-style: normal;
-            line-height: 120%;
-            letter-spacing: -0.56px;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
             color: #000;
         }
 
@@ -264,14 +321,14 @@
             border-radius: 51px;
             border: none;
             background: #E3E3E3;
+            font-family: "SF Pro Text";
             font-size: 16px;
             font-weight: 510;
             font-style: normal;
-            letter-spacing: -0.64px;
-            line-height: 120%;
+            line-height: 19.2px;
+            letter-spacing: -0.04em;
             color: #6E6E76;
             cursor: pointer;
-            font-family: inherit;
         }
 
         .sort-btn-apply {
@@ -280,14 +337,14 @@
             border-radius: 51px;
             border: none;
             background: #007AFF;
+            font-family: "SF Pro Text";
             font-size: 16px;
             font-weight: 510;
             font-style: normal;
-            letter-spacing: -0.64px;
-            line-height: 120%;
+            line-height: 19.2px;
+            letter-spacing: -0.04em;
             color: #fff;
             cursor: pointer;
-            font-family: inherit;
         }
 
         /* Sort button active state (gray circle background) */
@@ -364,11 +421,12 @@
             padding: 18px 0;
             border-bottom: 1px solid #E5E7EB;
             cursor: pointer;
+            font-family: "SF Pro Text";
             font-size: 14px;
             font-weight: 400;
             font-style: normal;
-            line-height: 120%;
-            letter-spacing: -0.56px;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
             color: #000;
         }
 
@@ -520,13 +578,14 @@
         }
 
         .collection-name {
+            font-family: "SF Pro Text";
             font-style: normal;
             font-size: 12px;
             font-weight: 510;
-            letter-spacing: -0.48px;
+            line-height: 14.4px;
+            letter-spacing: -0.04em;
             text-align: center;
             color: #000;
-            line-height: 1.2;
             width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -682,30 +741,33 @@
         }
 
         .card-price {
+            font-family: "SF Pro Text";
             font-style: normal;
             font-size: 14px;
             font-weight: 590;
-            letter-spacing: -0.56px;
-            line-height: 1.2;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
             color: #000;
         }
 
         .card-old-price {
+            font-family: "SF Pro Text";
             font-style: normal;
             font-size: 12px;
             font-weight: 400;
-            letter-spacing: -0.48px;
-            line-height: 1.2;
+            line-height: 14.4px;
+            letter-spacing: -0.04em;
             color: #909096;
             text-decoration: line-through;
         }
 
         .card-name {
+            font-family: "SF Pro Text";
             font-style: normal;
             font-size: 14px;
             font-weight: 400;
-            letter-spacing: -0.56px;
-            line-height: 1.2;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
             color: #000;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -762,8 +824,8 @@
         }
 
         .tab-icon {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -771,11 +833,12 @@
         }
 
         .tab-label {
+            font-family: "SF Pro Text";
             font-style: normal;
             font-size: 8px;
             font-weight: 400;
-            letter-spacing: -0.24px;
-            line-height: 1.2;
+            line-height: 9.6px;
+            letter-spacing: -0.03em;
             color: #000;
             text-align: center;
         }
@@ -880,12 +943,24 @@
             margin-bottom: 4px;
         }
 
-        .search-section-title,
+        .search-section-title {
+            font-family: "SF Pro Text";
+            font-size: 16px;
+            font-weight: 590;
+            font-style: normal;
+            line-height: 19.2px;
+            letter-spacing: -0.04em;
+            color: #B9B9BF;
+            margin-bottom: 4px;
+        }
+
         .search-results-title {
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: -0.34px;
-            line-height: 1.2;
+            font-family: "SF Pro Text";
+            font-size: 20px;
+            font-weight: 590;
+            font-style: normal;
+            line-height: 24px;
+            letter-spacing: -0.03em;
             color: #B9B9BF;
             margin-bottom: 4px;
         }
@@ -919,10 +994,12 @@
             background: transparent;
             padding: 14px 0;
             text-align: left;
-            font-size: 16px;
+            font-family: "SF Pro Text";
+            font-size: 14px;
             font-weight: 400;
-            letter-spacing: -0.32px;
-            line-height: 1.2;
+            font-style: normal;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
             color: #000;
             cursor: pointer;
         }
@@ -988,10 +1065,12 @@
             border: none;
             background: transparent;
             outline: none;
-            font-family: inherit;
+            font-family: "SF Pro Text";
             font-size: 16px;
             font-weight: 400;
-            letter-spacing: -0.32px;
+            font-style: normal;
+            line-height: 19.2px;
+            letter-spacing: -0.04em;
             color: #2C2C31;
             caret-color: #007AFF;
         }
@@ -1066,10 +1145,11 @@
         #profileOrdersView > .page-title,
         #profileOrderDetailView > .page-title,
         #profileViewedView > .page-title {
+            font-family: "SF Pro Text";
             font-style: normal;
             font-size: 20px;
             font-weight: 590;
-            line-height: 120%;
+            line-height: 24px;
             letter-spacing: -0.03em;
         }
 
@@ -1111,7 +1191,7 @@
         }
 
         .modal-content {
-            padding-bottom: calc(68px + max(12px, env(safe-area-inset-bottom, 12px)));
+            padding-bottom: calc(64px + max(32px, env(safe-area-inset-bottom, 32px)));
             padding-top: calc(var(--sys-safe-top, env(safe-area-inset-top, 0px)) + var(--tg-header-height, 44px));
         }
 
@@ -1188,7 +1268,7 @@
         body.viewer-mode .tab-bar-wrap { display: none !important; }
         body.viewer-mode .detail-bottom-bar { display: none !important; }
         body.viewer-mode .nav-actions-right { display: none !important; }
-        body.viewer-mode .nav-back-btn { display: flex !important; }
+        body.viewer-mode .nav-back-btn { display: none !important; }
         body.viewer-mode .nav-close-btn { display: none !important; }
         body.viewer-mode .nav-bar {
             background: rgba(255,255,255,0.95);
@@ -1228,6 +1308,18 @@
             margin-top: 16px;
         }
 
+        .detail-gallery::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 16px;
+            background: #fff;
+            pointer-events: none;
+            z-index: 2;
+        }
+
         .detail-images {
             display: flex;
             gap: 8px;
@@ -1235,6 +1327,9 @@
             overflow-x: auto;
             scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            scroll-padding-left: 16px;
+            scroll-behavior: smooth;
         }
 
         .detail-images::after {
@@ -1261,6 +1356,8 @@
             flex-shrink: 0;
             width: 314px;
             height: 410px;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
         }
 
         .detail-image {
@@ -1385,21 +1482,52 @@
 
         /* Detail brand + title */
         .detail-brand-line {
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 0;
             padding: 16px 16px 0;
-            font-size: 15px;
-            font-weight: 400;
             color: #000;
-            letter-spacing: -0.3px;
+            line-height: 24px;
         }
 
         .detail-brand-line .brand-name {
-            font-weight: 600;
+            font-family: "SF Pro Text";
+            font-size: 20px;
+            font-weight: 590;
+            font-style: normal;
+            line-height: 24px;
+            letter-spacing: -0.03em;
             text-transform: uppercase;
+            flex-shrink: 0;
+            white-space: nowrap;
         }
 
         .detail-brand-line .brand-sep {
-            color: #909096;
-            margin: 0 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        .detail-brand-line .brand-sep img {
+            width: 16px;
+            height: 16px;
+            filter: brightness(0);
+        }
+
+        .detail-brand-line .detail-product-title {
+            font-family: "SF Pro Text";
+            font-size: 20px;
+            font-weight: 510;
+            font-style: normal;
+            line-height: 24px;
+            letter-spacing: -0.03em;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         /* Detail price */
@@ -1411,15 +1539,23 @@
         }
 
         .detail-price {
-            font-size: 22px;
-            font-weight: 700;
-            color: #000;
-            letter-spacing: -0.5px;
+            font-family: "SF Pro Text";
+            font-size: 20px;
+            font-weight: 590;
+            font-style: normal;
+            line-height: 24px;
+            letter-spacing: -0.03em;
+            color: #000000;
         }
 
         .detail-old-price {
-            font-size: 16px;
-            color: #909096;
+            font-family: "SF Pro Text";
+            font-size: 14px;
+            font-weight: 400;
+            font-style: normal;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
+            color: #6E6E76;
             text-decoration: line-through;
         }
 
@@ -1428,32 +1564,38 @@
             margin: 16px 16px 0;
             background: #F6F6F6;
             border-radius: 16px;
-            padding: 20px;
+            padding: 16px;
         }
 
         .detail-desc-card h3 {
+            font-family: "SF Pro Text";
             font-size: 18px;
             font-weight: 590;
             font-style: normal;
-            line-height: 120%;
-            letter-spacing: -0.72px;
+            line-height: 21.6px;
+            letter-spacing: -0.04em;
             margin-bottom: 12px;
             color: #000;
         }
 
         .detail-desc-text {
+            font-family: "SF Pro Text";
             font-size: 14px;
             font-weight: 400;
             font-style: normal;
-            line-height: 120%;
-            letter-spacing: -0.56px;
-            color: #3C3C43;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
+            font-kerning: normal;
+            font-feature-settings: "kern" 1;
+            text-rendering: geometricPrecision;
+            color: #000000;
         }
 
         .detail-desc-text.collapsed {
-            max-height: calc(8 * 1.2em);
+            display: -webkit-box;
+            -webkit-line-clamp: 8;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .detail-desc-toggle {
@@ -1461,17 +1603,17 @@
             align-items: center;
             gap: 4px;
             margin-top: 8px;
+            font-family: "SF Pro Text";
             font-size: 14px;
             font-weight: 400;
             font-style: normal;
-            line-height: 120%;
-            letter-spacing: -0.56px;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
             color: #909096;
             cursor: pointer;
             background: none;
             border: none;
             padding: 0;
-            font-family: inherit;
         }
 
         .detail-desc-toggle svg {
@@ -1491,11 +1633,12 @@
         }
 
         .detail-specs-card h3 {
+            font-family: "SF Pro Text";
             font-size: 18px;
             font-weight: 590;
             font-style: normal;
-            line-height: 120%;
-            letter-spacing: -0.72px;
+            line-height: 21.6px;
+            letter-spacing: -0.04em;
             margin-bottom: 16px;
             color: #000;
         }
@@ -1519,21 +1662,23 @@
         }
 
         .spec-label {
+            font-family: "SF Pro Text";
             font-size: 14px;
             font-weight: 400;
             font-style: normal;
-            line-height: 120%;
-            letter-spacing: -0.56px;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
             color: #909096;
             flex-shrink: 0;
         }
 
         .spec-value {
+            font-family: "SF Pro Text";
             font-size: 14px;
             font-weight: 400;
             font-style: normal;
-            line-height: 120%;
-            letter-spacing: -0.56px;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
             color: #000;
             text-align: left;
         }
@@ -1560,11 +1705,13 @@
             border: none;
             background: #007AFF;
             color: #fff;
-            font-family: inherit;
+            font-family: "SF Pro Text";
             font-size: 16px;
             font-weight: 510;
             cursor: pointer;
-            letter-spacing: -0.64px;
+            font-style: normal;
+            line-height: 19.2px;
+            letter-spacing: -0.04em;
         }
 
         .detail-qty-controls {
@@ -1607,14 +1754,17 @@
             border: none;
             background: #007AFF;
             color: #fff;
-            font-family: inherit;
+            font-family: "SF Pro Text";
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 510;
+            font-style: normal;
+            line-height: 19.2px;
             cursor: pointer;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.04em;
         }
 
         /* Image viewer fullscreen */
+
         .image-viewer {
             display: none;
             position: fixed;
@@ -1632,18 +1782,21 @@
         }
 
         .image-viewer-main {
-            flex: 1;
+            flex: none;
             position: relative;
             overflow: hidden;
+            box-sizing: border-box;
+            height: calc(489px + var(--sys-safe-top, env(safe-area-inset-top, 0px)) + var(--tg-header-height, 44px) + 48px);
             padding-top: calc(var(--sys-safe-top, env(safe-area-inset-top, 0px)) + var(--tg-header-height, 44px) + 48px);
             touch-action: pan-y;
-            background: #F5F5F5;
+            background: #fff;
         }
 
         .viewer-track {
-            height: 100%;
+            height: 489px;
             display: flex;
             will-change: transform;
+            background: #F3F3F3;
         }
 
         .viewer-slide {
@@ -1652,7 +1805,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 16px;
+            padding: 16px;
             box-sizing: border-box;
         }
 
@@ -1667,10 +1820,10 @@
         .image-viewer-thumbs {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             height: 185px;
             box-sizing: border-box;
-            padding: 24px 16px;
+            padding: 32px 0 50px 16px;
             overflow-x: auto;
             scrollbar-width: none;
             background: #fff;
@@ -1679,19 +1832,20 @@
         .image-viewer-thumbs::-webkit-scrollbar { display: none; }
 
         .viewer-thumb {
-            width: 52px;
-            height: 72px;
-            border-radius: 10px;
+            width: 51px;
+            height: 66px;
+            border-radius: 8px;
             overflow: hidden;
             flex-shrink: 0;
             cursor: pointer;
             border: none;
-            background: #F5F5F5;
-            transition: transform 0.2s ease;
+            background: #F3F3F3;
+            transition: width 0.2s ease, height 0.2s ease;
         }
 
         .viewer-thumb.active {
-            transform: scale(1.24);
+            width: 79px;
+            height: 103px;
         }
 
         .viewer-thumb img {
@@ -1776,7 +1930,8 @@
         .cart-head-btn img {
             width: 20px;
             height: 20px;
-            opacity: 0.45;
+            opacity: 1;
+            filter: brightness(0) saturate(100%) invert(73%) sepia(0%) saturate(0%) hue-rotate(184deg) brightness(92%) contrast(86%);
         }
 
         .cart-head-btn svg {
@@ -1973,8 +2128,44 @@
             object-fit: contain;
         }
 
-        #emptyFavorites .cart-empty-icon img {
-            filter: brightness(0);
+        #emptyFavorites,
+        #emptyCart {
+            padding-top: 96px;
+        }
+
+        #emptyFavorites .cart-empty-icon,
+        #emptyCart .cart-empty-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            opacity: 1;
+        }
+
+        #emptyFavorites .cart-empty-icon img,
+        #emptyCart .cart-empty-icon img {
+            width: 72px;
+            height: 72px;
+            filter: brightness(0) invert(1) brightness(0.89);
+        }
+
+        #emptyFavorites .cart-empty-text,
+        #emptyCart .cart-empty-text {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: -0.64px;
+            color: #909096;
+        }
+
+        #emptyFavorites .cart-empty-btn,
+        #emptyCart .cart-empty-btn {
+            margin-top: 20px;
+            background: #E3E3E3;
+            color: #6E6E76;
+            font-size: 14px;
+            font-weight: 510;
+            line-height: 1.2;
+            letter-spacing: -0.56px;
         }
 
         .cart-empty-text {
@@ -2009,20 +2200,26 @@
         }
 
         .cart-offer-title {
-            font-size: 17px;
-            font-weight: 700;
-            letter-spacing: -0.34px;
-            line-height: 1.1;
-            color: #1A1A1D;
+            font-family: "SF Pro Text";
+            font-size: 16px;
+            font-weight: 590;
+            font-style: normal;
+            line-height: 19.2px;
+            letter-spacing: -0.04em;
+            color: #000000;
+            text-align: center;
         }
 
         .cart-offer-desc {
             margin-top: 8px;
-            font-size: 15px;
+            font-family: "SF Pro Text";
+            font-size: 14px;
             font-weight: 400;
-            letter-spacing: -0.28px;
-            line-height: 1.22;
-            color: #8E8E95;
+            font-style: normal;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
+            color: #909096;
+            text-align: center;
         }
 
         .cart-offer-btn {
@@ -2033,10 +2230,12 @@
             border: none;
             background: linear-gradient(90deg, #B252FF 0%, #F09919 100%);
             color: #fff;
-            font-family: inherit;
-            font-size: 17px;
-            font-weight: 590;
-            letter-spacing: -0.34px;
+            font-family: "SF Pro Text";
+            font-size: 14px;
+            font-weight: 510;
+            font-style: normal;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
             cursor: pointer;
         }
 
@@ -2052,7 +2251,12 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-family: inherit;
+            font-family: "SF Pro Text";
+            font-size: 16px;
+            font-weight: 510;
+            font-style: normal;
+            line-height: 19.2px;
+            letter-spacing: -0.04em;
             cursor: pointer;
             z-index: 1200;
             background: #007AFF;
@@ -2060,8 +2264,8 @@
         }
 
         .cart-bottom-action.disabled {
-            background: #D8D8DB;
-            color: #AFAFB4;
+            background: #E3E3E3;
+            color: #BABABA;
             justify-content: center;
             cursor: default;
         }
@@ -2274,11 +2478,14 @@
         }
 
         .profile-name {
-            font-size: 30px;
-            font-weight: 600;
-            letter-spacing: -0.7px;
-            line-height: 1.1;
+            font-family: "SF Pro Text";
+            font-size: 20px;
+            font-weight: 590;
+            font-style: normal;
+            line-height: 24px;
+            letter-spacing: -0.03em;
             color: #1A1A1D;
+            text-align: center;
         }
 
         .profile-phone {
@@ -2295,10 +2502,13 @@
             border: 1px solid #D6D6DB;
             border-radius: 20px;
             background: transparent;
-            color: #66666F;
-            font-size: 16px;
+            color: #6E6E76;
+            font-family: "SF Pro Text";
+            font-size: 14px;
             font-weight: 510;
-            letter-spacing: -0.35px;
+            font-style: normal;
+            line-height: 16.8px;
+            letter-spacing: -0.04em;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2307,25 +2517,32 @@
         }
 
         .profile-home-shortcut-icon {
-            width: 18px;
-            height: 18px;
-            border: 1.4px solid #9999A1;
-            border-radius: 50%;
+            width: 20px;
+            height: 20px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .profile-home-shortcut-icon::before {
+            content: "";
+            width: 20px;
+            height: 20px;
+            background: #6E6E76;
+            mask: url('icon/add_circle_outline.svg') center / 20px 20px no-repeat;
+            -webkit-mask: url('icon/add_circle_outline.svg') center / 20px 20px no-repeat;
         }
 
         .profile-home-shortcut-note {
             margin: 8px 10px 18px;
-            font-size: 14px;
+            font-family: "SF Pro Text";
+            font-size: 12px;
             font-weight: 400;
-            letter-spacing: -0.15px;
-            line-height: 1.25;
-            color: #9D9DA5;
+            font-style: normal;
+            line-height: 14.4px;
+            letter-spacing: -0.04em;
+            color: #909096;
             text-align: center;
         }
 
@@ -2346,12 +2563,12 @@
             padding: 14px 14px;
             color: #222328;
             cursor: pointer;
-            font-family: inherit;
+            font-family: "SF Pro Text";
             font-style: normal;
             font-size: 16px;
             font-weight: 400;
-            line-height: 120%;
-            letter-spacing: -0.64px;
+            line-height: 19.2px;
+            letter-spacing: -0.04em;
             text-align: left;
         }
 
@@ -2366,19 +2583,53 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
-            font-size: 16px;
-            font-weight: 700;
             flex-shrink: 0;
+            position: relative;
         }
 
-        .profile-menu-icon.orders { background: #FF2D55; }
-        .profile-menu-icon.viewed { background: #0A84FF; }
-        .profile-menu-icon.support { background: #34C759; }
-        .profile-menu-icon.loyalty { background: #FF9F0A; }
-        .profile-menu-icon.invite { background: #32ADE6; }
-        .profile-menu-icon.rules { background: #B0B0B5; }
-        .profile-menu-icon.policy { background: #AEAEB2; }
+        .profile-menu-icon::before {
+            content: "";
+            width: 20px;
+            height: 20px;
+            background: #FFFFFF;
+            mask: var(--profile-menu-icon) center / 20px 20px no-repeat;
+            -webkit-mask: var(--profile-menu-icon) center / 20px 20px no-repeat;
+        }
+
+        .profile-menu-icon.orders {
+            background: #FF004F;
+            --profile-menu-icon: url('icon/folder.svg');
+        }
+
+        .profile-menu-icon.viewed {
+            background: #007CFF;
+            --profile-menu-icon: url('icon/visibility.svg');
+        }
+
+        .profile-menu-icon.support {
+            background: #00C948;
+            --profile-menu-icon: url('icon/message.svg');
+        }
+
+        .profile-menu-icon.loyalty {
+            background: #FF8D00;
+            --profile-menu-icon: url('icon/local_offer.svg');
+        }
+
+        .profile-menu-icon.invite {
+            background: #00ADDF;
+            --profile-menu-icon: url('icon/person.svg');
+        }
+
+        .profile-menu-icon.rules {
+            background: #BABABA;
+            --profile-menu-icon: url('icon/info.svg');
+        }
+
+        .profile-menu-icon.policy {
+            background: #BABABA;
+            --profile-menu-icon: url('icon/security.svg');
+        }
 
         .profile-menu-chevron {
             margin-left: auto;
@@ -3014,9 +3265,8 @@
             </div>
             <div class="search-input-wrap">
                 <div class="search-input-shell">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <circle cx="8.5" cy="8.5" r="6" stroke="#A8A8AE" stroke-width="1.5"/>
-                        <path d="M13 13L17.5 17.5" stroke="#A8A8AE" stroke-width="1.5" stroke-linecap="round"/>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.0262 13.8474L18.5951 17.4163L17.4166 18.5948L13.8477 15.0259C12.5644 16.0526 10.937 16.6667 9.16699 16.6667C5.02699 16.6667 1.66699 13.3067 1.66699 9.16675C1.66699 5.02675 5.02699 1.66675 9.16699 1.66675C13.307 1.66675 16.667 5.02675 16.667 9.16675C16.667 10.9367 16.0528 12.5642 15.0262 13.8474ZM13.3542 13.2291C14.3732 12.1789 15.0003 10.7464 15.0003 9.16675C15.0003 5.94383 12.3899 3.33341 9.16699 3.33341C5.94408 3.33341 3.33366 5.94383 3.33366 9.16675C3.33366 12.3897 5.94408 15.0001 9.16699 15.0001C10.7467 15.0001 12.1792 14.373 13.2293 13.354L13.3542 13.2291Z" fill="#A8A8AE"/>
                     </svg>
                     <input id="searchInput" class="search-input" type="search" placeholder="Поиск" autocomplete="off" autocapitalize="none" spellcheck="false">
                     <button id="searchClearBtn" class="search-clear-btn" onclick="clearSearchQuery()">
@@ -3086,24 +3336,24 @@
             </div>
 
             <button class="profile-home-shortcut-btn" onclick="handleAddToHomeScreen()">
-                <span class="profile-home-shortcut-icon">+</span>
+                <span class="profile-home-shortcut-icon" aria-hidden="true"></span>
                 Добавить на экран «Домой»
             </button>
             <p class="profile-home-shortcut-note">Добавьте иконку магазина на главный экран смартфона, чтобы он всегда был под рукой.</p>
 
             <div class="profile-menu-group">
                 <button class="profile-menu-item" onclick="openProfileOrders()">
-                    <span class="profile-menu-icon orders">O</span>
+                    <span class="profile-menu-icon orders" aria-hidden="true"></span>
                     <span>История заказов</span>
                     <span class="profile-menu-chevron">›</span>
                 </button>
                 <button class="profile-menu-item" onclick="openProfileViewed()">
-                    <span class="profile-menu-icon viewed">V</span>
+                    <span class="profile-menu-icon viewed" aria-hidden="true"></span>
                     <span>Просмотренные товары</span>
                     <span class="profile-menu-chevron">›</span>
                 </button>
                 <button class="profile-menu-item" onclick="showProfilePlaceholder('Поддержка')">
-                    <span class="profile-menu-icon support">S</span>
+                    <span class="profile-menu-icon support" aria-hidden="true"></span>
                     <span>Поддержка</span>
                     <span class="profile-menu-chevron">›</span>
                 </button>
@@ -3111,12 +3361,12 @@
 
             <div class="profile-menu-group">
                 <button class="profile-menu-item" onclick="showProfilePlaceholder('Уровень лояльности')">
-                    <span class="profile-menu-icon loyalty">L</span>
+                    <span class="profile-menu-icon loyalty" aria-hidden="true"></span>
                     <span>Уровень лояльности</span>
                     <span class="profile-menu-chevron">›</span>
                 </button>
                 <button class="profile-menu-item" onclick="showProfilePlaceholder('Пригласить друга')">
-                    <span class="profile-menu-icon invite">I</span>
+                    <span class="profile-menu-icon invite" aria-hidden="true"></span>
                     <span>Пригласить друга</span>
                     <span class="profile-menu-chevron">›</span>
                 </button>
@@ -3124,12 +3374,12 @@
 
             <div class="profile-menu-group">
                 <button class="profile-menu-item" onclick="openProfileDocument('rules')">
-                    <span class="profile-menu-icon rules">R</span>
+                    <span class="profile-menu-icon rules" aria-hidden="true"></span>
                     <span>Условия использования</span>
                     <span class="profile-menu-chevron">›</span>
                 </button>
                 <button class="profile-menu-item" onclick="openProfileDocument('policy')">
-                    <span class="profile-menu-icon policy">P</span>
+                    <span class="profile-menu-icon policy" aria-hidden="true"></span>
                     <span>Политика конфиденциальности</span>
                     <span class="profile-menu-chevron">›</span>
                 </button>
@@ -3246,7 +3496,7 @@
     <div class="tab-bar">
         <button class="tab active" onclick="showPage('main')">
             <div class="tab-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
                     <path d="M10.0002 2.5L3.3335 7.5V17.5H7.50016V11.6667H12.5002V17.5H16.6668V7.5L10.0002 2.5Z" fill="currentColor"/>
                 </svg>
             </div>
@@ -3255,7 +3505,7 @@
 
         <button class="tab" onclick="showPage('favorites')">
             <div class="tab-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
                     <path d="M9.9974 17.7917L8.78906 16.6917C4.4974 12.8 1.66406 10.2333 1.66406 7.08333C1.66406 4.51667 3.68073 2.5 6.2474 2.5C7.6974 2.5 9.08906 3.175 9.9974 4.24167C10.9057 3.175 12.2974 2.5 13.7474 2.5C16.3141 2.5 18.3307 4.51667 18.3307 7.08333C18.3307 10.2333 15.4974 12.8 11.2057 16.7L9.9974 17.7917Z" fill="currentColor"/>
                 </svg>
             </div>
@@ -3265,7 +3515,7 @@
 
         <button class="tab" onclick="showPage('cart')">
             <div class="tab-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
                     <path d="M15.8333 5.00004H14.1667C14.1667 2.70004 12.3 0.833374 10 0.833374C7.7 0.833374 5.83333 2.70004 5.83333 5.00004H4.16667C3.25 5.00004 2.50833 5.75004 2.50833 6.66671L2.5 16.6667C2.5 17.5834 3.25 18.3334 4.16667 18.3334H15.8333C16.75 18.3334 17.5 17.5834 17.5 16.6667V6.66671C17.5 5.75004 16.75 5.00004 15.8333 5.00004ZM10 2.50004C11.3833 2.50004 12.5 3.61671 12.5 5.00004H7.5C7.5 3.61671 8.61667 2.50004 10 2.50004ZM10 10.8334C7.7 10.8334 5.83333 8.96671 5.83333 6.66671H7.5C7.5 8.05004 8.61667 9.16671 10 9.16671C11.3833 9.16671 12.5 8.05004 12.5 6.66671H14.1667C14.1667 8.96671 12.3 10.8334 10 10.8334Z" fill="currentColor"/>
                 </svg>
             </div>
@@ -3282,9 +3532,8 @@
     </div>
 
     <div class="search-btn" onclick="focusSearch()">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <circle cx="8.5" cy="8.5" r="6" stroke="#000" stroke-width="1.3"/>
-            <path d="M13 13L17.5 17.5" stroke="#000" stroke-width="1.3" stroke-linecap="round"/>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.0262 13.8474L18.5951 17.4163L17.4166 18.5948L13.8477 15.0259C12.5644 16.0526 10.937 16.6667 9.16699 16.6667C5.02699 16.6667 1.66699 13.3067 1.66699 9.16675C1.66699 5.02675 5.02699 1.66675 9.16699 1.66675C13.307 1.66675 16.667 5.02675 16.667 9.16675C16.667 10.9367 16.0528 12.5642 15.0262 13.8474ZM13.3542 13.2291C14.3732 12.1789 15.0003 10.7464 15.0003 9.16675C15.0003 5.94383 12.3899 3.33341 9.16699 3.33341C5.94408 3.33341 3.33366 5.94383 3.33366 9.16675C3.33366 12.3897 5.94408 15.0001 9.16699 15.0001C10.7467 15.0001 12.1792 14.373 13.2293 13.354L13.3542 13.2291Z" fill="black"/>
         </svg>
     </div>
 </div>
@@ -4446,7 +4695,7 @@
                 ${p.volumes.map((v, i) => `<button class="volume-btn ${i===0?'active':''}" onclick="selectVolume(this)">${v}</button>`).join('')}
             </div>` : ''}
             <div class="detail-brand-line">
-                <span class="brand-name">${p.brand}</span><span class="brand-sep">›</span> ${p.title}
+                <span class="brand-name">${p.brand}</span><span class="brand-sep"><img src="icon/chevron_right.svg" alt=""></span><span class="detail-product-title">${p.title}</span>
             </div>
             <div class="detail-price-row">
                 <span class="detail-price">${p.price.toLocaleString()} ₽</span>
@@ -4612,12 +4861,14 @@
 
     function switchViewerImage(index) {
         if (index < 0 || index >= viewerState.images.length) return;
+        if (index === viewerState.realIndex) return;
+        if (viewerState.isAnimating) return;
 
-        viewerState.isAnimating = false;
+        viewerState.isAnimating = true;
         viewerState.realIndex = index;
         if (viewerState.images.length > 1) {
             viewerState.virtualIndex = index + 1;
-            setViewerTrackPosition(false);
+            setViewerTrackPosition(true);
         }
         updateViewerThumbs();
     }
@@ -4687,7 +4938,11 @@
 
     function updateViewerThumbs() {
         document.querySelectorAll('.viewer-thumb').forEach((t, i) => {
-            t.classList.toggle('active', i === viewerState.realIndex);
+            const isActive = i === viewerState.realIndex;
+            t.classList.toggle('active', isActive);
+            if (isActive) {
+                t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+            }
         });
     }
 
