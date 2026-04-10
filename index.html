@@ -159,7 +159,7 @@
 
         .filters {
             display: flex;
-            gap: 4px;
+            gap: 3px;
             align-items: center;
             background: rgba(255,255,255,0.88);
             border: 1px solid #fff;
@@ -758,7 +758,7 @@
             line-height: 14.4px;
             letter-spacing: -0.04em;
             color: #909096;
-            text-decoration: line-through;
+            white-space: nowrap;
         }
 
         .card-name {
@@ -1556,7 +1556,7 @@
             line-height: 16.8px;
             letter-spacing: -0.04em;
             color: #6E6E76;
-            text-decoration: line-through;
+            white-space: nowrap;
         }
 
         /* Description card */
@@ -2094,8 +2094,8 @@
             letter-spacing: -0.2px;
             line-height: 1.15;
             color: #A3A3AA;
-            text-decoration: line-through;
             margin-bottom: 3px;
+            white-space: nowrap;
         }
 
         .cart-now-price {
@@ -2944,7 +2944,44 @@
             font-weight: 400;
             letter-spacing: -0.14px;
             color: #9A9AA2;
-            text-decoration: line-through;
+            white-space: nowrap;
+        }
+
+        .card-old-price,
+        .detail-old-price,
+        .cart-old-price,
+        .profile-viewed-old {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .cart-old-price {
+            justify-content: flex-end;
+        }
+
+        .old-price-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .old-price-strike {
+            position: absolute;
+            left: -0.18em;
+            top: 50%;
+            width: calc(100% + 0.36em);
+            height: 1.18em;
+            transform: translateY(-47%);
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .old-price-strike path {
+            fill: none;
+            stroke: #FF4D57;
+            stroke-width: 1.31;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .profile-viewed-title {
@@ -3134,6 +3171,8 @@
 
         .hidden { display: none !important; }
     </style>
+    <link rel="stylesheet" href="css/macbook.css">
+    <link rel="stylesheet" href="css/iphone.css">
 </head>
 <body>
 
@@ -4568,7 +4607,7 @@
                 <div class="card-info">
                     <div class="card-prices">
                         <span class="card-price">${p.price.toLocaleString()} ₽</span>
-                        ${p.oldPrice ? `<span class="card-old-price">${p.oldPrice.toLocaleString()} ₽</span>` : ''}
+                        ${p.oldPrice ? renderOldPriceMarkup(`${p.oldPrice.toLocaleString()} ₽`, 'card-old-price') : ''}
                     </div>
                     <div class="card-name">${p.title}</div>
                 </div>
@@ -4699,7 +4738,7 @@
             </div>
             <div class="detail-price-row">
                 <span class="detail-price">${p.price.toLocaleString()} ₽</span>
-                ${p.oldPrice ? `<span class="detail-old-price">${p.oldPrice.toLocaleString()} ₽</span>` : ''}
+                ${p.oldPrice ? renderOldPriceMarkup(`${p.oldPrice.toLocaleString()} ₽`, 'detail-old-price') : ''}
             </div>
             <div class="detail-desc-card">
                 <h3>Описание</h3>
@@ -5036,6 +5075,19 @@
         return Number(value || 0).toLocaleString('ru-RU') + ' ₽';
     }
 
+    function renderOldPriceMarkup(value, className, tagName = 'span') {
+        return `
+            <${tagName} class="${className}">
+                <span class="old-price-text">${value}</span>
+                <svg class="old-price-strike" viewBox="0 0 120 24" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M2 9.3C18 8.2 38 8 58 8.2C68 8.3 75 8.5 80 8.8" stroke-opacity="0.92" style="stroke-width: 1.375;" vector-effect="non-scaling-stroke"></path>
+                    <path d="M31 16.9C43 12.8 58 11.5 74 11.3C80 11.2 85 11.4 90 11.8" stroke-opacity="0.8" style="stroke-width: 1.344;" vector-effect="non-scaling-stroke"></path>
+                    <path d="M31 18.1C48 18.3 67 17.2 86 15.8C99 14.9 109 14.4 118 14.3" stroke-opacity="0.88" style="stroke-width: 1.406;" vector-effect="non-scaling-stroke"></path>
+                </svg>
+            </${tagName}>
+        `;
+    }
+
     function getCartItemsDetailed() {
         return Object.entries(state.cart).map(([sku, qty]) => {
             const product = state.products.find(x => x.sku === sku);
@@ -5167,7 +5219,7 @@
                                 <button class="cart-qty-btn" onclick="updateQuantity('${sku}', 1)">+</button>
                             </div>
                             <div class="cart-price-col">
-                                ${itemOldPrice ? `<div class="cart-old-price">${formatRub(itemOldPrice)}</div>` : ''}
+                                ${itemOldPrice ? renderOldPriceMarkup(formatRub(itemOldPrice), 'cart-old-price', 'div') : ''}
                                 <div class="cart-now-price">${formatRub(itemPrice)}</div>
                             </div>
                         </div>
@@ -5514,7 +5566,7 @@
                     <div class="profile-viewed-dots">${dots}</div>
                     <div class="profile-viewed-prices">
                         <span class="profile-viewed-price">${formatRub(p.price)}</span>
-                        ${p.oldPrice ? `<span class="profile-viewed-old">${formatRub(p.oldPrice)}</span>` : ''}
+                        ${p.oldPrice ? renderOldPriceMarkup(formatRub(p.oldPrice), 'profile-viewed-old') : ''}
                     </div>
                     <div class="profile-viewed-title">${p.title}</div>
                 </div>
